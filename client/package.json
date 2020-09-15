@@ -15,47 +15,6 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "airbnb",
-      "airbnb/hooks",
-      "plugin:prettier/recommended",
-      "prettier/react"
-    ],
-    "rules": {
-      "prettier/prettier": "error",
-      "react/jsx-filename-extension": [
-        1,
-        {
-          "extensions": [
-            ".js",
-            ".jsx"
-          ]
-        }
-      ],
-      "react/forbid-prop-types": [
-        0,
-        {
-          "forbid": [
-            "any"
-          ]
-        }
-      ],
-      "react/prop-types": 0
-    }
-  },
-  "prettier": {
-    "printWidth": 80,
-    "tabWidth": 2,
-    "useTabs": false,
-    "semi": true,
-    "singleQuote": true,
-    "trailingComma": "all",
-    "bracketSpacing": false,
-    "jsxBracketSameLine": false,
-    "proseWrap": "always"
-  },
   "proxy": "http://localhost:3001",
   "browserslist": {
     "production": [
