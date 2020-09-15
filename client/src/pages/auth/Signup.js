@@ -1,12 +1,7 @@
 import React from 'react';
 import Auth from './Auth';
-import AuthForm from '../../components/AuthForm';
 
 const Signup = () => {
-  return (
-    <Auth>
-      <AuthForm />
-    </Auth>
-  );
+  return <Auth />;
 };
 export default Signup;

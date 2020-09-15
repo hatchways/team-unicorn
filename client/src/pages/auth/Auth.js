@@ -23,8 +23,6 @@ const useStyles = makeStyles({
   },
 });
 
-// const title = 'Welcome to Kanban';
-
 const Auth = () => {
   const classes = useStyles();
   return (
@@ -43,14 +41,13 @@ const Auth = () => {
         component={Box}
         display="flex"
         flexDirection="column"
-        alignItems="stretch"
         className={classes.formCol}
         md
         xs={12}
       >
-        <Box flexGrow={1}>
-          <AuthForm />
-        </Box>
+        <CenteringBox flexGrow={1}>
+          <AuthForm title="Welcome to KanBan!" />
+        </CenteringBox>
         <CenteringBox
           className={classes.footer}
           borderTop={1}
