@@ -13,10 +13,10 @@ const {
 } = require("../middleware/validator");
 const keys = require("../config/keys");
 
-const Student = require("../models/Student");
+const User = require("../models/User");
 
-// @route  POST student/register
-// @desc   register student
+// @route  POST user/register
+// @desc   register user
 // @access public
 
 router.post(
@@ -27,14 +27,14 @@ router.post(
     const { name, email, password } = req.body;
 
     try {
-      // Student exists
-      let isStudent = await Student.findOne({ email });
-      if (isStudent) {
+      // user exists
+      let isUser = await User.findOne({ email });
+      if (isUser) {
         return res
           .status(400)
-          .send({ errors: [{ msg: "Student already exists" }] });
+          .send({ errors: [{ msg: "User already exists" }] });
       }
-      let student = new Student({
+      let user = new User({
         name,
         email,
         password
@@ -42,22 +42,22 @@ router.post(
 
       // Bcrypt password
       const salt = await bcrypt.genSalt(10);
-      student.password = await bcrypt.hash(password, salt);
-      await student.save();
+      user.password = await bcrypt.hash(password, salt);
+      await user.save();
 
       // return jsonWebToken
       const payload = {
-        student: {
-          id: student.id,
-          name: student.name,
-          email: student.email
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email
         }
       };
 
       jwt.sign(payload, keys.jwtSecret, { expiresIn: 360000 }, (err, token) => {
         if (err) throw err;
         res.cookie("token", token, { httpOnly: true });
-        res.status(201).json({ token, student: payload.student });
+        res.status(201).json({ token, user: payload.user });
       });
     } catch (err) {
       console.error(err.message);
@@ -66,21 +66,21 @@ router.post(
   }
 );
 
-// @route  POST student/login
-// @desc   login student
+// @route  POST user/login
+// @desc   login user
 // @access public
 
 router.post("/login", loginValidationRules(), validate, async (req, res) => {
   const { email, password } = req.body;
   try {
-    // student exists , get the student from the database
-    let student = await Student.findOne({ email });
-    if (!student) {
+    // user exists , get the user from the database
+    let user = await User.findOne({ email });
+    if (!user) {
       return res.status(400).send({ errors: { msg: "Invalid credentials" } });
     }
 
     // Compare paswword - plain and encrypted
-    const isMatch = await bcrypt.compare(password, student.password);
+    const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
       return res.status(400).send({ errors: { msg: "Invalid credentials" } });
@@ -88,17 +88,17 @@ router.post("/login", loginValidationRules(), validate, async (req, res) => {
 
     // return jsonWebToken
     const payload = {
-      student: {
-        id: student.id,
-        name: student.name,
-        email: student.email
+      user: {
+        id: user.id,
+        name: user.name,
+        email: user.email
       }
     };
 
     jwt.sign(payload, keys.jwtSecret, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
       res.cookie("token", token, { httpOnly: true });
-      res.json({ token, student: payload.student });
+      res.json({ token, user: payload.user });
     });
   } catch (err) {
     console.error(err.message);
