@@ -2,7 +2,7 @@ import {Grid, makeStyles, Typography, Box, Link} from '@material-ui/core';
 import React from 'react';
 import {Link as RouterLink} from 'react-router-dom';
 import AuthForm from './AuthForm';
-import AuthImg from './auth-side-img.png';
+import AuthImg from './authPageImg.png';
 import CenteringBox from '../../components/CenteringBox';
 
 const useStyles = makeStyles({
