@@ -1,6 +1,18 @@
-import {TextField, Typography, Box, Button} from '@material-ui/core';
+import {
+  TextField,
+  Typography,
+  Box,
+  Button,
+  Paper,
+  makeStyles,
+} from '@material-ui/core';
 import React, {useState} from 'react';
-import validation from './validation';
+
+const useStyles = makeStyles({
+  submit: {
+    margin: '1.2rem',
+  },
+});
 
 const AuthForm = ({title}) => {
   const [email, setEmail] = useState('');
@@ -18,28 +30,38 @@ const AuthForm = ({title}) => {
     setConfirmPassword(e.target.value);
   };
 
-  const isEmailValid = validation.validateEmail(email);
+  const classes = useStyles();
   return (
     <Box
+      component={Paper}
       display="flex"
       flexDirection="column"
       alignItems="stretch"
       justifyContent="space-around"
+      px={3}
+      elevation={3}
       width="300px"
-      height="300px"
+      height="400px"
     >
       <Box>
         <Typography variant="h5" align="center">
           {title}
         </Typography>
       </Box>
-      <Box id="signup" component="form" textAlign="center">
+      <Box
+        id="signup"
+        component="form"
+        textAlign="center"
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <TextField
           id="email-input"
           name="email"
           type="email"
           label="Email"
-          helperText={isEmailValid ? '' : 'Please enter a valid email.'}
           autoComplete="username email"
           placeholder="Enter email address"
           margin="dense"
@@ -48,7 +70,6 @@ const AuthForm = ({title}) => {
           onChange={handleEmailChange}
           fullWidth
           required
-          error={!isEmailValid}
         />
         <TextField
           id="password-input"
@@ -75,7 +96,12 @@ const AuthForm = ({title}) => {
           fullWidth
           required
         />
-        <Button type="submit" variant="contained" color="primary">
+        <Button
+          type="submit"
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+        >
           Sign Up
         </Button>
       </Box>

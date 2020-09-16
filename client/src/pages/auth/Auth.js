@@ -6,7 +6,7 @@ import AuthImg from './authPageImg.png';
 import CenteringBox from '../../components/CenteringBox';
 
 const useStyles = makeStyles({
-  pageContainer: {
+  root: {
     height: '100%',
   },
   img: {
@@ -27,7 +27,7 @@ const Auth = () => {
   const classes = useStyles();
   return (
     <Grid
-      className={classes.pageContainer}
+      className={classes.root}
       direction="row"
       alignItems="stretch"
       container
