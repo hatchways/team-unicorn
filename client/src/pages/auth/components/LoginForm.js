@@ -1,6 +1,8 @@
 import React from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
+import {useForm} from 'react-hook-form';
 import formProps from '../formProps';
+import formValidation from '../formValidation';
 
 // TODO: Fix login form autofill labels
 
@@ -11,11 +13,18 @@ const useStyles = makeStyles({
 });
 
 const LoginForm = () => {
+  const {register, handleSubmit, errors} = useForm();
   const {
     email: emailHTMLProps,
     password: passwordHTMLProps,
   } = formProps.html.login;
   const {textField: textFieldStyleProps} = formProps.style;
+
+  const onSubmit = (data) => console.log(data);
+  const {
+    email: emailValidation,
+    password: passwordValidation,
+  } = formValidation.login;
 
   const classes = useStyles();
 
@@ -28,10 +37,21 @@ const LoginForm = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="space-between"
+      onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
-      <TextField {...emailHTMLProps} {...textFieldStyleProps} />
-      <TextField {...passwordHTMLProps} {...textFieldStyleProps} />
+      <TextField
+        {...emailHTMLProps}
+        {...textFieldStyleProps}
+        inputRef={register(emailValidation)}
+        {...formValidation.getMuiErrorProps(errors, emailHTMLProps.name)}
+      />
+      <TextField
+        {...passwordHTMLProps}
+        {...textFieldStyleProps}
+        inputRef={register(passwordValidation)}
+        {...formValidation.getMuiErrorProps(errors, passwordHTMLProps.name)}
+      />
       <Button
         type="submit"
         variant="contained"

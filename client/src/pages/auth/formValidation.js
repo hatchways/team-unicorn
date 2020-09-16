@@ -27,6 +27,22 @@ const formValidation = {
       };
     },
   },
+  login: {
+    email: {
+      required: 'Please enter your email address.',
+      pattern: {
+        value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        message: 'Email is not valid.',
+      },
+    },
+    password: {
+      Required: 'Please enter your password.',
+      minLength: {
+        value: 8,
+        message: 'Password is too short.',
+      },
+    },
+  },
   getMuiErrorProps: (errors, name) => {
     const isValid = !Object.prototype.hasOwnProperty.call(errors, name);
     const result = {error: !isValid};
