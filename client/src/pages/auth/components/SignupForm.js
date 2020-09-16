@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
+import {useForm} from 'react-hook-form';
 import formProps from '../formProps';
+import formValidation from '../formValidation';
 
 const useStyles = makeStyles({
   submit: {
@@ -9,20 +11,12 @@ const useStyles = makeStyles({
 });
 
 const SignupForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const {register, handleSubmit, getValues, trigger, errors} = useForm({
+    mode: 'onTouched',
+  });
 
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-  const handleConfirmPasswordChange = (e) => {
-    setConfirmPassword(e.target.value);
-  };
+  // TODO/IN: Implement and integrate data api
+  const onSubmit = (data) => console.log(data);
 
   const {
     email: emailHTMLProps,
@@ -30,6 +24,19 @@ const SignupForm = () => {
     confirmPassword: confirmPasswordHTMLProps,
   } = formProps.html.signup;
   const {textField: textFieldStyleProps} = formProps.style;
+
+  const {
+    email: emailValidation,
+    password: passwordValidationFactory,
+    confirmPassword: confirmPasswordValidationFactory,
+  } = formValidation.signup;
+
+  const passwordValidation = passwordValidationFactory(() =>
+    trigger(confirmPasswordHTMLProps.name),
+  );
+  const confirmPasswordValidation = confirmPasswordValidationFactory(() =>
+    getValues(passwordHTMLProps.name),
+  );
 
   const classes = useStyles();
 
@@ -42,24 +49,29 @@ const SignupForm = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="space-between"
+      onSubmit={handleSubmit(onSubmit)}
+      noValidate
     >
       <TextField
         {...emailHTMLProps}
         {...textFieldStyleProps}
-        value={email}
-        onChange={handleEmailChange}
+        inputRef={register(emailValidation)}
+        {...formValidation.getMuiErrorProps(errors, emailHTMLProps.name)}
       />
       <TextField
         {...passwordHTMLProps}
         {...textFieldStyleProps}
-        value={password}
-        onChange={handlePasswordChange}
+        inputRef={register(passwordValidation)}
+        {...formValidation.getMuiErrorProps(errors, passwordHTMLProps.name)}
       />
       <TextField
         {...confirmPasswordHTMLProps}
         {...textFieldStyleProps}
-        value={confirmPassword}
-        onChange={handleConfirmPasswordChange}
+        inputRef={register(confirmPasswordValidation)}
+        {...formValidation.getMuiErrorProps(
+          errors,
+          confirmPasswordHTMLProps.name,
+        )}
       />
       <Button
         type="submit"

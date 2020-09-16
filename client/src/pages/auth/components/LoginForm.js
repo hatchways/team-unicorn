@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
 import formProps from '../formProps';
 
@@ -10,18 +10,7 @@ const useStyles = makeStyles({
   },
 });
 
-const SignupForm = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-
-  const handleEmailChange = (e) => {
-    setEmail(e.target.value);
-  };
-
-  const handlePasswordChange = (e) => {
-    setPassword(e.target.value);
-  };
-
+const LoginForm = () => {
   const {
     email: emailHTMLProps,
     password: passwordHTMLProps,
@@ -39,19 +28,10 @@ const SignupForm = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="space-between"
+      noValidate
     >
-      <TextField
-        {...emailHTMLProps}
-        {...textFieldStyleProps}
-        value={email}
-        onChange={handleEmailChange}
-      />
-      <TextField
-        {...passwordHTMLProps}
-        {...textFieldStyleProps}
-        value={password}
-        onChange={handlePasswordChange}
-      />
+      <TextField {...emailHTMLProps} {...textFieldStyleProps} />
+      <TextField {...passwordHTMLProps} {...textFieldStyleProps} />
       <Button
         type="submit"
         variant="contained"
@@ -64,4 +44,4 @@ const SignupForm = () => {
   );
 };
 
-export default SignupForm;
+export default LoginForm;

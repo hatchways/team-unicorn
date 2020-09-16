@@ -29,7 +29,7 @@ const formProps = {
       },
       confirmPassword: {
         id: 'confirm-password-input',
-        name: 'password',
+        name: 'confirmPassword',
         type: 'password',
         label: 'Confirm Password',
         autoComplete: 'new-password',
