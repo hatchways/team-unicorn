@@ -7,6 +7,7 @@ import {
   makeStyles,
 } from '@material-ui/core';
 import React, {useState} from 'react';
+import formProps from './formProps';
 
 const useStyles = makeStyles({
   submit: {
@@ -29,6 +30,13 @@ const AuthForm = ({title}) => {
   const handleConfirmPasswordChange = (e) => {
     setConfirmPassword(e.target.value);
   };
+
+  const {
+    email: emailHTMLProps,
+    password: passwordHTMLProps,
+    confirmPassword: confirmPasswordHTMLProps,
+  } = formProps.html.signup;
+  const {textField: textFieldStyleProps} = formProps.style;
 
   const classes = useStyles();
   return (
@@ -58,43 +66,22 @@ const AuthForm = ({title}) => {
         justifyContent="space-between"
       >
         <TextField
-          id="email-input"
-          name="email"
-          type="email"
-          label="Email"
-          autoComplete="username email"
-          placeholder="Enter email address"
-          margin="dense"
-          variant="outlined"
+          {...emailHTMLProps}
+          {...textFieldStyleProps}
           value={email}
           onChange={handleEmailChange}
-          fullWidth
-          required
         />
         <TextField
-          id="password-input"
-          name="password"
-          type="password"
-          label="Create Password"
-          autoComplete="new-password"
-          variant="outlined"
-          margin="dense"
+          {...passwordHTMLProps}
+          {...textFieldStyleProps}
           value={password}
           onChange={handlePasswordChange}
-          fullWidth
-          required
         />
         <TextField
-          name="password"
-          type="password"
-          label="Confirm Password"
-          autoComplete="new-password"
-          variant="outlined"
-          margin="dense"
+          {...confirmPasswordHTMLProps}
+          {...textFieldStyleProps}
           value={confirmPassword}
           onChange={handleConfirmPasswordChange}
-          fullWidth
-          required
         />
         <Button
           type="submit"
