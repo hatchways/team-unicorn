@@ -1,6 +1,5 @@
-import {Grid, makeStyles, Typography, Box, Link} from '@material-ui/core';
+import {Grid, makeStyles, Box} from '@material-ui/core';
 import React from 'react';
-import {Link as RouterLink} from 'react-router-dom';
 import AuthImg from './authPageImg.png';
 import CenteringBox from '../../components/CenteringBox';
 import AuthFormContainer from './components/AuthFormContainer';
@@ -23,7 +22,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Auth = ({formComponent, title}) => {
+const Auth = ({formComponent, footerComponent, title}) => {
   const classes = useStyles();
   return (
     <Grid
@@ -53,12 +52,7 @@ const Auth = ({formComponent, title}) => {
           borderTop={1}
           borderColor="grey.300"
         >
-          <Typography variant="body1" align="center">
-            Already have an account? <br />
-            <Link component={RouterLink} to="/login" color="primary">
-              Login
-            </Link>
-          </Typography>
+          {footerComponent}
         </CenteringBox>
       </Grid>
     </Grid>
