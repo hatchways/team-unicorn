@@ -1,4 +1,4 @@
-import {Grid, makeStyles, Box} from '@material-ui/core';
+import {Grid, makeStyles, Box, Hidden} from '@material-ui/core';
 import React from 'react';
 import AuthImg from './authPageImg.png';
 import CenteringBox from '../../components/CenteringBox';
@@ -22,6 +22,10 @@ const useStyles = makeStyles({
   },
 });
 
+// TODO:  Instead of hiding picture on small screens,
+//        consider putting it in bg.
+//        Also consider debouncing and moving components
+//        dynamically (i.e. smoothly) upon resize.
 const Auth = ({formComponent, footerComponent, title}) => {
   const classes = useStyles();
   return (
@@ -31,9 +35,11 @@ const Auth = ({formComponent, footerComponent, title}) => {
       alignItems="stretch"
       container
     >
-      <Grid className={classes.imgCol} item md xs={12}>
-        <img className={classes.img} src={AuthImg} alt="" />
-      </Grid>
+      <Hidden smDown>
+        <Grid item md className={classes.imgCol}>
+          <img className={classes.img} src={AuthImg} alt="KanBan Homepage" />
+        </Grid>
+      </Hidden>
 
       <Grid
         item
