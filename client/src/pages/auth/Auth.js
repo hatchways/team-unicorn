@@ -1,9 +1,9 @@
 import {Grid, makeStyles, Typography, Box, Link} from '@material-ui/core';
 import React from 'react';
 import {Link as RouterLink} from 'react-router-dom';
-import AuthForm from './AuthForm';
 import AuthImg from './authPageImg.png';
 import CenteringBox from '../../components/CenteringBox';
+import AuthFormContainer from './components/AuthFormContainer';
 
 const useStyles = makeStyles({
   root: {
@@ -23,7 +23,7 @@ const useStyles = makeStyles({
   },
 });
 
-const Auth = () => {
+const Auth = ({formComponent, title}) => {
   const classes = useStyles();
   return (
     <Grid
@@ -46,7 +46,7 @@ const Auth = () => {
         xs={12}
       >
         <CenteringBox flexGrow={1}>
-          <AuthForm title="Welcome to KanBan!" />
+          <AuthFormContainer title={title}>{formComponent}</AuthFormContainer>
         </CenteringBox>
         <CenteringBox
           className={classes.footer}

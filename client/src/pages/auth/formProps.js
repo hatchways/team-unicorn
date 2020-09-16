@@ -35,8 +35,25 @@ const formProps = {
         autoComplete: 'new-password',
       },
     },
+
+    login: {
+      email: {
+        id: 'email-input',
+        name: 'email',
+        type: 'email',
+        label: 'Email',
+        autoComplete: 'username email',
+        placeholder: 'Enter email address',
+      },
+      password: {
+        id: 'password-input',
+        name: 'password',
+        type: 'password',
+        label: 'Password',
+        autoComplete: 'current-password',
+      },
+    },
   },
-  login: {},
 };
 
 export default formProps;
