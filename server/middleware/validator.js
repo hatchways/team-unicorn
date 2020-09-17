@@ -19,7 +19,7 @@ exports.registerValidationRules = () => {
 exports.loginValidationRules = () => {
   return [
     body("email").isEmail().withMessage("Please include a valid email"),
-    body("password").not().isEmpty().withMessage("Name is required")
+    body("password").not().isEmpty().withMessage("Password is required")
   ];
 };
 
