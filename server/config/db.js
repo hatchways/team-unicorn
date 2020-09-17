@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const keys = require("./keys");
 
 const connectDB = async () => {
   try {
-    await mongoose.connect(keys.MONGO_URI, {
+    await mongoose.connect("mongodb+srv://nick:nick@schoolcluster.dal4d.mongodb.net/school?retryWrites=true&w=majority", {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,

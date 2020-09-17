@@ -3,13 +3,12 @@ const router = express.Router();
 const Card = require("../../models/cards");
 const Column = require("../../models/columns");
 
-const colQuery = require("./columns_query_handler");
 // @route POST api/cards/create
 // @desc Create Card
 // @access Public
 router.post("/create", (req, res) => {
     const name = req.body.name;
-    const desc = req.body.description;
+    const desc = req.body.desc;
 
     const newCard = { name: name, desc: desc }
     Card.create(newCard, (err, card) => {
@@ -17,45 +16,59 @@ router.post("/create", (req, res) => {
             console.log(err)
         } else {
             console.log(card)
+            res.send(card)
         }
     })
 })
 
-// @route PUT api/cards/create
+// router.put("/update/:id", (req, res) => {
+//     Card.findByIdAndUpdate(req.params.id, req.body, (err, updatedCard) => {
+//         if (err) {
+//             console.log(err)
+//             res.send(err)
+//         } else {
+//             console.log(updatedCard)
+//             res.send(updatedCard)
+//         }
+//     })
+// })
+
+// @route PUT api/cards/update
 // @desc Move Card to another column
 // @access Public
-router.put("/update/:card_id&:col_id&:index", (req, res) => {
-    const index = req.params.index;
-    const col_id = req.params.col_id
-    const card_id = req.params.card_id
+router.put("/update/:id", async (req, res) => {
+    try {
+        const index = req.body.index;
+        const newColId = req.body.newCol
+        const oldColId = req.body.oldCol
+        const cardId = req.params.id
 
-    //Have to update column where card is removed, 
-    const oldCol = Column.findById(Card.findById(card_id).column)
-    const oldColCards = oldCol.cards.filter((card) => card !== card_id)
-    Column.findByIdAndUpdate(Card.findById(card_id).column, {'cards': oldColCards}, (err, res) => {
+        //Have to update column where card is removed, 
+        const oldCol = await Column.findById(oldColId)
+        const oldColCards = await oldCol.cards
+        await Column.findByIdAndUpdate(oldColId, {'cards': oldColCards.filter(c => c !== cardId)})
+        
+        //Update column where card is added
+        const newCol = await Column.findById(newColId)
+        let newColCards = await newCol.cards;
+        await Column.findByIdAndUpdate(newColId, {'cards': [...newColCards.slice(0, index), cardId, ...newColCards.slice(index)]})
+
+        //Change card's column reference
+        await Card.findByIdAndUpdate(cardId, { 'column': newColId })
+        
+        res.sendStatus(200)
+    } catch(e) {
+        console.error(e)
+        res.sendStatus(404)
+    }
+})
+
+router.get("/show/:id", (req, res) => {
+    Card.findById(req.params.id, (err, card) => {
         if (err) {
-            console.log(err)
+            res.send(err)
         } else {
-            console.log(res)
-        }
-    })
-    
-    //Update column where card is added
-    let newColCards = Column.findById(col_id).cards
-    newColCards = [...newColCards.slice(0, index), card_id, ...newColCards.slice(index)]
-    Column.findByIdAndUpdate(col_id, {'cards': oldColCards}, (err,  res) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(res)
-        }
-    })
-    //Change card's column reference
-    Card.findByIdAndUpdate(card_id, { 'column': col_id }, (err, res) => {
-        if (err) {
-            console.log(err)
-        } else {
-            console.log(res)
+            res.send(card)
         }
     })
 })
