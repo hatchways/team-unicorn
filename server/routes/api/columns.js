@@ -34,6 +34,9 @@ router.put("/update/:id", (req, res) => {
     })
 })
 
+// @route GET api/columns/update
+// @desc Either change name of column or changing location of card within column.
+// @access Public
 router.get("/show/:id", (req, res) => {
     Column.findById(req.params.id, (err, col) => {
         if (err) {
