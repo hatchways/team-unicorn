@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {DragDropContext, Droppable, Draggable} from 'react-beautiful-dnd';
-import { makeStyles, withStyles } from '@material-ui/core/styles';
+import { makeStyles } from '@material-ui/core/styles';
 import {Card, Button, Grid, Typography} from '@material-ui/core';
 import uuid from 'uuid/v4';
 import { theme } from '../themes/theme';
@@ -49,9 +49,9 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const mockTasks = {
-  issues: [{ id: uuid(), desc: "Refactor css", deadline: '09/17/2020'}, { id: uuid(), desc: "Add context and state management", deadline: '09/19/2020' },
+  issues: [{ id: uuid(), desc: "Refactor css", deadline: '09/17/2020'}, { id: uuid(), desc: "Grid layout no longer responsive. Fix and optimize for viewports", deadline: '09/19/2020' },
 ],
-  frontend: [{ id: uuid(), desc: "Drag columns", deadline: '09/17/2020' }, { id: uuid(), desc: "Drag cards", deadline: '09/17/2020' },
+  frontend: [{ id: uuid(), desc: "Drag columns", deadline: '09/17/2020' }, { id: uuid(), desc: "Style cards", deadline: '09/17/2020' },{ id: uuid(), desc: "Add context and state management", deadline: '09/19/2020' }
 ],
   progress: [{ id: uuid(), desc: "Create mock kanban board layout", deadline: '09/16/2020' }, { id: uuid(), desc: "Style board to match mock in google drive", deadline: '09/17/2020' }],
   review: [{ id: uuid(), desc: "Drag cards", deadline: '09/17/2020' },
