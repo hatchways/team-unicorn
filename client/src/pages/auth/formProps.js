@@ -1,17 +1,25 @@
-// TODO: Somewhat overloaded, probably should be
-// restructured if it needs to scale in the future
+// TODO: Probably should be restructured
+//       if it needs to scale in the future
 
 const formProps = {
   style: {
     textField: {
       margin: 'dense',
       variant: 'outlined',
-      fullWidth: true,
       required: true,
+      fullWidth: true,
     },
   },
   html: {
     signup: {
+      name: {
+        id: 'name-input',
+        name: 'name',
+        type: 'text',
+        label: 'Full Name',
+        autoComplete: 'name',
+        placeholder: 'Enter your full name',
+      },
       email: {
         id: 'email-input',
         name: 'email',

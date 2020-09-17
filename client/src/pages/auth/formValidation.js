@@ -1,5 +1,8 @@
 const formValidation = {
   signup: {
+    name: {
+      required: 'Please enter your name.',
+    },
     email: {
       required: 'Please enter an email address.',
       pattern: {

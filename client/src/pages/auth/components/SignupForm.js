@@ -19,6 +19,7 @@ const SignupForm = () => {
   const onSubmit = (data) => console.log(data);
 
   const {
+    name: fullNameHTMLProps,
     email: emailHTMLProps,
     password: passwordHTMLProps,
     confirmPassword: confirmPasswordHTMLProps,
@@ -26,11 +27,16 @@ const SignupForm = () => {
   const {textField: textFieldStyleProps} = formProps.style;
 
   const {
+    name: fullNameValidation,
     email: emailValidation,
     password: passwordValidationFactory,
     confirmPassword: confirmPasswordValidationFactory,
   } = formValidation.signup;
 
+  // NOTE: Password validation needs to trigger password confirmation
+  //      validation, so the config takes a callback to trigger it.
+  //      Similarly, password confirmation validation needs
+  //      the password's value, hence the config takes a callback to retrive it.
   const passwordValidation = passwordValidationFactory(() =>
     trigger(confirmPasswordHTMLProps.name),
   );
@@ -52,6 +58,13 @@ const SignupForm = () => {
       onSubmit={handleSubmit(onSubmit)}
       noValidate
     >
+      <TextField
+        {...textFieldStyleProps}
+        {...fullNameHTMLProps}
+        inputRef={register(fullNameValidation)}
+        {...formValidation.getMuiErrorProps(errors, fullNameHTMLProps.name)}
+      />
+
       <TextField
         {...emailHTMLProps}
         {...textFieldStyleProps}
