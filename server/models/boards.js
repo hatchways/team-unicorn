@@ -1,4 +1,18 @@
 const mongoose = require("mongoose");
+const Column = require("columns")
+
+const defaultColumns = () => {
+    //to produce the Completed/In progress columns for the board
+    const initial = [{ 'name': 'Completed' }, { 'name': 'In Progress' }]
+    Columns.create(initial, (err, columns) => {
+        if (err) {
+            console.log(err);
+            return []
+        } else {
+            return columns.map(col => col._id)
+        }
+    })
+}
 
 const boardSchema = new mongoose.Schema({
     user: {
@@ -15,7 +29,7 @@ const boardSchema = new mongoose.Schema({
                 ref: "Column"
             }
         ],
-        default: [] //change to give default values of completed + in progress columns
+        default: defaultColumns()
     }
 })
 

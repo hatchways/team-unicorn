@@ -8,6 +8,9 @@ const connectDB = require("./config/db");
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
 
+const cardsRouter = require("./routes/api/cards");
+const colRouter = require("./routes/api/columns");
+
 const { json, urlencoded } = express;
 
 var app = express();
@@ -23,6 +26,8 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+app.use("/api/cards", cardsRouter);
+app.use("/api/columns", colRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
