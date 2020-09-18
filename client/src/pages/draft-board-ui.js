@@ -12,12 +12,9 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'center',
     height: '100%'
   },
-  grid: {
-    width: 275,
-    minHeight: '20vh',
-    padding: theme.spacing(1),
-    borderRadius: 4,
-    backgroundColor: '#F4F6FF',
+  board: {
+    display: "flex",
+    backgroundColor: "red",
   },
   column: {
     padding: theme.spacing(1),
@@ -26,7 +23,14 @@ const useStyles = makeStyles((theme) => ({
     minHeight: '30vh',
     backgroundColor: '#F4F6FF',
     borderRadius: 4,
-
+    
+  },
+  drag: {
+    width: 275,
+    minHeight: '20vh',
+    padding: theme.spacing(1),
+    borderRadius: 4,
+    backgroundColor: '#F4F6FF',
   },
   card: {
     userSelect: "none",
@@ -86,75 +90,104 @@ const mockColumns = {
 
 const onDragEnd = (result, columns, setColumns) => {
   if (!result.destination) return;
-  const { source, destination } = result;
+  const { source, destination, type } = result;
 
-  if (source.droppableId !== destination.droppableId) {
-    const sourceColumn = columns[source.droppableId];
-    const destColumn = columns[destination.droppableId];
-    const sourceItems = [...sourceColumn.items];
-    const destItems = [...destColumn.items];
-    const [removed] = sourceItems.splice(source.index, 1);
-    destItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...sourceColumn,
-        items: sourceItems
-      },
-      [destination.droppableId]: {
-        ...destColumn,
-        items: destItems
-      }
-    });
+  if (type === 'column') {
+    const newColumnOrder = Array.from(Object.values(columns))
+    console.log(newColumnOrder)
+    const [removed] = newColumnOrder.splice(source.index, 1)
+    newColumnOrder.splice(destination.index, 0, removed)
+    setColumns(newColumnOrder)
   } else {
-    const column = columns[source.droppableId];
-    const copiedItems = [...column.items];
-    const [removed] = copiedItems.splice(source.index, 1);
-    copiedItems.splice(destination.index, 0, removed);
-    setColumns({
-      ...columns,
-      [source.droppableId]: {
-        ...column,
-        items: copiedItems
-      }
-    });
+    if (source.droppableId !== destination.droppableId) {
+      const sourceColumn = columns[source.droppableId];
+      const destColumn = columns[destination.droppableId];
+      const sourceItems = [...sourceColumn.items];
+      const destItems = [...destColumn.items];
+      const [removed] = sourceItems.splice(source.index, 1);
+      destItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...sourceColumn,
+          items: sourceItems
+        },
+        [destination.droppableId]: {
+          ...destColumn,
+          items: destItems
+        }
+      });
+    } else {
+      const column = columns[source.droppableId];
+      const copiedItems = [...column.items];
+      const [removed] = copiedItems.splice(source.index, 1);
+      copiedItems.splice(destination.index, 0, removed);
+      setColumns({
+        ...columns,
+        [source.droppableId]: {
+          ...column,
+          items: copiedItems
+        }
+      });
+    }
   }
 };
 
 export default function KanbanBoard() {
-  const [columns, setColumns] = useState(mockColumns)
+  const [columns, setColumns] = useState(mockColumns);
   const classes = useStyles();
+
+  console.log({columns})
 
   return (
     <div className={classes.root}>
       <DragDropContext
         onDragEnd={result => onDragEnd(result, columns, setColumns)}
       >
-        {Object.entries(columns).map(([columnId, column], index) => {
+      <Droppable droppableId="board" direction="horizontal" type="column">
+        {(provided, snapshot) => {
           return (
+            Object.entries(columns).map(([id, column], index) => {
+            return (
             <Grid
-              style={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center"
-              }}
-              key={columnId}
+              container
+              className={classes.board}
+              key={id}
+              ref={provided.innerRef}
+              {...provided.droppableProps}
+              spacing={1}
             >
-              <Grid className={classes.column}>
-              <Typography variant="h4" align="center" gutterBottom>{column.name}</Typography>
-                <Droppable droppableId={columnId} key={columnId}>
+            <Draggable
+              key={id}
+              draggableId={id}
+              index={index} 
+            >
+              {(provided) => {
+                return (
+
+              <Grid 
+                className={classes.column} 
+                {...provided.draggableProps}
+                ref={provided.innerRef}
+              >
+              <Typography 
+                {...provided.dragHandleProps}
+                variant="h4" 
+                align="center" 
+                gutterBottom
+              >{column.name}</Typography>
+                <Droppable droppableId={id} key={id} type="task">
                   {(provided, snapshot) => {
                     return (
                       <Grid
+                        className={classes.drag}
                         {...provided.droppableProps}
                         ref={provided.innerRef}
                         style={{
                           background: snapshot.isDraggingOver
                             ? "#E6ECFC"
                             : "#F4F6FF",
-
                         }}
-                        className={classes.grid}
                       >
                         {column.items.map((item, index) => {
                           return (
@@ -206,9 +239,18 @@ export default function KanbanBoard() {
                   }}
                 </Droppable>
               </Grid>
+                )
+              }}
+
+            </Draggable>
+            {provided.placeholder}
             </Grid>
           );
-        })}
+        })
+          )
+        }}
+      </Droppable> 
+        
       </DragDropContext>
     </div>
   );
