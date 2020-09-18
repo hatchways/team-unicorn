@@ -10,7 +10,6 @@ const useStyles = makeStyles((theme) => ({
   },
   title: {
     flexGrow: 1,
-    fontFamily: 'cursive',
     marginLeft: theme.spacing(5),
   },
   appBar: {
@@ -24,7 +23,7 @@ const NavBar = () => {
     <div>
       <AppBar position="static" className={classes.appBar} elevation={0}>
         <Toolbar>
-          <Typography variant="h6" className={classes.title} color="secondary">
+          <Typography variant="h4" className={classes.title} color="secondary">
             My School Board
           </Typography>
           <IconButton
@@ -40,5 +39,4 @@ const NavBar = () => {
     </div>
   );
 };
-
 export default NavBar;
