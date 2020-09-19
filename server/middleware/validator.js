@@ -1,25 +1,25 @@
 const { body, validationResult } = require("express-validator");
 
-exports.registerValidationRules = () => {
+exports.createValidationRules = () => {
   return [
     body("name").not().isEmpty().withMessage("Name is required"),
-    body("email").isEmail().withMessage("Please include a valid email"),
+    body("email").isEmail().withMessage("Email is not valid"),
     body("password")
-      .isLength({ min: 6 })
-      .withMessage("Please enter a password with 6 or more characters"),
-    body("confirmPassword").custom((value, { req, loc, path }) => {
+      .isLength({ min: 8 })
+      .withMessage("Please enter a password with 8 or more characters"),
+    body("confirmPassword").custom((value, { req }) => {
       if (value !== req.body.password) {
         throw new Error("Passwords don't match");
       }
       return true;
-    })
+    }),
   ];
 };
 
-exports.loginValidationRules = () => {
+exports.authenticateValidationRules = () => {
   return [
-    body("email").isEmail().withMessage("Please include a valid email"),
-    body("password").not().isEmpty().withMessage("Password is required")
+    body("email").isEmail().withMessage("Email is not valid"),
+    body("password").not().isEmpty().withMessage("Password is required"),
   ];
 };
 
@@ -27,11 +27,11 @@ exports.validate = (req, res, next) => {
   const errors = validationResult(req);
 
   if (!errors.isEmpty()) {
-    let error = {};
+    let message = {};
     errors.array().forEach((err) => {
-      error[err.param] = err.msg;
+      message[err.param] = err.msg;
     });
-    return res.status(400).json({ error });
+    return res.status(400).json({ message });
   }
   return next();
 };
