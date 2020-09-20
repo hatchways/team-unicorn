@@ -55,7 +55,7 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
 // @route  POST user/authenticate
 // @desc   Authenticate user
 // @access public
-
+// TODO: Set www authenticate header to basic?
 router.post(
   "/authenticate",
   authenticateValidationRules(),
@@ -93,7 +93,7 @@ router.post(
         (err, token) => {
           if (err) throw err;
           res.cookie("auth-token", token, { httpOnly: true });
-          res.json({ token, user: payload.user });
+          res.json({ user: payload.user });
         }
       );
     } catch (err) {
@@ -103,7 +103,43 @@ router.post(
   }
 );
 
-// @route GET user/session/extend
-// @route GET user/session/resolve
+// @route   POST user/session/extend
+// @desc    Extend user's session if authorized.
+// @access  Authenticated
+//TODO: Invalidate old token?
+router.post("user/session/extend", auth, async (req, res) => {
+  // NOTE: Auth middleware will verify jwt and decode user from jwt
+  //       if there is a valid jwt.
+  const payload = {
+    user: req.user,
+  };
 
+  try {
+    jwt.sign(
+      payload,
+      keys.jwtSecret,
+      { expiresIn: AuthTokenTTL },
+      (err, token) => {
+        if (err) throw err;
+        res.cookie("auth-token", token, { httpOnly: true });
+        res.json({ user: payload.user });
+      }
+    );
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).json({ message: "Could not extend session." });
+  }
+});
+
+// @route GET  user/session/resolve
+// @desc   Resolve which user owns the jwt if exists.
+// @access Authenticated
+router.get("user/session/resolve", auth, async (req, res) => {
+  const { user } = req;
+  res.json({ user });
+});
+
+// @route POST user/session/end
+// @desc   Invalidate jwt and end user session.
+// @access Authenticated
 module.exports = router;

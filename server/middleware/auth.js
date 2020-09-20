@@ -8,6 +8,7 @@ module.exports = function (req, res, next) {
   const token = req.cookies["auth-token"];
 
   // Check if not token exists : 401  not authorized
+  // TODO: Set www authenticate header to basic?
   if (!token)
     return res.status(401).json({ message: "No authorization token." });
 
