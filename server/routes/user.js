@@ -63,7 +63,7 @@ router.post(
   async (req, res) => {
     const { email, password } = req.body;
     try {
-      // user exists , get the user from the database
+      // user exists
       let user = await User.findOne({ email });
       if (!user) {
         return res.status(401).json({ message: "Account doesn't exist" });
@@ -71,7 +71,6 @@ router.post(
 
       // Compare paswword - plain and encrypted
       const isMatch = await bcrypt.compare(password, user.password);
-
       if (!isMatch) {
         return res.status(401).json({ message: "Invalid credentials" });
       }
