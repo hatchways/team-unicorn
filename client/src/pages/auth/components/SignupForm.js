@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
 import {useForm} from 'react-hook-form';
+import {Redirect} from 'react-router-dom';
 import formProps from '../formProps';
 import formValidation from '../formValidation';
+import User from '../../../api/User';
 
 const useStyles = makeStyles({
   submit: {
@@ -14,9 +16,16 @@ const SignupForm = () => {
   const {register, handleSubmit, getValues, trigger, errors} = useForm({
     mode: 'onTouched',
   });
+  const [redirect, setRedirect] = useState(false);
 
-  // TODO/IN: Implement and integrate data api
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const apiResult = await User.create(data);
+    if (apiResult.success) {
+      setRedirect(true);
+    } else {
+      // TODO: Render toaster
+    }
+  };
 
   const {
     name: fullNameHTMLProps,
@@ -46,7 +55,9 @@ const SignupForm = () => {
 
   const classes = useStyles();
 
-  return (
+  return redirect ? (
+    <Redirect to="/login" />
+  ) : (
     <Box
       id="signup"
       component="form"

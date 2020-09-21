@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
 import {useForm} from 'react-hook-form';
 import formProps from '../formProps';
 import formValidation from '../formValidation';
+import User from '../../../api/User';
+import UserContext from '../../../contexts';
 
 // TODO: Fix login form autofill labels
 
@@ -20,7 +22,16 @@ const LoginForm = () => {
   } = formProps.html.login;
   const {textField: textFieldStyleProps} = formProps.style;
 
-  const onSubmit = (data) => console.log(data);
+  const userContext = useContext(UserContext);
+  const onSubmit = async (data) => {
+    const apiResult = await User.authenticate(data);
+    if (apiResult.success) {
+      userContext.setUser(apiResult.user);
+      userContext.setAuthenticated(true);
+    } else {
+      // TODO: Display toaster
+    }
+  };
   const {
     email: emailValidation,
     password: passwordValidation,

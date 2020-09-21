@@ -106,7 +106,7 @@ router.post(
 // @desc    Extend user's session if authorized.
 // @access  Authenticated
 //TODO: Invalidate old token?
-router.post("user/session/extend", auth, async (req, res) => {
+router.post("/session/extend", auth, async (req, res) => {
   // NOTE: Auth middleware will verify jwt and decode user from jwt
   //       if there is a valid jwt.
   const payload = {
@@ -133,7 +133,7 @@ router.post("user/session/extend", auth, async (req, res) => {
 // @route GET  user/session/resolve
 // @desc   Resolve which user owns the jwt if exists.
 // @access Authenticated
-router.get("user/session/resolve", auth, async (req, res) => {
+router.get("/session/resolve", auth, async (req, res) => {
   const { user } = req;
   res.json({ user });
 });
