@@ -24,8 +24,9 @@ const upload = multer({
   }),
 })
 
-//@POST api/upload
-//DESC: posts a profile picture to aws bucket
+//@route POST api/upload
+//@desc: posts a profile picture to aws bucket
+//@accesss public
 //should probably validate file first before uploading (basic file regex? *.png or *.jpg)
 router.post('/', upload.single('profile'), (req, res, next) => {
   res.status(200).send(req.file);
