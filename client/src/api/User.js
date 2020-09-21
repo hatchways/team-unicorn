@@ -12,7 +12,8 @@ import axios from 'axios';
 // We leverage this by try-catch blocks.
 
 const User = {
-  // TODO: Implement error handling
+  // TODO: Implement error handling ~
+  // TODO: Standardize an ApiResult object for return values
 
   create: async (data) => {
     try {

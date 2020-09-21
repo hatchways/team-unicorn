@@ -71,18 +71,21 @@ describe("/POST /user/create", () => {
       .send(user)
       .end((err, res) => {
         res.should.have.status(201);
+        res.body.should.have.property("user");
+        res.body.user.should.contain.keys(["id", "email", "name"]);
+        res.body.user.should.not.contain.keys(["password"]);
         done();
       });
   });
 
   // Try to re-create
-  it("It should return 403", (done) => {
+  it("It should return 409", (done) => {
     chai
       .request(app)
       .post("/user/create/")
       .send(user)
       .end((err, res) => {
-        res.should.have.status(403);
+        res.should.have.status(409);
         res.body.should.have.property("message");
         done();
       });

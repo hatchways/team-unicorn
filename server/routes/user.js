@@ -19,10 +19,25 @@ const User = require("../models/User");
 // Auth token time-to-live in ms.
 const AuthTokenTTL = 7 * 24 * 60 * 60 * 1000;
 
+const issueJWT = (user) => {
+  // Remove sensitive information from payload and
+  // issue jwt.
+  const payload = {
+    user: {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+    },
+  };
+
+  const token = jwt.sign(payload, keys.jwtSecret, { expiresIn: AuthTokenTTL });
+
+  return { payload, token };
+};
+
 // @route  POST user/create
 // @desc   Create a new user
 // @access public
-
 router.post("/create", createValidationRules(), validate, async (req, res) => {
   const { name, email, password } = req.body;
 
@@ -30,7 +45,7 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
     // User exists
     let isUser = await User.findOne({ email });
     if (isUser) {
-      return res.status(403).send({ message: "Email is already in use!" });
+      return res.status(409).send({ message: "Email is already in use!" });
     }
 
     // Create new user
@@ -45,7 +60,10 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
     user.password = await bcrypt.hash(password, salt);
     await user.save();
 
-    res.status(201).json();
+    const { payload, token } = issueJWT(user);
+
+    res.cookie("auth-token", token, { httpOnly: true });
+    res.status(201).json(payload);
   } catch (err) {
     console.error(err.message);
     res.status(500).send("Server Error");
@@ -75,26 +93,9 @@ router.post(
         return res.status(401).json({ message: "Invalid credentials" });
       }
 
-      // Remove sensitive information from payload and
-      // issue jwt.
-      const payload = {
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-        },
-      };
-
-      jwt.sign(
-        payload,
-        keys.jwtSecret,
-        { expiresIn: AuthTokenTTL },
-        (err, token) => {
-          if (err) throw err;
-          res.cookie("auth-token", token, { httpOnly: true });
-          res.json({ user: payload.user });
-        }
-      );
+      const { payload, token } = issueJWT(user);
+      res.cookie("auth-token", token, { httpOnly: true });
+      res.json(payload);
     } catch (err) {
       console.error(err.message);
       res.status(500).json({ message: "Server Error" });
