@@ -7,6 +7,7 @@ const connectDB = require("./config/db");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
+const uploadRouter = require("./routes/api/upload");
 const userRouter = require("./routes/user");
 
 const cardsRouter = require("./routes/api/cards");
@@ -27,10 +28,10 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+app.use("/api/upload", uploadRouter)
 app.use("/api/cards", cardsRouter);
 app.use("/api/columns", colRouter);
 app.use("/user", userRouter);
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
