@@ -9,6 +9,9 @@ const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
 const userRouter = require("./routes/user");
 
+const cardsRouter = require("./routes/api/cards");
+const colRouter = require("./routes/api/columns");
+
 const { json, urlencoded } = express;
 
 var app = express();
@@ -24,6 +27,8 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
+app.use("/api/cards", cardsRouter);
+app.use("/api/columns", colRouter);
 app.use("/user", userRouter);
 
 // catch 404 and forward to error handler
