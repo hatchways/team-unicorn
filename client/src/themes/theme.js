@@ -8,9 +8,7 @@ export const theme = createMuiTheme({
       // could customize the h1 variant as well
     },
   },
-  palette: {
-    primary: {main: '#DF1B1B'},
-  },
+  palette: {},
 });
 
 export default theme;
