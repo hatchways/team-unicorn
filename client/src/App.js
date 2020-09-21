@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {MuiThemeProvider} from '@material-ui/core';
 import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
+import AuthRoute from './components/AuthRoute';
+import PrivateRoute from './components/PrivateRoute';
 import UserContext from './contexts';
 import {theme} from './themes/theme';
 
@@ -19,7 +21,7 @@ function App() {
   useEffect(() => {
     const resolveAndAssignUser = async () => {
       const apiResult = await User.resolveSession();
-      if (apiResult.sucess) {
+      if (apiResult.success) {
         setUser(apiResult.user);
         setAuthenticated(true);
       } else {
@@ -31,29 +33,33 @@ function App() {
     setSessionResolved(true);
   }, []);
 
-  const AuthRoutes = (
-    <>
-      <Switch>
-        <Route exact path="/" component={() => <Redirect to="/signup" />} />
-        <Route path="/signup" component={Signup} />
-        <Route path="/login" component={Login} />
-        <Route component={() => <Redirect to="/" />} />
-      </Switch>
-    </>
-  );
-
   return !sessionResolved ? null : (
     <MuiThemeProvider theme={theme}>
       <UserContext.Provider value={userContextValue}>
         <BrowserRouter>
-          {!authenticated ? (
-            AuthRoutes
-          ) : (
-            <Switch>
-              <Route path="/empty" component={Empty} />
-              <Route component={Empty} />
-            </Switch>
-          )}
+          <Switch>
+            <Route
+              exact
+              path="/"
+              component={
+                authenticated
+                  ? () => <Redirect to="/empty" />
+                  : () => <Redirect to="/signup" />
+              }
+            />
+            <AuthRoute
+              authed={authenticated}
+              path="/signup"
+              component={Signup}
+            />
+            <AuthRoute authed={authenticated} path="/login" component={Login} />
+            <PrivateRoute
+              authed={authenticated}
+              path="/empty"
+              component={Empty}
+            />
+            <PrivateRoute authed={authenticated} component={Empty} />
+          </Switch>
         </BrowserRouter>
       </UserContext.Provider>
     </MuiThemeProvider>
