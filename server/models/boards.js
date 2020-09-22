@@ -20,11 +20,11 @@ const boardSchema = new mongoose.Schema({
     type: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Column",
-      },
+        ref: "Column"
+      }
     ],
-    default: defaultColumns(),
-  },
+    default: defaultColumns()
+  }
 });
 
 module.exports = mongoose.model("Board", boardSchema);

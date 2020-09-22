@@ -51,7 +51,7 @@ router.put("/update/:id", async (req, res) => {
     const oldCol = await Column.findById(oldColId);
     const oldColCards = await oldCol.cards;
     await Column.findByIdAndUpdate(oldColId, {
-      cards: oldColCards.filter((c) => c !== cardId),
+      cards: oldColCards.filter((c) => c !== cardId)
     });
 
     //Update column where card is added
@@ -61,8 +61,8 @@ router.put("/update/:id", async (req, res) => {
       cards: [
         ...newColCards.slice(0, index),
         cardId,
-        ...newColCards.slice(index),
-      ],
+        ...newColCards.slice(index)
+      ]
     });
 
     //Change card's column reference

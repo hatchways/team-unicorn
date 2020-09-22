@@ -6,11 +6,11 @@ const columnSchema = mongoose.Schema({
     type: [
       {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "Card",
-      },
+        ref: "Card"
+      }
     ],
-    default: [],
-  },
+    default: []
+  }
 });
 
 module.exports = mongoose.model("Column", columnSchema);
