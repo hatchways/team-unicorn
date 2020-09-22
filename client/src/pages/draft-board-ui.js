@@ -8,12 +8,7 @@ import Column from '../components/column'
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
-  },
-  board: {
-    display: "flex",
-    backgroundColor: "red",
-    flexDirection: "column",
-    alignItems: "center"
+    overflow: 'auto'
   },
   column: {
     padding: theme.spacing(1),
@@ -55,7 +50,7 @@ const useStyles = makeStyles((theme) => ({
 const InnerList = memo((props) => {
   const {column, taskMap, index} = props;
   const tasks = column.taskIds.map(taskId => taskMap[taskId])
-  console.log('render')
+  console.log('column re-render')
   return <Column column={column} tasks={tasks} index={index} />
 }
 );
@@ -150,7 +145,6 @@ export default function KanbanBoard() {
       >
         {(provided) =>
           <Grid 
-            container 
             className={classes.root}
             {...provided.droppableProps}
             innerRef={provided.innerRef}
