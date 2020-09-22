@@ -12,6 +12,8 @@ import Empty from './pages/Empty';
 import './App.css';
 import User from './api/User';
 
+// TODO: Handle UI if server is unavailable?
+
 function App() {
   const [user, setUser] = useState(null);
   const [authenticated, setAuthenticated] = useState(false);
@@ -20,11 +22,15 @@ function App() {
   const userContextValue = {user, setAuthenticated, setUser};
   useEffect(() => {
     const resolveAndAssignUser = async () => {
-      const apiResult = await User.resolveSession();
-      if (apiResult.success) {
-        setUser(apiResult.user);
+      const {success, data, errors} = await User.resolveSession();
+      if (success) {
+        const {user: resolvedUser} = data;
+        setUser(resolvedUser);
         setAuthenticated(true);
       } else {
+        // TODO: Do we want to display any messages
+        //       regarding session resolution errors?
+        console.log(errors);
         setAuthenticated(false);
       }
     };

@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 });
 
 const LoginForm = () => {
-  const {register, handleSubmit, errors} = useForm();
+  const {register, handleSubmit, errors: formErrors} = useForm();
   const {
     email: emailHTMLProps,
     password: passwordHTMLProps,
@@ -24,12 +24,15 @@ const LoginForm = () => {
 
   const userContext = useContext(UserContext);
   const onSubmit = async (data) => {
-    const {success, user, message} = await User.authenticate(data);
+    const {success, data: apiData, errors: apiErrors} = await User.authenticate(
+      data,
+    );
     if (success) {
+      const {user} = apiData;
       userContext.setUser(user);
       userContext.setAuthenticated(true);
     } else {
-      console.log(message);
+      console.log(apiErrors);
       // TODO: Display toaster
     }
   };
@@ -56,13 +59,13 @@ const LoginForm = () => {
         {...emailHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(emailValidation)}
-        {...formValidation.getMuiErrorProps(errors, emailHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, emailHTMLProps.name)}
       />
       <TextField
         {...passwordHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(passwordValidation)}
-        {...formValidation.getMuiErrorProps(errors, passwordHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, passwordHTMLProps.name)}
       />
       <Button
         type="submit"

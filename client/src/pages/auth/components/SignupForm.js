@@ -13,18 +13,25 @@ const useStyles = makeStyles({
 });
 
 const SignupForm = () => {
-  const {register, handleSubmit, getValues, trigger, errors} = useForm({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    trigger,
+    errors: formErrors,
+  } = useForm({
     mode: 'onTouched',
   });
   const userContext = useContext(UserContext);
 
   const onSubmit = async (data) => {
-    const {success, user, message} = await User.create(data);
+    const {success, data: apiData, errors: apiErrors} = await User.create(data);
     if (success) {
+      const {user} = apiData;
       userContext.setUser(user);
       userContext.setAuthenticated(true);
     } else {
-      console.log(message);
+      console.log(apiErrors);
       // TODO: Render toaster
     }
   };
@@ -73,27 +80,27 @@ const SignupForm = () => {
         {...textFieldStyleProps}
         {...fullNameHTMLProps}
         inputRef={register(fullNameValidation)}
-        {...formValidation.getMuiErrorProps(errors, fullNameHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, fullNameHTMLProps.name)}
       />
 
       <TextField
         {...emailHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(emailValidation)}
-        {...formValidation.getMuiErrorProps(errors, emailHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, emailHTMLProps.name)}
       />
       <TextField
         {...passwordHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(passwordValidation)}
-        {...formValidation.getMuiErrorProps(errors, passwordHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, passwordHTMLProps.name)}
       />
       <TextField
         {...confirmPasswordHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(confirmPasswordValidation)}
         {...formValidation.getMuiErrorProps(
-          errors,
+          formErrors,
           confirmPasswordHTMLProps.name,
         )}
       />

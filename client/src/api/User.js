@@ -1,4 +1,5 @@
 import axios from 'axios';
+import ApiResultFactory from './ApiResult';
 
 // const sampleUser = {
 //   name: 'John Doe',
@@ -11,65 +12,50 @@ import axios from 'axios';
 // response headers outside of 2xx.
 // We leverage this by try-catch blocks.
 
-const User = {
-  // TODO: Implement error handling ~
-  // TODO: Standardize an ApiResult object for return values
+const defaultErrorHandler = (axiosError) => {
+  const {errors} = axiosError.response.data;
+  return ApiResultFactory.withErrors(errors);
+};
 
+const User = {
   create: async (data) => {
     try {
-      const {
-        data: {user},
-      } = await axios.post('/user/create', data);
-      const success = true;
-      return {success, user};
+      const {data: respData} = await axios.post('/user/create', data);
+      return ApiResultFactory.withData(respData);
     } catch (err) {
-      const success = false;
-      const {message} = err.body;
-      return {success, message};
+      return defaultErrorHandler(err);
     }
   },
   authenticate: async (data) => {
     try {
-      const resp = await axios.post('/user/authenticate', data);
-      const success = true;
-      const {user} = resp.data;
-      return {success, user};
+      const {data: respData} = await axios.post('/user/authenticate', data);
+      return ApiResultFactory.withData(respData);
     } catch (err) {
-      // HandleError;
-      const success = false;
-      const {message} = err.response.data;
-      return {success, message};
+      return defaultErrorHandler(err);
     }
   },
   extendSession: async () => {
     try {
       await axios.post('/user/session/extend');
-      return true;
+      return ApiResultFactory.success();
     } catch (err) {
-      // HandleError
-      return false;
+      return defaultErrorHandler(err);
     }
   },
   resolveSession: async () => {
     try {
-      const resp = await axios.get('/user/session/resolve');
-      const success = true;
-      const {user} = resp.data;
-      return {success, user};
+      const {data: respData} = await axios.get('/user/session/resolve');
+      return ApiResultFactory.withData(respData);
     } catch (err) {
-      // Handle Error
-      const success = false;
-      const {message} = err.response.data;
-      return {success, message};
+      return defaultErrorHandler(err);
     }
   },
   endSession: async () => {
     try {
       await axios.post('/user/session/end');
-      return true;
+      return ApiResultFactory.success();
     } catch (err) {
-      // Handle Error
-      return false;
+      return defaultErrorHandler(err);
     }
   },
 };
