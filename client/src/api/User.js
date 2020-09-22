@@ -17,9 +17,11 @@ const User = {
 
   create: async (data) => {
     try {
-      await axios.post('/user/create', data);
+      const {
+        data: {user},
+      } = await axios.post('/user/create', data);
       const success = true;
-      return {success};
+      return {success, user};
     } catch (err) {
       const success = false;
       const {message} = err.body;

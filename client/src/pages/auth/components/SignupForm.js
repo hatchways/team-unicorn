@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React, {useContext} from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
 import {useForm} from 'react-hook-form';
-import {Redirect} from 'react-router-dom';
 import formProps from '../formProps';
 import formValidation from '../formValidation';
 import User from '../../../api/User';
+import UserContext from '../../../contexts';
 
 const useStyles = makeStyles({
   submit: {
@@ -16,13 +16,15 @@ const SignupForm = () => {
   const {register, handleSubmit, getValues, trigger, errors} = useForm({
     mode: 'onTouched',
   });
-  const [redirect, setRedirect] = useState(false);
+  const userContext = useContext(UserContext);
 
   const onSubmit = async (data) => {
-    const apiResult = await User.create(data);
-    if (apiResult.success) {
-      setRedirect(true);
+    const {success, user, message} = await User.create(data);
+    if (success) {
+      userContext.setUser(user);
+      userContext.setAuthenticated(true);
     } else {
+      console.log(message);
       // TODO: Render toaster
     }
   };
@@ -55,9 +57,7 @@ const SignupForm = () => {
 
   const classes = useStyles();
 
-  return redirect ? (
-    <Redirect to="/login" />
-  ) : (
+  return (
     <Box
       id="signup"
       component="form"

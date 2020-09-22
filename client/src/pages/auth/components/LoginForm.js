@@ -24,11 +24,12 @@ const LoginForm = () => {
 
   const userContext = useContext(UserContext);
   const onSubmit = async (data) => {
-    const apiResult = await User.authenticate(data);
-    if (apiResult.success) {
-      userContext.setUser(apiResult.user);
+    const {success, user, message} = await User.authenticate(data);
+    if (success) {
+      userContext.setUser(user);
       userContext.setAuthenticated(true);
     } else {
+      console.log(message);
       // TODO: Display toaster
     }
   };
