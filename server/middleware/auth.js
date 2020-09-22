@@ -1,9 +1,10 @@
 const jwt = require("jsonwebtoken");
 const keys = require("../config/keys");
+const User = require("../models/User");
 
 //  TODO: Refactor cookie name "auth-token" into
 //  a variable? (also used in user/authenticate route)
-module.exports = function (req, res, next) {
+module.exports = async function (req, res, next) {
   // Get token from http-only cookie
   const token = req.cookies["auth-token"];
 
@@ -15,7 +16,11 @@ module.exports = function (req, res, next) {
   // Verify token
   try {
     const decoded = jwt.verify(token, keys.jwtSecret);
-    req.user = decoded.user;
+    const user = await User.findById(decoded.user.id);
+    if (!user) {
+      res.status(404).json({ message: "User not found." });
+    }
+    req.user = user;
     next();
   } catch (err) {
     res.status(401).json({ message: "Token is invalid or expired." });
