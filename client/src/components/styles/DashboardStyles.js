@@ -1,0 +1,100 @@
+import {makeStyles} from '@material-ui/core/styles';
+
+export default makeStyles((theme) => ({
+  dashboardContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
+  addColumnContainer: {
+    '&#leftNav': {
+      '& .addColumnContent': {
+        minHeight: '500px',
+        '& a': {
+          width: '2%',
+          padding: '0 30px 0 0',
+          left: '-30px',
+          minHeight: '500px',
+          position: 'fixed',
+          textDecoration: 'none',
+          height: 'inherit',
+          display: 'flex',
+          alignItems: 'center',
+          '& button': {
+            marginRight: '10px',
+            backgroundColor: theme.palette.props.slideFont,
+            padding: '0px',
+            color: theme.palette.props.slideBackground,
+          },
+          '&:hover': {
+            padding: '0 0 0 20px',
+            left: 0,
+            position: 'relative',
+            width: 'fit-content',
+            // grey
+            backgroundColor: theme.palette.props.slideBackground,
+            transition: '0.05s',
+          },
+        },
+      },
+    },
+    '&#rightNav': {
+      '& .addColumnContent': {
+        minHeight: '500px',
+        '& a': {
+          position: 'fixed',
+          transition: '0.1s',
+          textDecoration: 'none',
+          height: 'inherit',
+          display: 'flex',
+          alignItems: 'center',
+          width: '2%',
+          padding: '0 0 0 30px',
+          right: '-30px',
+          minHeight: '500px',
+          '& button': {
+            marginLeft: '10px',
+            backgroundColor: theme.palette.props.slideFont,
+            color: theme.palette.props.slideBackground,
+            padding: '0px',
+          },
+          '&:hover': {
+            position: 'relative',
+            width: 'fit-content',
+            backgroundColor: theme.palette.props.slideBackground,
+            right: 0,
+            padding: '0 10px 0 0',
+          },
+        },
+      },
+    },
+  },
+  columnsContainer: {
+    width: '90%',
+    '& .columns': {
+      display: 'flex',
+      overflowX: 'scroll',
+      width: '100%',
+      '& > *': {
+        margin: theme.spacing(1),
+      },
+      '& .column': {
+        display: 'flex',
+        flexWrap: 'wrap',
+        height: 'fit-content',
+        padding: theme.spacing(2),
+        background: theme.palette.background.default,
+        '& .cardItem': {
+          minWidth: 200,
+          maxWidth: 275,
+          width: 250,
+          cursor: 'pointer',
+          marginBottom: theme.spacing(2),
+        },
+      },
+      '& .title': {
+        marginBottom: theme.spacing(2),
+      },
+    },
+  },
+}));
