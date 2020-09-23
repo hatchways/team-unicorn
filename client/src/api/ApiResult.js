@@ -27,8 +27,9 @@ const ApiResultFactory = {
     return succeed();
   },
   // NOTE: Failure should include at least one
-  //        error message! Therefore, no fail method
-  //        in factory.
+  //        error message! Therefore, no "failure"
+  //        counterpart of sucess method in factory.
+
   withErrors: (errors) => {
     return fail({errors});
   },

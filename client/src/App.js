@@ -33,10 +33,10 @@ function App() {
         console.log(errors);
         setAuthenticated(false);
       }
+      setSessionResolved(true);
     };
 
     resolveAndAssignUser();
-    setSessionResolved(true);
   }, []);
 
   return !sessionResolved ? null : (
