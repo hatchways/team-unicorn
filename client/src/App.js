@@ -3,6 +3,7 @@ import {MuiThemeProvider} from '@material-ui/core';
 import {BrowserRouter, Route, Redirect} from 'react-router-dom';
 
 import {theme} from './themes/theme';
+import Dashboard from './pages/Dashboard';
 
 import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
@@ -15,6 +16,7 @@ function App() {
         <Route exact path="/" component={() => <Redirect to="/signup" />} />
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />
+        <Route exact path="/dashboard" component={Dashboard} />
       </BrowserRouter>
     </MuiThemeProvider>
   );
