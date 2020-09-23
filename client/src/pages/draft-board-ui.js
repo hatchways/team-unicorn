@@ -1,7 +1,7 @@
 import React, { useState, memo } from 'react';
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { makeStyles } from '@material-ui/core/styles';
-import {Grid} from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import mockData from './mock-data';
 import Column from '../components/column'
 
@@ -50,7 +50,6 @@ const useStyles = makeStyles((theme) => ({
 const InnerList = memo((props) => {
   const {column, taskMap, index} = props;
   const tasks = column.taskIds.map(taskId => taskMap[taskId])
-  console.log('column re-render')
   return <Column column={column} tasks={tasks} index={index} />
 }
 );
