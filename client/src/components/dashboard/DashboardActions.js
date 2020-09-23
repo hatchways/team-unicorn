@@ -11,7 +11,7 @@ const DashboardActions = () => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-
+  const [newColumn, setNewColumn] = useState({columns: []});
   const loadData = async () => {
     const payload = await getCurrentColumns();
 
@@ -28,7 +28,7 @@ const DashboardActions = () => {
     <>
       <div className={classes.dashboardContainer}>
         <div className={classes.addColumnContainer} id="leftNav">
-          <AddColumn />
+          <AddColumn newColumn={newColumn} setNewColumn={setNewColumn} />
         </div>
         <div className={classes.columnsContainer}>
           {error && <div>Something went wrong. Please try again!!!</div>}
@@ -42,7 +42,7 @@ const DashboardActions = () => {
           )}
         </div>
         <div className={classes.addColumnContainer} id="rightNav">
-          <AddColumn />
+          <AddColumn column={newColumn} setColumn={setNewColumn} />
         </div>
       </div>
     </>

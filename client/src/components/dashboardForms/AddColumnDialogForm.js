@@ -16,7 +16,8 @@ import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
 const AddColumnDialogForm = (props) => {
-  const {open} = props;
+  const {open, newColumn, setNewColumn} = props;
+
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
@@ -32,6 +33,9 @@ const AddColumnDialogForm = (props) => {
 
     setError(payload.error);
     setData(payload.data);
+    const {columns} = newColumn;
+    columns.push(payload.data);
+    setNewColumn({columns});
 
     if (!error) document.getElementById('title').value = '';
     setTimeout(() => {

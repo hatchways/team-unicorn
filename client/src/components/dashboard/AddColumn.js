@@ -4,7 +4,8 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircle';
 
 import AddColumnDialogForm from '../dashboardForms/AddColumnDialogForm';
 
-const AddColumn = () => {
+const AddColumn = (props) => {
+  const {newColumn, setNewColumn} = props;
   const [open, setOpen] = useState(false);
   const handleClickOpen = (event) => {
     event.preventDefault();
@@ -19,7 +20,14 @@ const AddColumn = () => {
           </IconButton>
         </a>
       </div>
-      {open && <AddColumnDialogForm open={open} setOpen={setOpen} />}
+      {open && (
+        <AddColumnDialogForm
+          open={open}
+          setOpen={setOpen}
+          newColumn={newColumn}
+          setNewColumn={setNewColumn}
+        />
+      )}
     </div>
   );
 };
