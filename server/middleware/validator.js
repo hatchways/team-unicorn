@@ -23,6 +23,24 @@ exports.loginValidationRules = () => {
   ];
 };
 
+exports.boardValidationRules = () => {
+  return [
+    body("name").not().isEmpty().withMessage("Please enter title of the board")
+  ];
+};
+
+exports.columnValidationRules = () => {
+  return [
+    body("name").not().isEmpty().withMessage("Please enter title of the column")
+  ];
+};
+
+exports.cardValidationRules = () => {
+  return [
+    body("name").not().isEmpty().withMessage("Please enter title of the card")
+  ];
+};
+
 exports.validate = (req, res, next) => {
   const errors = validationResult(req);
 

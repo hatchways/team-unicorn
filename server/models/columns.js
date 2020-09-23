@@ -8,8 +8,7 @@ const columnSchema = mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "Card"
       }
-    ],
-    default: []
+    ]
   }
 });
 
