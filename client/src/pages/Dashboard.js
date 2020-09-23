@@ -1,12 +1,12 @@
 import React from 'react';
-
 import NavBar from '../components/layout/NavBar';
+import AppLayout from './AppLayout';
 
 const Dashboard = () => {
   return (
-    <div>
+    <AppLayout>
       <NavBar />
-    </div>
+    </AppLayout>
   );
 };
 
