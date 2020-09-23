@@ -1,7 +1,7 @@
 import {Box, Paper, Typography} from '@material-ui/core';
 import React from 'react';
 
-const AuthFormContainer = ({title, children}) => {
+const AuthFormContainer = ({children, title}) => {
   return (
     <Box
       component={Paper}

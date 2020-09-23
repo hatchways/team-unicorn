@@ -81,6 +81,7 @@ const SignupForm = () => {
         {...fullNameHTMLProps}
         inputRef={register(fullNameValidation)}
         {...formValidation.getMuiErrorProps(formErrors, fullNameHTMLProps.name)}
+        required
       />
 
       <TextField
@@ -94,6 +95,7 @@ const SignupForm = () => {
         {...textFieldStyleProps}
         inputRef={register(passwordValidation)}
         {...formValidation.getMuiErrorProps(formErrors, passwordHTMLProps.name)}
+        required
       />
       <TextField
         {...confirmPasswordHTMLProps}
@@ -103,6 +105,7 @@ const SignupForm = () => {
           formErrors,
           confirmPasswordHTMLProps.name,
         )}
+        required
       />
       <Button
         type="submit"

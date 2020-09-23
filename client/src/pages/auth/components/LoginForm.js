@@ -60,12 +60,14 @@ const LoginForm = () => {
         {...textFieldStyleProps}
         inputRef={register(emailValidation)}
         {...formValidation.getMuiErrorProps(formErrors, emailHTMLProps.name)}
+        required
       />
       <TextField
         {...passwordHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(passwordValidation)}
         {...formValidation.getMuiErrorProps(formErrors, passwordHTMLProps.name)}
+        required
       />
       <Button
         type="submit"

@@ -6,7 +6,6 @@ const formProps = {
     textField: {
       margin: 'dense',
       variant: 'outlined',
-      required: true,
       fullWidth: true,
     },
   },

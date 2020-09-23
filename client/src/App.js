@@ -6,8 +6,8 @@ import PrivateRoute from './components/PrivateRoute';
 import UserContext from './contexts';
 import {theme} from './themes/theme';
 
-import Signup from './pages/auth/Signup';
-import Login from './pages/auth/Login';
+import Signup from './pages/Signup';
+import Login from './pages/Login';
 import Empty from './pages/Empty';
 import './App.css';
 import User from './api/User';
