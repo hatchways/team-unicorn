@@ -5,10 +5,10 @@ import AuthRoute from './components/AuthRoute';
 import PrivateRoute from './components/PrivateRoute';
 import UserContext from './contexts';
 import {theme} from './themes/theme';
+import Dashboard from './pages/Dashboard';
 
 import Signup from './pages/Signup';
 import Login from './pages/Login';
-import Empty from './pages/Empty';
 import './App.css';
 import User from './api/User';
 
@@ -49,7 +49,7 @@ function App() {
               path="/"
               component={
                 authenticated
-                  ? () => <Redirect to="/empty" />
+                  ? () => <Redirect to="/dashboard" />
                   : () => <Redirect to="/signup" />
               }
             />
@@ -61,10 +61,9 @@ function App() {
             <AuthRoute authed={authenticated} path="/login" component={Login} />
             <PrivateRoute
               authed={authenticated}
-              path="/empty"
-              component={Empty}
+              path="/dashboard"
+              component={Dashboard}
             />
-            <PrivateRoute authed={authenticated} component={Empty} />
           </Switch>
         </BrowserRouter>
       </UserContext.Provider>

@@ -17,7 +17,6 @@ const user = {
 //             moving on from development stage.
 // Clear User collection
 const connectDB = require("../config/db");
-const keys = require("../config/keys.js");
 
 const dropCollection = async () => {
   await connectDB();

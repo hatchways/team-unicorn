@@ -11,7 +11,6 @@ const {
   createValidationRules,
   authenticateValidationRules,
 } = require("../middleware/validator");
-const keys = require("../config/keys");
 
 const User = require("../models/User");
 
@@ -30,7 +29,9 @@ const issueJWT = (user) => {
     },
   };
 
-  const token = jwt.sign(payload, keys.jwtSecret, { expiresIn: AuthTokenTTL });
+  const token = jwt.sign(payload, process.env.JWTSECRET, {
+    expiresIn: AuthTokenTTL,
+  });
 
   return { payload, token };
 };
@@ -126,7 +127,7 @@ router.post("/session/extend", authenticator, async (req, res) => {
   try {
     jwt.sign(
       payload,
-      keys.jwtSecret,
+      process.env.JWTSECRET,
       { expiresIn: AuthTokenTTL },
       (err, token) => {
         if (err) throw err;

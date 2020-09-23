@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const keys = require("../config/keys");
 const User = require("../models/User");
 
 //  TODO: Refactor cookie name "auth-token" into constans
@@ -17,7 +16,7 @@ module.exports = async function (req, res, next) {
 
   // Verify token
   try {
-    const decoded = jwt.verify(token, keys.jwtSecret);
+    const decoded = jwt.verify(token, process.env.JWTSECRET);
     const user = await User.findById(decoded.user.id);
     if (!user) {
       res.status(404).json({ errors: { DNE: "User not found." } });
