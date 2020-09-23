@@ -49,8 +49,8 @@ describe("/POST /user/create", () => {
       })
       .end((err, res) => {
         res.should.have.status(400);
-        res.body.should.have.property("message");
-        res.body.message.should.contain.keys([
+        res.body.should.have.property("errors");
+        res.body.errors.should.contain.keys([
           "name",
           "email",
           "password",
@@ -86,7 +86,7 @@ describe("/POST /user/create", () => {
       .send(user)
       .end((err, res) => {
         res.should.have.status(409);
-        res.body.should.have.property("message");
+        res.body.should.have.property("errors");
         done();
       });
   });
@@ -104,8 +104,8 @@ describe("/POST /user/authenticate", () => {
       })
       .end((err, res) => {
         res.should.have.status(400);
-        res.body.should.have.property("message");
-        res.body.message.should.contain.keys(["email"]);
+        res.body.should.have.property("errors");
+        res.body.errors.should.contain.keys(["email"]);
         done();
       });
   });
@@ -127,8 +127,8 @@ describe("/POST /user/authenticate", () => {
       })
       .end((err, res) => {
         res.should.have.status(401);
-        res.body.should.have.property("message");
-        res.body.message.should.be.equal("Account doesn't exist");
+        res.body.should.have.property("errors");
+        res.body.errors.should.contain.keys(["DNE_USER"]);
 
         //TODO: Test this behaviour when implemented.
         // res.should.have.property("header");
@@ -148,8 +148,8 @@ describe("/POST /user/authenticate", () => {
       })
       .end((err, res) => {
         res.should.have.status(401);
-        res.body.should.have.property("message");
-        res.body.message.should.be.equal("Invalid credentials");
+        res.body.should.have.property("errors");
+        res.body.errors.should.contain.keys(["INCORRECT_PASSWORD"]);
 
         //TODO: Test this behaviour when implemented.
         // res.should.have.property("header");

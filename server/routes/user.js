@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const auth = require("../middleware/auth");
+const auth = require("../middleware/authenticator");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -45,14 +45,15 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
     // User exists
     let isUser = await User.findOne({ email });
     if (isUser) {
-      return res.status(409).send({ message: "Email is already in use!" });
+      return res
+        .status(409)
+        .json({ errors: { EMAIL_IN_USE: "Email is already in use!" } });
     }
 
     // Create new user
     let user = new User({
       name,
       email,
-      password,
     });
 
     // Bcrypt password
@@ -66,7 +67,9 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
     res.status(201).json(payload);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    res
+      .status(500)
+      .json({ errors: { DEFAULT_SERVER_ERROR: "Something went wrong..." } });
   }
 });
 
@@ -84,13 +87,17 @@ router.post(
       // user exists
       let user = await User.findOne({ email });
       if (!user) {
-        return res.status(401).json({ message: "Account doesn't exist" });
+        return res
+          .status(401)
+          .json({ errors: { DNE_USER: "Account doesn't exist" } });
       }
 
       // Compare paswword - plain and encrypted
       const isMatch = await bcrypt.compare(password, user.password);
       if (!isMatch) {
-        return res.status(401).json({ message: "Invalid credentials" });
+        return res
+          .status(401)
+          .json({ errors: { INCORRECT_PASSWORD: "Invalid credentials" } });
       }
 
       const { payload, token } = issueJWT(user);
@@ -98,7 +105,9 @@ router.post(
       res.json(payload);
     } catch (err) {
       console.error(err.message);
-      res.status(500).json({ message: "Server Error" });
+      res
+        .status(500)
+        .json({ errors: { DEFAULT_SERVER_ERROR: "Something went wrong..." } });
     }
   }
 );
@@ -127,7 +136,9 @@ router.post("/session/extend", auth, async (req, res) => {
     );
   } catch (err) {
     console.error(err.message);
-    res.status(500).json({ message: "Could not extend session." });
+    res
+      .status(500)
+      .json({ errors: { DEFAULT_SERVER_ERROR: "Something went wrong..." } });
   }
 });
 

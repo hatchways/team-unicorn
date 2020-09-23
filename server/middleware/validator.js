@@ -24,14 +24,14 @@ exports.authenticateValidationRules = () => {
 };
 
 exports.validate = (req, res, next) => {
-  const errors = validationResult(req);
+  const validationErrors = validationResult(req);
 
-  if (!errors.isEmpty()) {
-    let message = {};
-    errors.array().forEach((err) => {
-      message[err.param] = err.msg;
+  if (!validationErrors.isEmpty()) {
+    const errors = {};
+    validationErrors.array().forEach((err) => {
+      errors[err.param] = err.msg;
     });
-    return res.status(400).json({ message });
+    return res.status(400).json({ errors });
   }
   return next();
 };
