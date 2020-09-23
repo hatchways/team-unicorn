@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const auth = require("../middleware/authenticator");
+const authenticator = require("../middleware/authenticator");
 
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -43,7 +43,7 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
 
   try {
     // User exists
-    let isUser = await User.findOne({ email });
+    const isUser = await User.findOne({ email });
     if (isUser) {
       return res
         .status(409)
@@ -51,7 +51,7 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
     }
 
     // Create new user
-    let user = new User({
+    const user = new User({
       name,
       email,
     });
@@ -85,7 +85,7 @@ router.post(
     const { email, password } = req.body;
     try {
       // user exists
-      let user = await User.findOne({ email });
+      const user = await User.findOne({ email });
       if (!user) {
         return res
           .status(401)
@@ -116,7 +116,7 @@ router.post(
 // @desc    Extend user's session if authorized.
 // @access  Authenticated
 //TODO: Invalidate old token?
-router.post("/session/extend", auth, async (req, res) => {
+router.post("/session/extend", authenticator, async (req, res) => {
   // NOTE: Auth middleware will verify jwt and decode user from jwt
   //       if there is a valid jwt.
   const payload = {
@@ -145,7 +145,7 @@ router.post("/session/extend", auth, async (req, res) => {
 // @route GET  user/session/resolve
 // @desc   Resolve which user owns the jwt if exists.
 // @access Authenticated
-router.get("/session/resolve", auth, async (req, res) => {
+router.get("/session/resolve", authenticator, async (req, res) => {
   const { user } = req;
   res.json({ user });
 });

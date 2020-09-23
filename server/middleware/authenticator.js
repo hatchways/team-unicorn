@@ -23,6 +23,7 @@ module.exports = async function (req, res, next) {
       res.status(404).json({ errors: { DNE: "User not found." } });
     }
     req.user = user;
+    next();
   } catch (err) {
     res
       .status(401)
