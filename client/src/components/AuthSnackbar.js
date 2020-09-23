@@ -22,9 +22,9 @@ const AuthSnackbar = ({open, message, severity, onClose, ...otherProps}) => {
       autoHideDuration={6000}
       resumeHideDuration={500}
       transitionDuration={500}
-      anchorOrigin={{vertical: 'top', horizontal: 'right'}}
+      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
       TransitionComponent={Slide}
-      TransitionProps={{direction: 'down'}}
+      TransitionProps={{direction: 'up'}}
       onClose={onClose}
       {...otherProps}
     >
