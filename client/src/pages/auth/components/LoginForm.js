@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
 import {useForm} from 'react-hook-form';
 import formProps from '../formProps';
 import formValidation from '../formValidation';
+import User from '../../../api/User';
+import UserContext from '../../../contexts';
 
 // TODO: Fix login form autofill labels
 
@@ -13,14 +15,27 @@ const useStyles = makeStyles({
 });
 
 const LoginForm = () => {
-  const {register, handleSubmit, errors} = useForm();
+  const {register, handleSubmit, errors: formErrors} = useForm();
   const {
     email: emailHTMLProps,
     password: passwordHTMLProps,
   } = formProps.html.login;
   const {textField: textFieldStyleProps} = formProps.style;
 
-  const onSubmit = (data) => console.log(data);
+  const userContext = useContext(UserContext);
+  const onSubmit = async (data) => {
+    const {success, data: apiData, errors: apiErrors} = await User.authenticate(
+      data,
+    );
+    if (success) {
+      const {user} = apiData;
+      userContext.setUser(user);
+      userContext.setAuthenticated(true);
+    } else {
+      console.log(apiErrors);
+      // TODO: Display toaster
+    }
+  };
   const {
     email: emailValidation,
     password: passwordValidation,
@@ -44,13 +59,15 @@ const LoginForm = () => {
         {...emailHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(emailValidation)}
-        {...formValidation.getMuiErrorProps(errors, emailHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, emailHTMLProps.name)}
+        required
       />
       <TextField
         {...passwordHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(passwordValidation)}
-        {...formValidation.getMuiErrorProps(errors, passwordHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, passwordHTMLProps.name)}
+        required
       />
       <Button
         type="submit"

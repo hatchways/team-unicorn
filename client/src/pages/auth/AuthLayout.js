@@ -2,7 +2,6 @@ import {Grid, makeStyles, Box, Hidden} from '@material-ui/core';
 import React from 'react';
 import AuthImg from './authPageImg.png';
 import CenteringBox from '../../components/CenteringBox';
-import AuthFormContainer from './components/AuthFormContainer';
 
 const useStyles = makeStyles({
   root: {
@@ -26,8 +25,12 @@ const useStyles = makeStyles({
 //        consider putting it in bg.
 //        Also consider debouncing and moving components
 //        dynamically (i.e. smoothly) upon resize.
-const Auth = ({formComponent, footerComponent, title}) => {
+const AuthLayout = ({children}) => {
   const classes = useStyles();
+
+  const formComponent = children.filter((comp) => comp.key === 'form');
+  const footerComponent = children.filter((comp) => comp.key === 'footer');
+
   return (
     <Grid
       className={classes.root}
@@ -50,9 +53,7 @@ const Auth = ({formComponent, footerComponent, title}) => {
         md
         xs={12}
       >
-        <CenteringBox flexGrow={1}>
-          <AuthFormContainer title={title}>{formComponent}</AuthFormContainer>
-        </CenteringBox>
+        <CenteringBox flexGrow={1}>{formComponent}</CenteringBox>
         <CenteringBox
           className={classes.footer}
           borderTop={1}
@@ -65,4 +66,4 @@ const Auth = ({formComponent, footerComponent, title}) => {
   );
 };
 
-export default Auth;
+export default AuthLayout;

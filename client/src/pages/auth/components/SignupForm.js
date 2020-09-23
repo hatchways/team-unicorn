@@ -1,8 +1,10 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {makeStyles, Box, TextField, Button} from '@material-ui/core';
 import {useForm} from 'react-hook-form';
 import formProps from '../formProps';
 import formValidation from '../formValidation';
+import User from '../../../api/User';
+import UserContext from '../../../contexts';
 
 const useStyles = makeStyles({
   submit: {
@@ -11,12 +13,28 @@ const useStyles = makeStyles({
 });
 
 const SignupForm = () => {
-  const {register, handleSubmit, getValues, trigger, errors} = useForm({
+  const {
+    register,
+    handleSubmit,
+    getValues,
+    trigger,
+    errors: formErrors,
+  } = useForm({
     mode: 'onTouched',
   });
+  const userContext = useContext(UserContext);
 
-  // TODO/IN: Implement and integrate data api
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) => {
+    const {success, data: apiData, errors: apiErrors} = await User.create(data);
+    if (success) {
+      const {user} = apiData;
+      userContext.setUser(user);
+      userContext.setAuthenticated(true);
+    } else {
+      console.log(apiErrors);
+      // TODO: Render toaster
+    }
+  };
 
   const {
     name: fullNameHTMLProps,
@@ -62,29 +80,32 @@ const SignupForm = () => {
         {...textFieldStyleProps}
         {...fullNameHTMLProps}
         inputRef={register(fullNameValidation)}
-        {...formValidation.getMuiErrorProps(errors, fullNameHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, fullNameHTMLProps.name)}
+        required
       />
 
       <TextField
         {...emailHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(emailValidation)}
-        {...formValidation.getMuiErrorProps(errors, emailHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, emailHTMLProps.name)}
       />
       <TextField
         {...passwordHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(passwordValidation)}
-        {...formValidation.getMuiErrorProps(errors, passwordHTMLProps.name)}
+        {...formValidation.getMuiErrorProps(formErrors, passwordHTMLProps.name)}
+        required
       />
       <TextField
         {...confirmPasswordHTMLProps}
         {...textFieldStyleProps}
         inputRef={register(confirmPasswordValidation)}
         {...formValidation.getMuiErrorProps(
-          errors,
+          formErrors,
           confirmPasswordHTMLProps.name,
         )}
+        required
       />
       <Button
         type="submit"
