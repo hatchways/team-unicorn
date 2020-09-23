@@ -11,7 +11,6 @@ const {
   registerValidationRules,
   loginValidationRules
 } = require("../middleware/validator");
-const keys = require("../config/keys");
 
 const User = require("../models/User");
 
@@ -54,7 +53,7 @@ router.post(
         }
       };
 
-      jwt.sign(payload, keys.jwtSecret, { expiresIn: 360000 }, (err, token) => {
+      jwt.sign(payload, process.local.jwtSecret, { expiresIn: 360000 }, (err, token) => {
         if (err) throw err;
         res.cookie("token", token, { httpOnly: true });
         res.status(201).json({ token, user: payload.user });
@@ -95,7 +94,7 @@ router.post("/login", loginValidationRules(), validate, async (req, res) => {
       }
     };
 
-    jwt.sign(payload, keys.jwtSecret, { expiresIn: 360000 }, (err, token) => {
+    jwt.sign(payload, process.env.jwtSecret, { expiresIn: 360000 }, (err, token) => {
       if (err) throw err;
       res.cookie("token", token, { httpOnly: true });
       res.json({ token, user: payload.user });

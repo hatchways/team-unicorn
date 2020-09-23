@@ -1,17 +1,8 @@
 const mongoose = require("mongoose");
-const Column = require("columns")
+const Column = require("./columns")
 
-const defaultColumns = () => {
-    //to produce the Completed/In progress columns for the board
-    const initial = [{ 'name': 'Completed' }, { 'name': 'In Progress' }]
-    Columns.create(initial, (err, columns) => {
-        if (err) {
-            console.log(err);
-            return []
-        } else {
-            return columns.map(col => col._id)
-        }
-    })
+const createCols = () => {
+    return Column.create([{ 'name': 'Completed' }, { 'name': 'In Progress' }])
 }
 
 const boardSchema = new mongoose.Schema({
@@ -29,8 +20,13 @@ const boardSchema = new mongoose.Schema({
                 ref: "Column"
             }
         ],
-        default: defaultColumns()
     }
-})
+});
 
+boardSchema.pre('save', async function() {
+    if (this.columns.length === 0) {
+        const cols = await createCols()
+        this.columns = await cols.map(col => col._id)
+    }
+});
 module.exports = mongoose.model("Board", boardSchema)

@@ -12,6 +12,7 @@ const userRouter = require("./routes/user");
 
 const cardsRouter = require("./routes/api/cards");
 const colRouter = require("./routes/api/columns");
+const boardRouter = require("./routes/api/boards");
 
 const { json, urlencoded } = express;
 
@@ -31,6 +32,8 @@ app.use("/ping", pingRouter);
 app.use("/api/upload", uploadRouter)
 app.use("/api/cards", cardsRouter);
 app.use("/api/columns", colRouter);
+app.use("/api/boards", boardRouter);
+
 app.use("/user", userRouter);
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
