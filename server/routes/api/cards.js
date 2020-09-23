@@ -26,12 +26,13 @@ router.post("/create", (req, res) => {
 // @access Public
 
 router.put("/detail/update/:id", (req, res) => {
+  console.log(req.body);
   Card.findByIdAndUpdate(req.params.id, req.body, (err, updatedCard) => {
     if (err) {
       console.log(err);
       res.send(err);
     } else {
-      console.log(updatedCard);
+      console.log("updatedCard", updatedCard);
       res.send(updatedCard);
     }
   });
@@ -83,7 +84,7 @@ router.get("/show/:id", (req, res) => {
   Card.findById(req.params.id)
     .populate("column", ["name"])
     .exec((err, card) => {
-      console.log(card);
+      console.log("card", card);
       if (err) {
         res.send(err);
       } else {

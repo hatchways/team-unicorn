@@ -6,8 +6,6 @@ const formProps = {
       fullWidth: true,
     },
     textAreaField: {
-      // rowsMin: 5,
-      // rowsMax: 5,
       rows: 5,
     },
   },
@@ -20,11 +18,11 @@ const formProps = {
         type: 'text',
       },
     },
-    editColumn: {
+    editCard: {
       description: {
-        id: 'description',
-        name: 'description',
-        placeholder: 'Type your description here *',
+        id: 'desc',
+        name: 'desc',
+        placeholder: 'Type your description here',
       },
     },
   },

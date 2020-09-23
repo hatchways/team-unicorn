@@ -1,9 +1,11 @@
 import axios from 'axios';
 
 // Get card by Id
-export const getCardById = async (cardId) => {
+export const getCardById = async (card) => {
   try {
-    const res = await axios.get(`/api/cards/show/${cardId}`);
+    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+    card.id = card._id;
+    const res = await axios.get(`/api/cards/show/${card.id}`);
 
     return {data: res.data, loading: false, error: false};
   } catch (err) {
@@ -19,9 +21,11 @@ export const updateCard = async (card) => {
         'Content-Type': 'application/json',
       },
     };
-    const body = JSON.stringify(card);
+    const editedCard = card;
+    const body = JSON.stringify(editedCard);
+
     // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    card.id = card._id.toString();
+    card.id = card._id;
 
     const res = await axios.put(
       `/api/cards/detail/update/${card.id}`,

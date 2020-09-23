@@ -4,10 +4,8 @@ import {
   Typography,
   Button,
   IconButton,
-  TextField,
   Dialog,
   DialogContent,
-  // TextareaAutosize,
   Divider,
 } from '@material-ui/core/';
 import CloseIcon from '@material-ui/icons/Close';
@@ -27,18 +25,18 @@ const AddColumnDialogForm = (props) => {
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
-  const [data, setData] = useState(false);
+  const [data, setData] = useState();
   const [error, setError] = useState(false);
 
-  const {title: titleProps} = formProps.html.addColumn;
-  const {textField: textFieldProps} = formProps.style;
-  const {title: titleValidation} = formValidation.addColumn;
+  const {description: descriptionProps} = formProps.html.editCard;
+  const {textAreaField: textAreaFieldProps} = formProps.style;
+  const {description: descriptionValidation} = formValidation.editCard;
 
   const onSubmitForm = async (formData) => {
-    if (formData.title !== cardData.desc) {
-      cardData.desc = formData.title;
-      const payload = await updateCard(cardData);
+    if (formData.desc !== cardData.desc) {
+      cardData.desc = formData.desc;
 
+      const payload = await updateCard(cardData);
       setError(payload.error);
       setData(payload.data);
 
@@ -56,7 +54,7 @@ const AddColumnDialogForm = (props) => {
     props.setOpen(false);
   };
   const handleEditCancel = () => {
-    document.getElementById('title').value = cardData.desc;
+    document.getElementById('desc').value = cardData.desc;
   };
 
   return (
@@ -119,22 +117,13 @@ const AddColumnDialogForm = (props) => {
                 <div className="rightContent">
                   <Typography variant="subtitle1">Description</Typography>
                   <div>
-                    {/* <TextareaAutosize
-                  {...textAreaProps}
-                  {...descriptionProps}
-                  inputRef={register(descriptionValidation)}
-                  {...formValidation.getMuiErrorProps(
-                    errors,
-                    descriptionProps.name,
-                  )}
-                /> */}
-                    <TextField
-                      {...textFieldProps}
-                      {...titleProps}
-                      inputRef={register(titleValidation)}
+                    <textarea
+                      {...textAreaFieldProps}
+                      {...descriptionProps}
+                      ref={register(descriptionValidation)}
                       {...formValidation.getMuiErrorProps(
                         errors,
-                        titleProps.name,
+                        descriptionProps.name,
                       )}
                       defaultValue={cardData.desc}
                     />

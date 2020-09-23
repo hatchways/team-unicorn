@@ -17,9 +17,7 @@ const CardItem = (props) => {
   const [cardError, setCardError] = useState(false);
 
   const getCardData = async () => {
-    // To test
-    const id = '5f633dd6723ccc36b496af6f';
-    const payload = await getCardById(id); // change id to card._id
+    const payload = await getCardById(card);
     setCardData(payload.data);
     setCardLoading(payload.data.loading);
     setCardError(payload.error);
@@ -27,7 +25,7 @@ const CardItem = (props) => {
 
   const handleClickOpen = () => {
     getCardData();
-    setOpen(true);
+    if (!cardError) setOpen(true);
   };
 
   return (

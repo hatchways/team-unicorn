@@ -4,7 +4,7 @@ const formValidation = {
       required: 'Please enter title',
     },
   },
-  editColumn: {
+  editCard: {
     description: {
       required: 'Please enter description',
     },
