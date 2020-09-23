@@ -1,7 +1,8 @@
 import {Grid, makeStyles, Box, Hidden} from '@material-ui/core';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
 import AuthImg from './authPageImg.png';
 import CenteringBox from '../../components/CenteringBox';
+import AuthSnackbar from '../../components/AuthSnackbar';
 
 const useStyles = makeStyles({
   root: {
@@ -25,11 +26,28 @@ const useStyles = makeStyles({
 //        consider putting it in bg.
 //        Also consider debouncing and moving components
 //        dynamically (i.e. smoothly) upon resize.
-const AuthLayout = ({children}) => {
+const AuthLayout = ({
+  formContainer: FormContainer,
+  footer: FooterComponent,
+}) => {
   const classes = useStyles();
 
-  const formComponent = children.filter((comp) => comp.key === 'form');
-  const footerComponent = children.filter((comp) => comp.key === 'footer');
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState('');
+  // const [snackSeverity, setSnackSeverity] = useState("error")
+
+  const openSnackbar = useCallback((message) => {
+    setSnackMessage(message);
+    setSnackOpen(true);
+  }, []);
+  const closeSnackbar = useCallback(() => {
+    setSnackOpen(false);
+    setSnackMessage('');
+  }, []);
+
+  const FormContainerWithFormProps = React.cloneElement(FormContainer, {
+    formProps: {openSnackbar},
+  });
 
   return (
     <Grid
@@ -53,13 +71,19 @@ const AuthLayout = ({children}) => {
         md
         xs={12}
       >
-        <CenteringBox flexGrow={1}>{formComponent}</CenteringBox>
+        <AuthSnackbar
+          open={snackOpen}
+          message={snackMessage}
+          severity="error"
+          onClose={closeSnackbar}
+        />
+        <CenteringBox flexGrow={1}>{FormContainerWithFormProps}</CenteringBox>
         <CenteringBox
           className={classes.footer}
           borderTop={1}
           borderColor="grey.300"
         >
-          {footerComponent}
+          {FooterComponent}
         </CenteringBox>
       </Grid>
     </Grid>

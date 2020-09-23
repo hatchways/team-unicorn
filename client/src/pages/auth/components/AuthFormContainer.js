@@ -1,7 +1,12 @@
 import {Box, Paper, Typography} from '@material-ui/core';
 import React from 'react';
 
-const AuthFormContainer = ({children, title}) => {
+const AuthFormContainer = ({component: FormComponent, formProps, title}) => {
+  const FormComponentWithFormProps = React.cloneElement(FormComponent, {
+    ...formProps,
+  });
+
+  // console.log(FormComponentWithFormProps);
   return (
     <Box
       component={Paper}
@@ -19,7 +24,7 @@ const AuthFormContainer = ({children, title}) => {
           {title}
         </Typography>
       </Box>
-      {children}
+      {FormComponentWithFormProps}
     </Box>
   );
 };
