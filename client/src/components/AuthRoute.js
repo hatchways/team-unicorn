@@ -6,7 +6,7 @@ const AuthRoute = ({component: Component, authed, ...rest}) => {
     <Route
       {...rest}
       render={(props) =>
-        authed === false ? (
+        !authed ? (
           <Component {...props} />
         ) : (
           <Redirect to={{pathname: '/empty', state: {from: props.location}}} />
