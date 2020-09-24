@@ -1,13 +1,19 @@
 import React from 'react';
 import {Box, makeStyles} from '@material-ui/core';
-import NavBar from '../components/layout/NavBar';
+import NavBar from './NavBar';
+import AppLogo from './AppLogo';
+import SwitchView from './SwitchView';
+import CenteringBox from '../../components/CenteringBox';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
     backgroundColor: 'lightgrey',
   },
   header: {
     backgroundColor: 'white',
+  },
+  logoContainer: {
+    paddingLeft: theme.spacing(theme.pageIndent),
   },
   appBar: {
     backgroundColor: 'lightblue',
@@ -15,7 +21,7 @@ const useStyles = makeStyles({
   content: {
     backgroundColor: 'lightgreen',
   },
-});
+}));
 
 const AppLayout = () => {
   const classes = useStyles();
@@ -34,6 +40,7 @@ const AppLayout = () => {
         flexDirection="column"
       >
         <Box
+          component="header"
           display="flex"
           flexDirection="row"
           flexGrow={1}
@@ -42,9 +49,28 @@ const AppLayout = () => {
           alignItems="stretch"
           className={classes.header}
         >
-          <Box flexGrow={1} bgcolor="blue" />
-          <Box flexGrow={1} bgcolor="red" />
-          <Box flexGrow={1} bgcolor="orange" />
+          <Box
+            className={classes.logoContainer}
+            display="flex"
+            alignItems="center"
+            boxSizing="border-box"
+            flexBasis="30%"
+            flexGrow={1}
+          >
+            <AppLogo />
+          </Box>
+          <CenteringBox boxSizing="border-box" flexBasis="40%" flexGrow={1}>
+            <SwitchView />
+          </CenteringBox>
+          <Box
+            boxSizing="border-box"
+            flexBasis="30%"
+            flexGrow={1}
+            bgcolor="orange"
+          >
+            {/* <CreateBoardButton />
+            <ProfileHeader /> */}
+          </Box>
         </Box>
         <Box flexGrow={1} className={classes.appBar}>
           <NavBar />

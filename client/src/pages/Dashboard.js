@@ -1,13 +1,8 @@
 import React from 'react';
-import NavBar from '../components/layout/NavBar';
-import AppLayout from './AppLayout';
+import AppLayout from './layouts/AppLayout';
 
 const Dashboard = () => {
-  return (
-    <AppLayout>
-      <NavBar />
-    </AppLayout>
-  );
+  return <AppLayout />;
 };
 
 export default Dashboard;

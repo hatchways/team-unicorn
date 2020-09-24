@@ -64,6 +64,12 @@ function App() {
               path="/dashboard"
               component={Dashboard}
             />
+            <PrivateRoute
+              authed={authenticated}
+              path="/calendar"
+              // TODO: Update component to calendar
+              component={Dashboard}
+            />
           </Switch>
         </BrowserRouter>
       </UserContext.Provider>
