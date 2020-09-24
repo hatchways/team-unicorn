@@ -16,7 +16,7 @@ import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
 const AddColumnDialogForm = (props) => {
-  const {open, boardId} = props;
+  const {open, boardId, setLoadBoard} = props;
 
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
@@ -36,11 +36,15 @@ const AddColumnDialogForm = (props) => {
     // data.columns.push(payload.data);
     // setData(data);
 
-    if (!error) document.getElementById('name').value = '';
+    if (!error) {
+      document.getElementById('name').value = '';
+      setLoadBoard(true);
+    }
     setTimeout(() => {
       setError(false);
       setColumnData();
-    }, 4000);
+      props.setOpen(false);
+    }, 1000);
   };
   const handleClose = () => {
     setError(false);

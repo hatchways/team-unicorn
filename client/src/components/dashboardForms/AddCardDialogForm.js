@@ -16,7 +16,7 @@ import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
 const AddCardDialogForm = (props) => {
-  const {open, columnId} = props;
+  const {open, columnId, setLoadBoard} = props;
 
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
@@ -34,11 +34,15 @@ const AddCardDialogForm = (props) => {
     setError(payload.error);
     setCardData(payload.data);
 
-    if (!error) document.getElementById('name').value = '';
+    if (!error) {
+      document.getElementById('name').value = '';
+      setLoadBoard(true);
+    }
     setTimeout(() => {
       setError(false);
       setCardData();
-    }, 4000);
+      props.setOpen(false);
+    }, 1000);
   };
   const handleClose = () => {
     setError(false);

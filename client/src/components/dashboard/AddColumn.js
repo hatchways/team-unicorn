@@ -1,18 +1,20 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {IconButton} from '@material-ui/core/';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircle';
 
 import AddColumnDialogForm from '../dashboardForms/AddColumnDialogForm';
 
 const AddColumn = (props) => {
-  const {boardId} = props;
+  const {boardId, setLoadBoard} = props;
   const [open, setOpen] = useState(false);
+
   const handleClickOpen = (event) => {
     event.preventDefault();
     setOpen(true);
   };
   return (
-    <div>
+    // eslint-disable-next-line react/jsx-fragments
+    <Fragment>
       <div className="addColumnContent">
         <a href="/#" onClick={handleClickOpen}>
           <IconButton edge="start" aria-label="menu">
@@ -21,9 +23,14 @@ const AddColumn = (props) => {
         </a>
       </div>
       {open && (
-        <AddColumnDialogForm open={open} setOpen={setOpen} boardId={boardId} />
+        <AddColumnDialogForm
+          open={open}
+          setOpen={setOpen}
+          boardId={boardId}
+          setLoadBoard={setLoadBoard}
+        />
       )}
-    </div>
+    </Fragment>
   );
 };
 export default AddColumn;

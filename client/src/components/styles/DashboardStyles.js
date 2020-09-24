@@ -7,6 +7,7 @@ export default makeStyles((theme) => ({
     overflow: 'hidden',
   },
   addColumnContainer: {
+    width: '5%',
     '&#leftNav': {
       '& .addColumnContent': {
         minHeight: '500px',
@@ -39,6 +40,8 @@ export default makeStyles((theme) => ({
       },
     },
     '&#rightNav': {
+      display: 'flex',
+      justifyContent: 'flex-end',
       '& .addColumnContent': {
         minHeight: '500px',
         '& a': {
@@ -73,12 +76,13 @@ export default makeStyles((theme) => ({
     width: '90%',
     '& .boardText': {margin: '10px 0 20px 10px'},
     '& .addCard': {
-      backgroundColor: '#F4F6FF',
+      backgroundColor: 'lightblue',
+      display: 'block',
       '&:hover': {
         color: 'white',
         backgroundColor: theme.palette.primary.main,
       },
-      margin: theme.spacing(1),
+      margin: '8px 0',
       padding: theme.spacing(1),
       textTransform: 'none',
       alignContent: 'center',
@@ -87,6 +91,7 @@ export default makeStyles((theme) => ({
       display: 'flex',
       overflowX: 'scroll',
       width: '100%',
+      height: '450px',
       '& > *': {
         margin: theme.spacing(1),
       },

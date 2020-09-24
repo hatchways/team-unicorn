@@ -43,7 +43,8 @@ const EditCardDialogForm = (props) => {
       setTimeout(() => {
         setError(false);
         setData(false);
-      }, 5000);
+        props.setOpen(false);
+      }, 1000);
     }
   };
 

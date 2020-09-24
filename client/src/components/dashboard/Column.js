@@ -5,7 +5,7 @@ import AddCardDialogForm from '../dashboardForms/AddCardDialogForm';
 import CardItem from './Card';
 
 const Column = (props) => {
-  const {column} = props;
+  const {column, setLoadBoard} = props;
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -33,6 +33,7 @@ const Column = (props) => {
           <AddCardDialogForm
             open={open}
             setOpen={setOpen}
+            setLoadBoard={setLoadBoard}
             // eslint-disable-next-line no-param-reassign, no-underscore-dangle
             columnId={column._id}
           />

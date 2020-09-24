@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import {Typography, Card, CardContent} from '@material-ui/core/';
 import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
 import {getCardById} from '../../api/Card';
@@ -23,7 +23,8 @@ const CardItem = (props) => {
   };
 
   return (
-    <div>
+    // eslint-disable-next-line react/jsx-fragments
+    <Fragment>
       <Card
         className="cardItem"
         color="background.default"
@@ -44,7 +45,7 @@ const CardItem = (props) => {
           setCardLoading={setCardLoading}
         />
       )}
-    </div>
+    </Fragment>
   );
 };
 export default CardItem;

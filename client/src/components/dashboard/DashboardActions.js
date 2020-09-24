@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {Fragment, useState, useEffect} from 'react';
 import {Typography} from '@material-ui/core/';
 import dashboardStyles from '../styles/DashboardStyles';
 import getBoard from '../../api/Board';
@@ -11,6 +11,7 @@ const DashboardActions = () => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+  const [loadBoard, setLoadBoard] = useState(true);
 
   const loadData = async () => {
     const payload = await getBoard();
@@ -18,11 +19,12 @@ const DashboardActions = () => {
     setData(payload.data);
     setLoading(payload.loading);
     setError(payload.error);
+    setLoadBoard(false);
   };
 
   useEffect(() => {
-    loadData();
-  }, []);
+    if (loadBoard) loadData();
+  }, [loadBoard]);
 
   return (
     <>
@@ -32,6 +34,7 @@ const DashboardActions = () => {
             <AddColumn
               data={data}
               setData={setData}
+              setLoadBoard={setLoadBoard}
               // eslint-disable-next-line no-param-reassign, no-underscore-dangle
               boardId={data._id}
             />
@@ -43,7 +46,8 @@ const DashboardActions = () => {
           {error && <div>Something went wrong. Please try again!!!</div>}
           {loading && <div>Loading ...</div>}
           {data?.columns.length > 0 && (
-            <div>
+            // eslint-disable-next-line react/jsx-fragments
+            <Fragment>
               <div className="boardText">
                 <Typography variant="h4" color="primary">
                   {data.name}
@@ -51,11 +55,15 @@ const DashboardActions = () => {
               </div>
               <div className="columns">
                 {data.columns.map((column) => (
-                  // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-                  <Column column={column} key={column._id} />
+                  <Column
+                    setLoadBoard={setLoadBoard}
+                    column={column}
+                    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+                    key={column._id}
+                  />
                 ))}
               </div>
-            </div>
+            </Fragment>
           )}
         </div>
         <div className={classes.addColumnContainer} id="rightNav">
@@ -63,6 +71,7 @@ const DashboardActions = () => {
             <AddColumn
               // eslint-disable-next-line no-param-reassign, no-underscore-dangle
               boardId={data._id}
+              setLoadBoard={setLoadBoard}
             />
           ) : (
             ' '
