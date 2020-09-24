@@ -6,7 +6,7 @@
  */
 
 class ApiResult {
-  constructor({success, data = {}, errors = {}}) {
+  constructor({success, data = null, errors = null}) {
     this.success = success;
     this.data = data;
     this.errors = errors;
