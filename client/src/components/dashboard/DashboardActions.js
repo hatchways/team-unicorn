@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
-
+import {Typography} from '@material-ui/core/';
 import dashboardStyles from '../styles/DashboardStyles';
-import {getCurrentColumns} from '../../actions/column';
+import getBoard from '../../api/Board';
 
 import AddColumn from './AddColumn';
 import Column from './Column';
@@ -11,9 +11,9 @@ const DashboardActions = () => {
   const [data, setData] = useState();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
-  const [newColumn, setNewColumn] = useState({columns: []});
+
   const loadData = async () => {
-    const payload = await getCurrentColumns();
+    const payload = await getBoard();
 
     setData(payload.data);
     setLoading(payload.loading);
@@ -28,21 +28,45 @@ const DashboardActions = () => {
     <>
       <div className={classes.dashboardContainer}>
         <div className={classes.addColumnContainer} id="leftNav">
-          <AddColumn newColumn={newColumn} setNewColumn={setNewColumn} />
+          {data?.columns ? (
+            <AddColumn
+              data={data}
+              setData={setData}
+              // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+              boardId={data._id}
+            />
+          ) : (
+            ' '
+          )}
         </div>
         <div className={classes.columnsContainer}>
           {error && <div>Something went wrong. Please try again!!!</div>}
           {loading && <div>Loading ...</div>}
           {data?.columns.length > 0 && (
-            <div className="columns">
-              {data.columns.map((column) => (
-                <Column column={column} key={column.id} />
-              ))}
+            <div>
+              <div className="boardText">
+                <Typography variant="h4" color="primary">
+                  {data.name}
+                </Typography>
+              </div>
+              <div className="columns">
+                {data.columns.map((column) => (
+                  // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+                  <Column column={column} key={column._id} />
+                ))}
+              </div>
             </div>
           )}
         </div>
         <div className={classes.addColumnContainer} id="rightNav">
-          <AddColumn column={newColumn} setColumn={setNewColumn} />
+          {data?.columns ? (
+            <AddColumn
+              // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+              boardId={data._id}
+            />
+          ) : (
+            ' '
+          )}
         </div>
       </div>
     </>

@@ -16,9 +16,9 @@ import dialogStyles from '../styles/DialogStyles';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-import {updateCard} from '../../actions/card';
+import {updateCard} from '../../api/Card';
 
-const AddColumnDialogForm = (props) => {
+const EditCardDialogForm = (props) => {
   const {open} = props;
 
   const {cardData} = props;
@@ -54,7 +54,8 @@ const AddColumnDialogForm = (props) => {
     props.setOpen(false);
   };
   const handleEditCancel = () => {
-    document.getElementById('desc').value = cardData.desc;
+    document.getElementById('desc').value =
+      cardData.desc !== undefined ? cardData.desc : '';
   };
 
   return (
@@ -161,4 +162,4 @@ const AddColumnDialogForm = (props) => {
     </Dialog>
   );
 };
-export default AddColumnDialogForm;
+export default EditCardDialogForm;

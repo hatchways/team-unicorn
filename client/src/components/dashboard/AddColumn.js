@@ -5,7 +5,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircle';
 import AddColumnDialogForm from '../dashboardForms/AddColumnDialogForm';
 
 const AddColumn = (props) => {
-  const {newColumn, setNewColumn} = props;
+  const {newColumn, setNewColumn, boardId} = props;
   const [open, setOpen] = useState(false);
   const handleClickOpen = (event) => {
     event.preventDefault();
@@ -26,6 +26,7 @@ const AddColumn = (props) => {
           setOpen={setOpen}
           newColumn={newColumn}
           setNewColumn={setNewColumn}
+          boardId={boardId}
         />
       )}
     </div>

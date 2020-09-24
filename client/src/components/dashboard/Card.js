@@ -7,7 +7,7 @@ import {
   Button,
 } from '@material-ui/core/';
 import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
-import {getCardById} from '../../actions/card';
+import {getCardById} from '../../api/Card';
 
 const CardItem = (props) => {
   const {card} = props;

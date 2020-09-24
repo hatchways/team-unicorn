@@ -11,17 +11,17 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import dialogStyles from '../styles/DialogStyles';
 
-import {addColumn} from '../../actions/column';
+import addColumnByBoardId from '../../api/Column';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
 const AddColumnDialogForm = (props) => {
-  const {open, newColumn, setNewColumn} = props;
+  const {open, boardId} = props;
 
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
-  const [data, setData] = useState();
+  const [columnData, setColumnData] = useState();
   const [error, setError] = useState(false);
 
   const {title: titleProps} = formProps.html.addColumn;
@@ -29,23 +29,22 @@ const AddColumnDialogForm = (props) => {
   const {title: titleValidation} = formValidation.addColumn;
 
   const onSubmitForm = async (formData) => {
-    const payload = await addColumn(formData.title);
+    const payload = await addColumnByBoardId(boardId, {name: formData.name});
 
     setError(payload.error);
-    setData(payload.data);
-    const {columns} = newColumn;
-    columns.push(payload.data);
-    setNewColumn({columns});
+    setColumnData(payload.data);
+    // data.columns.push(payload.data);
+    // setData(data);
 
-    if (!error) document.getElementById('title').value = '';
+    if (!error) document.getElementById('name').value = '';
     setTimeout(() => {
       setError(false);
-      setData();
+      setColumnData();
     }, 4000);
   };
   const handleClose = () => {
     setError(false);
-    setData(false);
+    setColumnData();
     props.setOpen(false);
   };
   return (
@@ -71,7 +70,7 @@ const AddColumnDialogForm = (props) => {
           id="addColumnForm"
         >
           {error && <div>Something went wrong. Please try again!!</div>}
-          {data?.cards.length === 0 ? <div>Added Successfully</div> : ' '}
+          {columnData?.cards.length === 0 ? <div>Added Successfully</div> : ' '}
 
           <TextField
             {...textFieldProps}

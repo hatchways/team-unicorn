@@ -71,6 +71,7 @@ export default makeStyles((theme) => ({
   },
   columnsContainer: {
     width: '90%',
+    '& .boardText': {margin: '10px 0 20px 10px'},
     '& .columns': {
       display: 'flex',
       overflowX: 'scroll',

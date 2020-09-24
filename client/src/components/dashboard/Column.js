@@ -19,7 +19,8 @@ const Column = (props) => {
           {column.name}
         </Typography>
         {column.cards.map((card) => (
-          <CardItem card={card} key={card.id} />
+          // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+          <CardItem card={card} key={card._id} />
         ))}
       </div>
     </Paper>

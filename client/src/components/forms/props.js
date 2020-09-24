@@ -12,9 +12,9 @@ const formProps = {
   html: {
     addColumn: {
       title: {
-        id: 'title',
+        id: 'name',
         label: 'Add Title *',
-        name: 'title',
+        name: 'name',
         type: 'text',
       },
     },
