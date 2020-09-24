@@ -13,6 +13,7 @@ const {
 } = require("../middleware/validator");
 
 const User = require("../models/User");
+const Board = require("../models/boards");
 
 // TODO: Find a more appropriate place to put this?
 // Auth token time-to-live in ms.
@@ -61,7 +62,16 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
     const salt = await bcrypt.genSalt(10);
     user.password = await bcrypt.hash(password, salt);
     await user.save();
+    
+    // Creating default personal board
+    const boardFields = {};
+    boardFields.user = user._id;
+    boardFields.name = "Personal";
 
+    console.log(boardFields);
+    const board = new Board(boardFields);
+
+    await board.save();
     const { payload, token } = issueJWT(user);
 
     res.cookie("auth-token", token, { httpOnly: true });
