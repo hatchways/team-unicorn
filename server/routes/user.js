@@ -11,6 +11,7 @@ const {
 } = require("../middleware/validator");
 
 const User = require("../models/User");
+const Board = require("../models/boards");
 
 // @route  POST user/register
 // @desc   register user
@@ -41,6 +42,16 @@ router.post(
       const salt = await bcrypt.genSalt(10);
       user.password = await bcrypt.hash(password, salt);
       await user.save();
+
+      // Creating default personal board
+      const boardFields = {};
+      boardFields.user = user._id;
+      boardFields.name = "Personal";
+
+      console.log(boardFields);
+      const board = new Board(boardFields);
+
+      await board.save();
 
       // return jsonWebToken
       const payload = {

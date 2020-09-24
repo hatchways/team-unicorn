@@ -36,20 +36,19 @@ router.post(
   }
 );
 
-// @route GET /api/board/:boardId
+// @route GET /api/board/
 // @desc Create Card
 // @access Private
-router.get("/:boardId", auth, async (req, res) => {
+router.get("/", auth, async (req, res) => {
   try {
-    await Board.findById(req.params.boardId)
+    console.log(req.user._id);
+
+    await Board.findOne({
+      user: req.user._id
+    })
       .populate({ path: "columns", populate: { path: "cards", model: "Card" } })
       .exec((err, board) => {
         console.log(board);
-        if (!board) {
-          return res.status(400).send({msg: "Invalid board"});
-        }
-        console.log(board);
-        console.log("board", board);
         res.json(board);
       });
   } catch (err) {

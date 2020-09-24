@@ -10,7 +10,7 @@ const pingRouter = require("./routes/ping");
 const userRouter = require("./routes/user");
 const columnsRouter = require("./routes/api/columns");
 const cardsRouter = require("./routes/api/cards");
-const boardRouter = require("./routes/api/board");
+const boardRouter = require("./routes/api/boards");
 
 const { json, urlencoded } = express;
 
@@ -30,7 +30,7 @@ app.use("/ping", pingRouter);
 app.use("/user", userRouter);
 app.use("/api/columns", columnsRouter);
 app.use("/api/cards", cardsRouter);
-app.use("/api/board", boardRouter);
+app.use("/api/boards", boardRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
