@@ -2,8 +2,8 @@ import React, {useState, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
-import mockData from './mock-data';
-import Column from '../components/Column';
+import mockData from '../../mock-data';
+import Column from './components/Column';
 
 const useStyles = makeStyles((theme) => ({
   root: {

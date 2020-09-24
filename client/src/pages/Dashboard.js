@@ -1,5 +1,5 @@
 import React from 'react';
-import KanbanBoard from './KanbanBoard';
+import KanbanBoard from './board/KanbanBoard';
 import AppLayout from './layouts/AppLayout';
 
 const Dashboard = () => {
