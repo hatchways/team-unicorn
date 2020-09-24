@@ -5,10 +5,6 @@ import {AppBar, Toolbar, IconButton, Typography} from '@material-ui/core/';
 import MenuIcon from '@material-ui/icons/Menu';
 
 const useStyles = makeStyles((theme) => ({
-  root: {},
-  menuButton: {
-    // marginRight: theme.spacing(theme.pageIndent),
-  },
   title: {
     flexGrow: 1,
     // marginLeft: theme.spacing(theme.pageIndent),
@@ -23,23 +19,16 @@ const useStyles = makeStyles((theme) => ({
 const NavBar = () => {
   const classes = useStyles();
   return (
-    <>
-      <AppBar position="static" className={classes.appBar} elevation={0}>
-        <Toolbar disableGutters>
-          <Typography variant="h6" className={classes.title} color="secondary">
-            My School Board
-          </Typography>
-          <IconButton
-            edge="start"
-            className={classes.menuButton}
-            color="secondary"
-            aria-label="menu"
-          >
-            <MenuIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-    </>
+    <AppBar position="static" className={classes.appBar} elevation={0}>
+      <Toolbar disableGutters>
+        <Typography variant="h6" className={classes.title} color="inherit">
+          My School Board
+        </Typography>
+        <IconButton edge="end" aria-label="menu" color="inherit">
+          <MenuIcon />
+        </IconButton>
+      </Toolbar>
+    </AppBar>
   );
 };
 export default NavBar;

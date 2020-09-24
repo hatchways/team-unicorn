@@ -1,37 +1,26 @@
 import React from 'react';
 import {Box, makeStyles} from '@material-ui/core';
-import NavBar from './NavBar';
-import AppLogo from './AppLogo';
-import SwitchView from './SwitchView';
+import NavBar from './components/NavBar';
+import AppLogo from './components/AppLogo';
+import SwitchView from './components/SwitchView';
 import CenteringBox from '../../components/CenteringBox';
+import CreateBoard from './components/CreateBoard';
+import ProfileAvatar from './components/ProfileAvatar';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    backgroundColor: 'lightgrey',
-  },
-  header: {
-    backgroundColor: 'white',
-  },
   logoContainer: {
     paddingLeft: theme.spacing(theme.pageIndent),
   },
-  appBar: {
-    backgroundColor: 'lightblue',
-  },
-  content: {
-    backgroundColor: 'lightgreen',
+  avatarContainer: {
+    paddingLeft: theme.spacing(theme.pageIndent),
+    paddingRight: theme.spacing(theme.pageIndent),
   },
 }));
 
 const AppLayout = () => {
   const classes = useStyles();
   return (
-    <Box
-      display="flex"
-      flexDirection="column"
-      height="100%"
-      className={classes.root}
-    >
+    <Box display="flex" flexDirection="column" height="100%">
       <Box
         display="flex"
         flexGrow={1}
@@ -47,7 +36,6 @@ const AppLayout = () => {
           minHeight="5rem"
           maxHeight="60%"
           alignItems="stretch"
-          className={classes.header}
         >
           <Box
             className={classes.logoContainer}
@@ -63,20 +51,31 @@ const AppLayout = () => {
             <SwitchView />
           </CenteringBox>
           <Box
+            display="flex"
+            alignItems="stretch"
+            justifyContent="space-between"
             boxSizing="border-box"
             flexBasis="30%"
             flexGrow={1}
-            bgcolor="orange"
           >
-            {/* <CreateBoardButton />
-            <ProfileHeader /> */}
+            <CenteringBox flexGrow={1}>
+              <CreateBoard />
+            </CenteringBox>
+            <Box
+              display="flex"
+              alignItems="center"
+              justifyContent="flex-end"
+              className={classes.avatarContainer}
+            >
+              <ProfileAvatar />
+            </Box>
           </Box>
         </Box>
-        <Box flexGrow={1} className={classes.appBar}>
+        <Box flexGrow={1}>
           <NavBar />
         </Box>
       </Box>
-      <Box flexGrow={1} className={classes.content} />
+      <Box flexGrow={1} />
     </Box>
   );
 };
