@@ -25,6 +25,14 @@ const formProps = {
         placeholder: 'Type your description here',
       },
     },
+    addCard: {
+      title: {
+        id: 'name',
+        label: 'Add Title *',
+        name: 'name',
+        type: 'text',
+      },
+    },
   },
 };
 

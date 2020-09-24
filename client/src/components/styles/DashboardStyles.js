@@ -72,7 +72,17 @@ export default makeStyles((theme) => ({
   columnsContainer: {
     width: '90%',
     '& .boardText': {margin: '10px 0 20px 10px'},
-    '& .addCard': {backgroundColor: theme.palette.primary.main},
+    '& .addCard': {
+      backgroundColor: '#F4F6FF',
+      '&:hover': {
+        color: 'white',
+        backgroundColor: theme.palette.primary.main,
+      },
+      margin: theme.spacing(1),
+      padding: theme.spacing(1),
+      textTransform: 'none',
+      alignContent: 'center',
+    },
     '& .columns': {
       display: 'flex',
       overflowX: 'scroll',
@@ -84,12 +94,10 @@ export default makeStyles((theme) => ({
         display: 'flex',
         flexWrap: 'wrap',
         height: 'fit-content',
+        minWidth: '175px',
         padding: theme.spacing(2),
         background: theme.palette.background.default,
         '& .cardItem': {
-          minWidth: 200,
-          maxWidth: 275,
-          width: 250,
           cursor: 'pointer',
           marginBottom: theme.spacing(2),
         },

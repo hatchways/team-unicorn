@@ -1,5 +1,23 @@
 import axios from 'axios';
 
+// post card
+export const addCardByColumnId = async (columnId, formData) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify(formData);
+
+    const res = await axios.post(`/api/cards/create/${columnId}`, body, config);
+
+    return {data: res.data, error: false};
+  } catch (err) {
+    return {data: [], error: true};
+  }
+};
+
 // Get card by Id
 export const getCardById = async (card) => {
   try {

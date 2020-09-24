@@ -1,11 +1,15 @@
-import React from 'react';
+import React, {useState} from 'react';
 
 import {Paper, Typography, Button} from '@material-ui/core/';
-
+import AddCardDialogForm from '../dashboardForms/AddCardDialogForm';
 import CardItem from './Card';
 
 const Column = (props) => {
   const {column} = props;
+  const [open, setOpen] = useState(false);
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
   return (
     <Paper
       variant="outlined"
@@ -22,9 +26,17 @@ const Column = (props) => {
           // eslint-disable-next-line no-param-reassign, no-underscore-dangle
           <CardItem card={card} key={card._id} />
         ))}
-        <Button size="small" className="addCard">
-          Add Card
+        <Button className="addCard" size="large" onClick={handleClickOpen}>
+          <Typography>Add a card</Typography>
         </Button>
+        {open && (
+          <AddCardDialogForm
+            open={open}
+            setOpen={setOpen}
+            // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+            columnId={column._id}
+          />
+        )}
       </div>
     </Paper>
   );

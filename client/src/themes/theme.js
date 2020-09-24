@@ -44,6 +44,7 @@ export const theme = createMuiTheme({
     body1: {
       fontSize: 14,
       fontWeight: 500,
+      wordBreak: 'break-all',
     },
     body2: {
       fontSize: 12,
