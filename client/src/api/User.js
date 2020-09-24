@@ -12,9 +12,15 @@ import ApiResultFactory from './ApiResult';
 // response headers outside of 2xx.
 // We leverage this by try-catch blocks.
 
-const defaultErrorHandler = (axiosError) => {
-  const {errors} = axiosError.response.data;
-  return ApiResultFactory.withErrors(errors);
+const defaultErrorHandler = (error) => {
+  // Check if error is axios error
+  if (error.response) {
+    const {errors} = error.response.data;
+    return ApiResultFactory.withErrors(errors);
+  }
+
+  console.log(error.message);
+  return {};
 };
 
 const User = {

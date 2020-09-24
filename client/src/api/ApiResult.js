@@ -6,7 +6,7 @@
  */
 
 class ApiResult {
-  constructor({success, data = null, errors = null}) {
+  constructor({success, data = {}, errors = {}}) {
     this.success = success;
     this.data = data;
     this.errors = errors;
@@ -24,7 +24,7 @@ const succeed = ({data}) => {
 
 const ApiResultFactory = {
   success: () => {
-    return succeed();
+    return succeed({});
   },
   // NOTE: Failure should include at least one
   //        error message! Therefore, no "failure"
