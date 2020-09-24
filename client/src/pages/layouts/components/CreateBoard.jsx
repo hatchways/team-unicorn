@@ -8,7 +8,7 @@ const CreateBoard = () => {
       color="primary"
       variant="contained"
       startIcon={<PlusIcon />}
-      size="medium"
+      size="large"
     >
       Create New Board
     </Button>

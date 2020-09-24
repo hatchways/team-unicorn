@@ -18,7 +18,6 @@ const SwitchView = () => {
       <Button
         className={classes.link}
         color="primary"
-        variant="outlined"
         startIcon={<DashboardIcon />}
         size="medium"
         component={RouterLink}
@@ -30,7 +29,6 @@ const SwitchView = () => {
       <Button
         className={classes.link}
         color="primary"
-        variant="outlined"
         startIcon={<CalendarIcon />}
         size="medium"
         component={RouterLink}
