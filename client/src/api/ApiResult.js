@@ -24,7 +24,7 @@ const succeed = ({data}) => {
 
 const ApiResultFactory = {
   success: () => {
-    return succeed();
+    return succeed({});
   },
   // NOTE: Failure should include at least one
   //        error message! Therefore, no "failure"

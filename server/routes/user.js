@@ -118,23 +118,12 @@ router.post(
 // @access  Authenticated
 //TODO: Invalidate old token?
 router.post("/session/extend", authenticator, async (req, res) => {
-  // NOTE: Auth middleware will verify jwt and decode user from jwt
-  //       if there is a valid jwt.
-  const payload = {
-    user: req.user,
-  };
-
+  // NOTE: Auth middleware will verify jwt and attach user from db
+  //       if there is one.
   try {
-    jwt.sign(
-      payload,
-      process.env.JWTSECRET,
-      { expiresIn: AuthTokenTTL },
-      (err, token) => {
-        if (err) throw err;
-        res.cookie("auth-token", token, { httpOnly: true });
-        res.json({ user: payload.user });
-      }
-    );
+    const { payload: user, token } = issueJWT(req.user);
+    res.cookie("auth-token", token, { httpOnly: true });
+    res.status(200).json({ user });
   } catch (err) {
     console.error(err.message);
     res
@@ -154,4 +143,16 @@ router.get("/session/resolve", authenticator, async (req, res) => {
 // @route POST user/session/end
 // @desc   Invalidate jwt and end user session.
 // @access Authenticated
+router.post("/session/end", authenticator, async (req, res) => {
+  try {
+    res.clearCookie("auth-token");
+    res.status(200).end();
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .json({ errors: { DEFAULT_SERVER_ERROR: "Something went wrong..." } });
+  }
+});
+
 module.exports = router;
