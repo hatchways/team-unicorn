@@ -1,6 +1,6 @@
 import {Grid, makeStyles, Box, Hidden} from '@material-ui/core';
 import React from 'react';
-import AuthImg from './authPageImg.png';
+import AuthImg from '../static/authPageImage.png';
 import CenteringBox from '../../components/CenteringBox';
 
 const useStyles = makeStyles({

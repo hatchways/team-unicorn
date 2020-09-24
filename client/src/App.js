@@ -4,7 +4,7 @@ import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
 import AuthRoute from './components/AuthRoute';
 import PrivateRoute from './components/PrivateRoute';
 import UserContext from './contexts';
-import {theme} from './themes/theme';
+import theme from './themes/theme';
 import Dashboard from './pages/Dashboard';
 
 import Signup from './pages/Signup';
@@ -62,6 +62,12 @@ function App() {
             <PrivateRoute
               authed={authenticated}
               path="/dashboard"
+              component={Dashboard}
+            />
+            <PrivateRoute
+              authed={authenticated}
+              path="/calendar"
+              // TODO: Update component to calendar
               component={Dashboard}
             />
           </Switch>
