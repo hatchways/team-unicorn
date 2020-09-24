@@ -10,7 +10,7 @@ const CreateBoard = () => {
       startIcon={<PlusIcon />}
       size="large"
     >
-      Create New Board
+      Create Board
     </Button>
   );
 };
