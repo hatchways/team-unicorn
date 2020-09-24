@@ -46,7 +46,7 @@ router.get("/", auth, async (req, res) => {
     await Board.findOne({
       user: req.user._id
     })
-      .populate({ path: "columns", populate: { path: "cards", model: "Card" } })
+      .populate({ path: "columns", populate: { path: "cards", model: "Card",  select: 'name' } })
       .exec((err, board) => {
         console.log(board);
         res.json(board);
