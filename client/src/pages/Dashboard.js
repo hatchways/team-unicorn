@@ -6,10 +6,12 @@ import Board from './draft-board-ui';
 
 const Dashboard = () => {
   return (
-    <CenteringBox>
+    <div>
       <NavBar />
-      <Board />
-    </CenteringBox>
+      <CenteringBox>
+        <Board />
+      </CenteringBox>
+    </div>
   );
 };
 
