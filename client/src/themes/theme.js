@@ -28,6 +28,13 @@ const theme = createMuiTheme({
         textTransform: 'capitalize',
       },
     },
+    MuiIconButton: {
+      root: {
+        '&:hover': {
+          backgroundColor: 'transparent',
+        },
+      },
+    },
   },
 });
 
