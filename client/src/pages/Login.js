@@ -1,7 +1,7 @@
 import React from 'react';
 import {Typography, Link} from '@material-ui/core';
 import {Link as RouterLink} from 'react-router-dom';
-import AuthLayout from './auth/AuthLayout';
+import AuthLayout from './layouts/AuthLayout';
 import AuthFormContainer from './auth/components/AuthFormContainer';
 import LoginForm from './auth/components/LoginForm';
 

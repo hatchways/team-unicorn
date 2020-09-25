@@ -2,7 +2,7 @@ import {createMuiTheme} from '@material-ui/core';
 
 import Montserrat from 'typeface-montserrat';
 
-export const theme = createMuiTheme({
+const theme = createMuiTheme({
   typography: {
     fontFamily: 'Montserrat, arial',
     fontSize: 14,
@@ -55,7 +55,10 @@ export const theme = createMuiTheme({
     },
   },
   palette: {
-    primary: {main: '#759CFC'},
+    primary: {
+      main: '#759CFC',
+      contrastText: '#ffffff',
+    },
     secondary: {main: '#fff'},
     divider: '#D8DFED',
     background: {paper: '#fff', default: '#F4F6FF'},
@@ -67,6 +70,7 @@ export const theme = createMuiTheme({
       dialogClose: '#BCBCBC',
     },
   },
+  pageIndent: 5,
   overrides: {
     MuiCssBaseline: {
       '@global': {
@@ -80,6 +84,12 @@ export const theme = createMuiTheme({
         },
       },
     },
+    MuiButton: {
+      root: {
+        textTransform: 'capitalize',
+      },
+    },
   },
 });
+
 export default theme;
