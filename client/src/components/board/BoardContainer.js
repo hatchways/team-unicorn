@@ -8,10 +8,9 @@ const useStyles = makeStyles({
   },
 });
 
-const BoardContainer = ({children}) => {
+const useHover = () => {
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
-  const classes = useStyles();
 
   const handleShow = (e, cb) => {
     e.stopPropagation();
@@ -47,6 +46,26 @@ const BoardContainer = ({children}) => {
     [setShowRight],
   );
 
+  return {
+    showLeft,
+    showRight,
+    handleShowLeft,
+    handleHideLeft,
+    handleShowRight,
+    handleHideRight,
+  };
+};
+
+const BoardContainer = ({children}) => {
+  const classes = useStyles();
+  const {
+    showLeft,
+    showRight,
+    handleShowLeft,
+    handleHideLeft,
+    handleShowRight,
+    handleHideRight,
+  } = useHover();
   return (
     <Grid
       direction="row"
