@@ -1,10 +1,11 @@
-import React, {useState, memo} from 'react';
-import {DragDropContext, Droppable} from 'react-beautiful-dnd';
-import {makeStyles} from '@material-ui/core/styles';
-import {Grid} from '@material-ui/core';
-import mockData from '../../mock-data';
+import React, { useState, useEffect, memo } from 'react';
+import { DragDropContext, Droppable } from 'react-beautiful-dnd';
+import { makeStyles } from '@material-ui/core/styles';
+import { Grid } from '@material-ui/core';
+// import mockData from '../../mock-data';
 import Column from './components/Column';
 
+import getBoard from '../../api/Board';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
@@ -45,18 +46,51 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// performance optimization. prevents re-render when components are dragged all over w/memo
-const InnerList = memo((props) => {
-  const {column, taskMap, index} = props;
-  const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-  return <Column column={column} tasks={tasks} index={index} />;
-});
 
 export default function KanbanBoard() {
-  const [data, setData] = useState(mockData);
+  const [data, setData] = useState({
+    tasks: {},
+    columns: {},
+    columnOrder: []
+  });
+
+  const [update, setUpdate] = useState(true)
+  const convertAPIData = async () => {
+    const boardData = await getBoard()
+    const data = await boardData.data
+    const newData = {
+      tasks: {},
+      columns: {},
+      columnOrder: []
+    }
+    /* eslint no-underscore-dangle: 0 */
+    await data.columns.map(column => {
+      newData.columns[column._id] = {
+        id: column._id,
+        title: column.name,
+        taskIds: column.cards.map(card => card._id)
+      }
+      column.cards.map(card => {
+        newData.tasks[card._id] = {
+          id: card._id,
+          content: card.desc
+        }
+      })
+      newData.columnOrder.push(column._id)
+    })
+    setData(newData)
+  }
+
+  useEffect((update) => {
+    if (update) {
+      convertAPIData()
+      setUpdate(false)
+    }
+  })
+
   const classes = useStyles();
   const onDragEnd = (result) => {
-    const {destination, source, draggableId, type} = result;
+    const { destination, source, draggableId, type } = result;
 
     if (!destination) {
       return;
@@ -150,6 +184,7 @@ export default function KanbanBoard() {
                   column={column}
                   taskMap={data.tasks}
                   index={index}
+                  setUpdate={setUpdate}
                 />
               );
             })}
@@ -160,3 +195,11 @@ export default function KanbanBoard() {
     </DragDropContext>
   );
 }
+
+// performance optimization. prevents re-render when components are dragged all over w/memo
+const InnerList = memo((props) => {
+  const { column, taskMap, index, setUpdate = { setUpdate } } = props;
+  const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
+  return <Column column={column} tasks={tasks} index={index} setUpdate={setUpdate} />;
+});
+

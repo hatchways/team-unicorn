@@ -1,8 +1,10 @@
-import React, {memo} from 'react';
-import {makeStyles} from '@material-ui/core/styles';
-import {Droppable, Draggable} from 'react-beautiful-dnd';
-import {Button, Grid, Typography} from '@material-ui/core';
-import Task from './Task';
+import React, { memo , useState} from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import { Droppable, Draggable } from 'react-beautiful-dnd';
+import { Button, Grid, Typography } from '@material-ui/core';
+
+import Task from './Task'
+import AddCardDialogForm from './dashboardForms/AddCardDialogForm';
 
 const useStyles = makeStyles((theme) => ({
   column: {
@@ -44,13 +46,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
-const InnerList = memo(({tasks}) =>
+const InnerList = memo(({ tasks }) =>
   tasks.map((task, index) => <Task key={task.id} task={task} index={index} />),
 );
 
-export default function Column({column, index, tasks}) {
+export default function Column({ column, index, tasks, setUpdate}) {
   const classes = useStyles();
+  const [open, setOpen] = useState(false);
 
+  const handleClickOpen = () => {
+    setOpen(true)
+  }
   return (
     <Draggable draggableId={column.id} index={index}>
       {(providedForDraggable) => (
@@ -77,9 +83,19 @@ export default function Column({column, index, tasks}) {
               >
                 <InnerList tasks={tasks} />
                 {providedForDroppable.placeholder}
-                <Button className={classes.button} size="large">
+                <Button className={classes.button} size="large" onClick={handleClickOpen}>
                   <Typography>Add a card</Typography>
                 </Button>
+                {open && (
+                  <AddCardDialogForm
+                    open={open}
+                    setOpen={setOpen}
+                    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+                    columnId={column.id}
+                    setUpdate={setUpdate}
+                  />
+                )}
+
               </Grid>
             )}
           </Droppable>

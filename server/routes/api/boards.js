@@ -37,7 +37,7 @@ router.post(
 );
 
 // @route GET /api/board/
-// @desc Create Card
+// @desc Get Board by User
 // @access Private
 router.get("/", auth, async (req, res) => {
   try {
