@@ -1,15 +1,9 @@
 import React from 'react';
-
-import NavBar from '../components/layout/NavBar';
-import LogoutButton from './auth/components/LogoutButton';
+import AppLayout from './layouts/AppLayout';
 
 const Dashboard = () => {
-  return (
-    <div>
-      <NavBar />
-      <LogoutButton />
-    </div>
-  );
+  // TODO: Wrap dashboard component with AppLayout.
+  return <AppLayout />;
 };
 
 export default Dashboard;
