@@ -1,5 +1,5 @@
+import React, {useState, useCallback} from 'react';
 import {Grid, makeStyles} from '@material-ui/core';
-import React from 'react';
 import AddColumn from './AddColumn';
 
 const useStyles = makeStyles({
@@ -9,7 +9,44 @@ const useStyles = makeStyles({
 });
 
 const BoardContainer = ({children}) => {
+  const [showLeft, setShowLeft] = useState(false);
+  const [showRight, setShowRight] = useState(false);
   const classes = useStyles();
+
+  const handleShow = (e, cb) => {
+    e.stopPropagation();
+    cb(true);
+  };
+  const handleHide = (e, cb) => {
+    e.stopPropagation();
+    cb(false);
+  };
+
+  const handleShowLeft = useCallback(
+    (e) => {
+      handleShow(e, setShowLeft);
+    },
+    [setShowLeft],
+  );
+  const handleShowRight = useCallback(
+    (e) => {
+      handleShow(e, setShowRight);
+    },
+    [setShowRight],
+  );
+  const handleHideLeft = useCallback(
+    (e) => {
+      handleHide(e, setShowLeft);
+    },
+    [setShowLeft],
+  );
+  const handleHideRight = useCallback(
+    (e) => {
+      handleHide(e, setShowRight);
+    },
+    [setShowRight],
+  );
+
   return (
     <Grid
       direction="row"
@@ -17,14 +54,24 @@ const BoardContainer = ({children}) => {
       alignItems="stretch"
       container
     >
-      <Grid item xs={1} style={{backgroundColor: 'lightblue'}}>
-        <AddColumn open />
+      <Grid
+        item
+        xs={1}
+        onMouseEnter={handleShowLeft}
+        onMouseLeave={handleHideLeft}
+      >
+        <AddColumn show={showLeft} />
       </Grid>
       <Grid item xs style={{backgroundColor: 'lightcyan'}}>
         {children}
       </Grid>
-      <Grid item xs={1} style={{backgroundColor: 'lightcoral'}}>
-        <AddColumn />
+      <Grid
+        item
+        xs={1}
+        onMouseEnter={handleShowRight}
+        onMouseLeave={handleHideRight}
+      >
+        <AddColumn show={showRight} />
       </Grid>
     </Grid>
   );
