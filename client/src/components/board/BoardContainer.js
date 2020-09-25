@@ -18,7 +18,7 @@ const BoardContainer = ({children}) => {
       container
     >
       <Grid item xs={1} style={{backgroundColor: 'lightblue'}}>
-        <AddColumn />
+        <AddColumn open />
       </Grid>
       <Grid item xs style={{backgroundColor: 'lightcyan'}}>
         {children}
