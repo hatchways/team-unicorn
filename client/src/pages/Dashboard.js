@@ -1,15 +1,9 @@
 import React from 'react';
-import Board from '../components/board/Board';
-
-import NavBar from '../components/layout/NavBar';
+import AppLayout from './layouts/AppLayout';
 
 const Dashboard = () => {
-  return (
-    <div>
-      <NavBar />
-      <Board />
-    </div>
-  );
+  // TODO: Wrap dashboard component with AppLayout.
+  return <AppLayout />;
 };
 
 export default Dashboard;
