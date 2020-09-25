@@ -54,14 +54,16 @@ const DashboardActions = () => {
                 </Typography>
               </div>
               <div className="columns">
-                {data.columns.map((column) => (
-                  <Column
-                    setLoadBoard={setLoadBoard}
-                    column={column}
-                    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-                    key={column._id}
-                  />
-                ))}
+                {data.columns
+                  .map((column) => (
+                    <Column
+                      setLoadBoard={setLoadBoard}
+                      column={column}
+                      // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+                      key={column._id}
+                    />
+                  ))
+                  .reverse()}
               </div>
             </Fragment>
           )}
