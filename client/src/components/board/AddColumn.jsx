@@ -1,20 +1,28 @@
-import {IconButton, makeStyles} from '@material-ui/core';
+import {ButtonBase, Box, makeStyles, useTheme} from '@material-ui/core';
 import React from 'react';
-import AddIcon from '@material-ui/icons/AddCircle';
-import CenteringBox from '../CenteringBox';
+import AddIcon from '@material-ui/icons/AddCircleOutlineRounded';
 
 const useStyles = makeStyles({
-  root: {},
+  root: {
+    display: 'flex',
+    width: '100%',
+  },
 });
 
 const AddColumn = ({show}) => {
   const classes = useStyles();
+  const theme = useTheme();
   return !show ? null : (
-    <CenteringBox className={classes.root} bgcolor="#D8D8D8" height="100%">
-      <IconButton>
-        <AddIcon fontSize="large" />
-      </IconButton>
-    </CenteringBox>
+    <Box
+      component={ButtonBase}
+      classes={{root: classes.root}}
+      bgcolor={theme.palette.hovering.main}
+      color={theme.palette.hovering.contrastText}
+      height="100%"
+      onClick={() => console.log('hello')}
+    >
+      <AddIcon fontSize="large" color="inherit" />
+    </Box>
   );
 };
 

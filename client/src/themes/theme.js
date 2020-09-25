@@ -15,6 +15,10 @@ const theme = createMuiTheme({
       main: '#f44336',
       contrastText: '#ffffff',
     },
+    hovering: {
+      main: '#D8D8D8',
+      contrastText: '#ffffff',
+    },
   },
   pageIndent: 5,
   overrides: {
