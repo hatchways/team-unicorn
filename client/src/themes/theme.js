@@ -21,6 +21,7 @@ const theme = createMuiTheme({
     },
   },
   pageIndent: 5,
+  contentIndent: 5,
   overrides: {
     MuiCssBaseline: {
       '@global': {

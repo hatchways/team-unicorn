@@ -75,7 +75,9 @@ const AppLayout = ({children}) => {
           <NavBar />
         </Box>
       </Box>
-      <Box flexGrow={1}>{children}</Box>
+      <Box display="flex" alignItems="stretch" flexGrow={1}>
+        {children}
+      </Box>
     </Box>
   );
 };

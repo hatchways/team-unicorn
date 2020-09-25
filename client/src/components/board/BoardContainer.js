@@ -1,97 +1,85 @@
-import React, {useState, useCallback} from 'react';
-import {Grid, makeStyles} from '@material-ui/core';
+import React, {useState} from 'react';
+import {Grid, Box, makeStyles} from '@material-ui/core';
+import _ from 'lodash';
 import AddColumn from './AddColumn';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    height: '100%',
+    boxSizing: 'content-box',
+    marginTop: theme.spacing(theme.contentIndent),
+    marginBottom: theme.spacing(theme.contentIndent),
   },
-});
+  board: {
+    marginLeft: theme.spacing(theme.contentIndent),
+    marginRight: theme.spacing(theme.contentIndent),
+  },
+}));
 
 const useHover = () => {
   const [showLeft, setShowLeft] = useState(false);
   const [showRight, setShowRight] = useState(false);
 
-  const handleShow = (e, cb) => {
-    e.stopPropagation();
-    cb(true);
-  };
-  const handleHide = (e, cb) => {
-    e.stopPropagation();
-    cb(false);
+  const isMouseInBounds = (x, width) => {
+    const pct = width / 10;
+    const leftThreshold = pct;
+    const rightThreshold = width - pct;
+
+    if (x <= leftThreshold) {
+      setShowLeft(true);
+      setShowRight(false);
+    } else if (x >= rightThreshold) {
+      setShowLeft(false);
+      setShowRight(true);
+    } else {
+      setShowLeft(false);
+      setShowRight(false);
+    }
   };
 
-  const handleShowLeft = useCallback(
-    (e) => {
-      handleShow(e, setShowLeft);
-    },
-    [setShowLeft],
-  );
-  const handleShowRight = useCallback(
-    (e) => {
-      handleShow(e, setShowRight);
-    },
-    [setShowRight],
-  );
-  const handleHideLeft = useCallback(
-    (e) => {
-      handleHide(e, setShowLeft);
-    },
-    [setShowLeft],
-  );
-  const handleHideRight = useCallback(
-    (e) => {
-      handleHide(e, setShowRight);
-    },
-    [setShowRight],
-  );
+  const debounced = _.debounce(isMouseInBounds, 30, {maxWait: 100});
+
+  const handleMouseMove = (e) => {
+    e.persist();
+    debounced(e.clientX, e.currentTarget.offsetWidth);
+  };
 
   return {
     showLeft,
     showRight,
-    handleShowLeft,
-    handleHideLeft,
-    handleShowRight,
-    handleHideRight,
+    handleMouseMove,
   };
 };
 
 const BoardContainer = ({children}) => {
   const classes = useStyles();
-  const {
-    showLeft,
-    showRight,
-    handleShowLeft,
-    handleHideLeft,
-    handleShowRight,
-    handleHideRight,
-  } = useHover();
+  const {showLeft, showRight, handleMouseMove} = useHover();
+
   return (
     <Grid
       direction="row"
       className={classes.root}
       alignItems="stretch"
       container
+      onMouseMove={handleMouseMove}
     >
+      {showLeft && (
+        <Grid item xs={1}>
+          <AddColumn show={showLeft} />
+        </Grid>
+      )}
       <Grid
         item
-        xs={1}
-        onMouseEnter={handleShowLeft}
-        onMouseLeave={handleHideLeft}
+        xs
+        className={classes.board}
+        style={{backgroundColor: 'lightcyan'}}
       >
-        <AddColumn show={showLeft} />
-      </Grid>
-      <Grid item xs style={{backgroundColor: 'lightcyan'}}>
         {children}
       </Grid>
-      <Grid
-        item
-        xs={1}
-        onMouseEnter={handleShowRight}
-        onMouseLeave={handleHideRight}
-      >
-        <AddColumn show={showRight} />
-      </Grid>
+      {showRight && (
+        <Grid component={Box} borderRadius="borderRadius" item xs={1}>
+          <AddColumn show={showRight} />
+        </Grid>
+      )}
     </Grid>
   );
 };

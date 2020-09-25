@@ -9,10 +9,10 @@ const useStyles = makeStyles({
   },
 });
 
-const AddColumn = ({show}) => {
+const AddColumn = () => {
   const classes = useStyles();
   const theme = useTheme();
-  return !show ? null : (
+  return (
     <Box
       component={ButtonBase}
       classes={{root: classes.root}}
