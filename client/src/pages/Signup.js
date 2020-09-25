@@ -6,18 +6,18 @@ import AuthFormContainer from './auth/components/AuthFormContainer';
 import SignupForm from './auth/components/SignupForm';
 
 const Signup = () => {
-  return (
-    <AuthLayout>
-      <AuthFormContainer key="form" title="Welcome to KanBan!">
-        <SignupForm />
-      </AuthFormContainer>
-      <Typography key="footer" variant="body1" align="center">
-        Already have an account? <br />
-        <Link component={RouterLink} to="/login" color="primary">
-          Login
-        </Link>
-      </Typography>
-    </AuthLayout>
+  const formComponent = <SignupForm />;
+  const formContainer = (
+    <AuthFormContainer title="Welcome to KanBan!" component={formComponent} />
   );
+  const footerComponent = (
+    <Typography variant="body1" align="center">
+      Already have an account? <br />
+      <Link component={RouterLink} to="/login" color="primary">
+        Login
+      </Link>
+    </Typography>
+  );
+  return <AuthLayout formContainer={formContainer} footer={footerComponent} />;
 };
 export default Signup;
