@@ -155,4 +155,5 @@ router.post("/session/end", authenticator, async (req, res) => {
   }
 });
 
+// router.get("/:id/avatar")
 module.exports = router;

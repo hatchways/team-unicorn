@@ -27,9 +27,21 @@ const upload = multer({
 //@route POST api/upload
 //@desc: posts a profile picture to aws bucket
 //@accesss public
-//should probably validate file first before uploading (basic file regex? *.png or *.jpg)
 router.post('/', upload.single('profile'), (req, res, next) => {
   res.status(200).send(req.file);
 })
 
+
+
+//@route GET api/upload
+//@desc: get a profile picture from aws bucket
+//@accesss public
+router.get('/', (req, res, next) => {
+  s3.getObject({Bucket: process.env.BUCKETNAME, Key: "download.png"}, (err, data) => {
+    if (err) {
+      return res.send({"error": err})
+    }
+    res.send({data})
+  })
+})
 module.exports = router;
