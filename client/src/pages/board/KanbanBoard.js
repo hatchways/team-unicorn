@@ -1,8 +1,8 @@
 import React, { useState, useEffect, memo } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { makeStyles } from '@material-ui/core/styles';
-import { Grid } from '@material-ui/core';
-// import mockData from '../../mock-data';
+import { CardActions, Grid } from '@material-ui/core';
+import mockData from '../../mock-data';
 import Column from './components/Column';
 
 import getBoard from '../../api/Board';
@@ -46,6 +46,12 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// performance optimization. prevents re-render when components are dragged all over w/memo
+const InnerList = memo((props) => {
+  const { column, taskMap, index, setUpdate = { setUpdate } } = props;
+  const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
+  return <Column column={column} tasks={tasks} index={index} setUpdate={setUpdate} />;
+});
 
 export default function KanbanBoard() {
   const [data, setData] = useState({
@@ -63,7 +69,6 @@ export default function KanbanBoard() {
       columns: {},
       columnOrder: []
     }
-    /* eslint no-underscore-dangle: 0 */
     await data.columns.map(column => {
       newData.columns[column._id] = {
         id: column._id,
@@ -73,7 +78,7 @@ export default function KanbanBoard() {
       column.cards.map(card => {
         newData.tasks[card._id] = {
           id: card._id,
-          content: card.desc
+          content: card.name
         }
       })
       newData.columnOrder.push(column._id)
@@ -81,7 +86,7 @@ export default function KanbanBoard() {
     setData(newData)
   }
 
-  useEffect((update) => {
+  useEffect(() => {
     if (update) {
       convertAPIData()
       setUpdate(false)
@@ -195,11 +200,3 @@ export default function KanbanBoard() {
     </DragDropContext>
   );
 }
-
-// performance optimization. prevents re-render when components are dragged all over w/memo
-const InnerList = memo((props) => {
-  const { column, taskMap, index, setUpdate = { setUpdate } } = props;
-  const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-  return <Column column={column} tasks={tasks} index={index} setUpdate={setUpdate} />;
-});
-
