@@ -16,7 +16,7 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
     width: '220px',
-    maxHeight: '400px',
+    height: 'fit-content',
   },
   drag: {
     width: '220px',
