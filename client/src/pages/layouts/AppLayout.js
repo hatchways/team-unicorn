@@ -7,6 +7,8 @@ import CenteringBox from '../../components/CenteringBox';
 import CreateBoard from './components/CreateBoard';
 import ProfileAvatar from './components/ProfileAvatar';
 
+import KanbanBoard from '../draft-board-ui';
+
 const useStyles = makeStyles((theme) => ({
   logoContainer: {
     paddingLeft: theme.spacing(theme.pageIndent),
@@ -71,9 +73,10 @@ const AppLayout = ({children}) => {
             </Box>
           </Box>
         </Box>
-        <Box flexGrow={1}>
-          <NavBar />
-        </Box>
+        <NavBar />
+        <CenteringBox flexGrow={1}>
+          <KanbanBoard />
+        </CenteringBox>
       </Box>
       <Box flexGrow={1}>{children}</Box>
     </Box>
