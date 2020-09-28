@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {DialogContent, TextField} from '@material-ui/core';
+import {TextField} from '@material-ui/core';
 import ScheduleIcon from '@material-ui/icons/ScheduleOutlined';
 import {DatePicker, KeyboardTimePicker} from '@material-ui/pickers';
 // import DateIcon from '@material-ui/icons/CalendarTodayOutlined';
@@ -26,7 +26,7 @@ const CardDialogDeadline = () => {
   );
 
   return (
-    <DialogContent>
+    <>
       <SectionTitle variant="h6" icon={ScheduleIcon}>
         Deadline
       </SectionTitle>
@@ -48,7 +48,7 @@ const CardDialogDeadline = () => {
           TextFieldComponent={PickerTextFieldComponent}
         />
       </div>
-    </DialogContent>
+    </>
   );
 };
 

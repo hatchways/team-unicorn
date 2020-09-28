@@ -1,11 +1,11 @@
-import {DialogContent, TextField} from '@material-ui/core';
+import {TextField} from '@material-ui/core';
 import React from 'react';
 import DescIcon from '@material-ui/icons/ImportContactsTwoTone';
 import SectionTitle from './SectionTitle';
 
 const CardDialogDesc = ({desc}) => {
   return (
-    <DialogContent dividers>
+    <>
       <SectionTitle icon={DescIcon} variant="h6">
         Description
       </SectionTitle>
@@ -22,7 +22,7 @@ const CardDialogDesc = ({desc}) => {
         variant="outlined"
         fullWidth
       />
-    </DialogContent>
+    </>
   );
 };
 

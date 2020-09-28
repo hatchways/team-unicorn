@@ -21,7 +21,7 @@ const sampleCard = {
 };
 
 const OpenEditCardDialog = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const handleClick = () => !open && setOpen(true);
   const handleClose = () => setOpen(false);
