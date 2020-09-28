@@ -20,7 +20,7 @@ const UserSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: ""
+    default: "https://unicorn-profile-pictures.s3-us-west-1.amazonaws.com/download.png"
   }
 });
 
