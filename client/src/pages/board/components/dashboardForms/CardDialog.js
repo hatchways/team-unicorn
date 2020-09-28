@@ -18,11 +18,11 @@ const CardDialog = ({
 }) => {
   const subtitle = `In list "${columnName}"`;
   return (
-    <Dialog onClose={onClose} {...rest}>
+    <Dialog fullWidth onClose={onClose} {...rest}>
       <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
         {title}
       </CardDialogTitle>
-      <CardDialogDesc> {desc}</CardDialogDesc>
+      <CardDialogDesc desc={desc} />
       <CardDialogDeadline date={deadline} />
     </Dialog>
   );
