@@ -45,7 +45,6 @@ const Auth = ({formComponent, footerComponent, title}) => {
         item
         component={Box}
         display="flex"
-        flexDirection="column"
         className={classes.formCol}
         md
         xs={12}

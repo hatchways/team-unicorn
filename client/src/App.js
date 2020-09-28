@@ -6,6 +6,7 @@ import {theme} from './themes/theme';
 
 import Signup from './pages/auth/Signup';
 import Login from './pages/auth/Login';
+import Kanban from './pages/TestContext';
 import './App.css';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
         <Route exact path="/" component={() => <Redirect to="/signup" />} />
         <Route path="/signup" component={Signup} />
         <Route path="/login" component={Login} />
+        <Route path="/testcontext" component={Kanban}/>
       </BrowserRouter>
     </MuiThemeProvider>
   );
