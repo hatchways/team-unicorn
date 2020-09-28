@@ -4,8 +4,7 @@ import {Paper, Typography, Button} from '@material-ui/core/';
 import AddCardDialogForm from '../dashboardForms/AddCardDialogForm';
 import CardItem from './Card';
 
-const Column = (props) => {
-  const {column, setLoadBoard} = props;
+const Column = ({column, setLoadBoard}) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);

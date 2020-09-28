@@ -14,49 +14,44 @@ import ImportContactsTwoToneIcon from '@material-ui/icons/ImportContactsTwoTone'
 import dialogStyles from '../styles/DialogStyles';
 
 import formProps from '../forms/props';
-import formValidation from '../forms/validator';
 
 import {updateCard} from '../../api/Card';
 
-const EditCardDialogForm = (props) => {
-  const {open} = props;
-
-  const {cardData} = props;
+const EditCardDialogForm = ({open, setOpen, detailCardData}) => {
   const classes = dialogStyles();
-  const {register, handleSubmit, errors} = useForm();
+  const {register, handleSubmit} = useForm();
 
-  const [data, setData] = useState();
-  const [error, setError] = useState(false);
+  const [updatedData, setUpdatedData] = useState();
+  const [updatedError, setUpdatedError] = useState(false);
 
   const {description: descriptionProps} = formProps.html.editCard;
   const {textAreaField: textAreaFieldProps} = formProps.style;
-  const {description: descriptionValidation} = formValidation.editCard;
 
   const onSubmitForm = async (formData) => {
-    if (formData.desc !== cardData.desc) {
-      cardData.desc = formData.desc;
+    if (formData.desc !== detailCardData.desc) {
+      const submitData = detailCardData;
+      submitData.desc = formData.desc;
 
-      const payload = await updateCard(cardData);
-      setError(payload.error);
-      setData(payload.data);
+      const payload = await updateCard(submitData);
+      setUpdatedError(payload.error);
+      setUpdatedData(payload.data);
 
       setTimeout(() => {
-        setError(false);
-        setData(false);
-        props.setOpen(false);
-      }, 1000);
+        setUpdatedError(false);
+        setUpdatedData();
+        setOpen(false);
+      }, 500);
     }
   };
 
   const handleClose = () => {
-    setError(false);
-    setData();
-    props.setCardLoading(true);
-    props.setOpen(false);
+    setUpdatedError(false);
+    setUpdatedData();
+    setOpen(false);
   };
   const handleEditCancel = () => {
     document.getElementById('desc').value =
-      cardData.desc !== undefined ? cardData.desc : '';
+      detailCardData.desc !== undefined ? detailCardData.desc : '';
   };
 
   return (
@@ -66,7 +61,7 @@ const EditCardDialogForm = (props) => {
       className={classes.editCardDialogModal}
     >
       <DialogContent>
-        {cardData?.column ? (
+        {detailCardData?.column ? (
           <div>
             <IconButton
               aria-label="close"
@@ -87,9 +82,11 @@ const EditCardDialogForm = (props) => {
                 </IconButton>
               </div>
               <div>
-                <Typography variant="subtitle1">{cardData.name}</Typography>
+                <Typography variant="subtitle1">
+                  {detailCardData.name}
+                </Typography>
                 <Typography variant="body1" className="cardSubTitle">
-                  in list {cardData.column.name}
+                  in list {detailCardData.column.name}
                 </Typography>
               </div>
             </div>
@@ -102,8 +99,10 @@ const EditCardDialogForm = (props) => {
               id="editCardForm"
             >
               <div className="submitSummary">
-                {error && <div>Something went wrong. Please try again!!</div>}
-                {data ? <div>Edited Successfully</div> : ' '}
+                {updatedError && (
+                  <div>Something went wrong. Please try again!!</div>
+                )}
+                {updatedData ? <div>Edited Successfully</div> : ' '}
               </div>
               <div className="editCardSection">
                 <div>
@@ -122,12 +121,8 @@ const EditCardDialogForm = (props) => {
                     <textarea
                       {...textAreaFieldProps}
                       {...descriptionProps}
-                      ref={register(descriptionValidation)}
-                      {...formValidation.getMuiErrorProps(
-                        errors,
-                        descriptionProps.name,
-                      )}
-                      defaultValue={cardData.desc}
+                      ref={register}
+                      defaultValue={detailCardData.desc}
                     />
                   </div>
                   <div className="buttonFields">

@@ -1,30 +1,27 @@
-import React, {Fragment, useState} from 'react';
+import React, {useState} from 'react';
 import {Typography, Card, CardContent} from '@material-ui/core/';
 import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
 import {getCardById} from '../../api/Card';
 
-const CardItem = (props) => {
-  const {card} = props;
+const CardItem = ({card}) => {
   const [open, setOpen] = useState(false);
-  const [cardData, setCardData] = useState(false);
-  const [cardLoading, setCardLoading] = useState(true);
-  const [cardError, setCardError] = useState(false);
+
+  const [detailCardData, setDetailCardData] = useState();
+  const [detailCardError, setDetailCardError] = useState(false);
 
   const getCardData = async () => {
     const payload = await getCardById(card);
-    setCardData(payload.data);
-    setCardLoading(payload.data.loading);
-    setCardError(payload.error);
+    setDetailCardData(payload.data);
+    setDetailCardError(payload.error);
   };
 
   const handleClickOpen = () => {
     getCardData();
-    if (!cardError) setOpen(true);
+    if (!detailCardError) setOpen(true);
   };
 
   return (
-    // eslint-disable-next-line react/jsx-fragments
-    <Fragment>
+    <>
       <Card
         className="cardItem"
         color="background.default"
@@ -34,18 +31,15 @@ const CardItem = (props) => {
           <Typography variant="body1">{card.name}</Typography>
         </CardContent>
       </Card>
-      {cardError && <div> Something went wrong </div>}
-      {!cardLoading && (
+      {detailCardError && <div> Something went wrong </div>}
+      {detailCardData?.name && (
         <EditCardDialogForm
           open={open}
           setOpen={setOpen}
-          cardData={cardData}
-          setCardData={setCardData}
-          cardLoading={cardLoading}
-          setCardLoading={setCardLoading}
+          detailCardData={detailCardData}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 export default CardItem;

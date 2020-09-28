@@ -32,7 +32,6 @@ export default makeStyles((theme) => ({
             left: 0,
             position: 'relative',
             width: 'fit-content',
-            // grey
             backgroundColor: theme.palette.props.slideBackground,
             transition: '0.05s',
           },
@@ -74,7 +73,7 @@ export default makeStyles((theme) => ({
   },
   columnsContainer: {
     width: '90%',
-    '& .boardText': {margin: '10px 0 20px 10px'},
+    '& .boardText': {margin: '20px 0 20px 10px'},
     '& .addCard': {
       backgroundColor: 'lightblue',
       display: 'block',
@@ -105,6 +104,7 @@ export default makeStyles((theme) => ({
         '& .cardItem': {
           cursor: 'pointer',
           marginBottom: theme.spacing(2),
+          width: '150px',
         },
       },
       '& .title': {

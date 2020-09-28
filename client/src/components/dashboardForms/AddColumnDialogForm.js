@@ -15,9 +15,7 @@ import addColumnByBoardId from '../../api/Column';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-const AddColumnDialogForm = (props) => {
-  const {open, boardId, setLoadBoard} = props;
-
+const AddColumnDialogForm = ({open, setOpen, boardId, setLoadBoard}) => {
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
@@ -43,13 +41,13 @@ const AddColumnDialogForm = (props) => {
     setTimeout(() => {
       setError(false);
       setColumnData();
-      props.setOpen(false);
-    }, 1000);
+      setOpen(false);
+    }, 500);
   };
   const handleClose = () => {
     setError(false);
     setColumnData();
-    props.setOpen(false);
+    setOpen(false);
   };
   return (
     <Dialog

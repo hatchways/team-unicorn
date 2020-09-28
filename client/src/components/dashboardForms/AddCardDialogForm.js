@@ -15,9 +15,7 @@ import {addCardByColumnId} from '../../api/Card';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-const AddCardDialogForm = (props) => {
-  const {open, columnId, setLoadBoard} = props;
-
+const AddCardDialogForm = ({open, setOpen, columnId, setLoadBoard}) => {
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
@@ -41,13 +39,13 @@ const AddCardDialogForm = (props) => {
     setTimeout(() => {
       setError(false);
       setCardData();
-      props.setOpen(false);
-    }, 1000);
+      setOpen(false);
+    }, 500);
   };
   const handleClose = () => {
     setError(false);
     setCardData();
-    props.setOpen(false);
+    setOpen(false);
   };
   return (
     <Dialog
