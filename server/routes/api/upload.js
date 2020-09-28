@@ -19,29 +19,29 @@ const upload = multer({
     },
     key: (req, file, cb) => {
       console.log('file is uploading')
-      cb(null, file.originalname)
+      cb(null, Date.now().toString())
     },
   }),
 })
 
-//@route POST api/upload
-//@desc: posts a profile picture to aws bucket
-//@accesss public
-router.post('/', upload.single('profile'), (req, res, next) => {
-  res.status(200).send(req.file);
-})
+// //@route POST api/upload
+// //@desc: posts a profile picture to aws bucket
+// //@accesss private
+// router.post('/', upload.single('profile'), (req, res, next) => {
+//   res.status(200).send(req.file);
+// })
 
 
 
-//@route GET api/upload
-//@desc: get a profile picture from aws bucket
-//@accesss public
-router.get('/', (req, res, next) => {
-  s3.getObject({Bucket: process.env.BUCKETNAME, Key: "download.png"}, (err, data) => {
-    if (err) {
-      return res.send({"error": err})
-    }
-    res.send({data})
-  })
-})
-module.exports = router;
+// //@route GET api/upload
+// //@desc: get a profile picture from aws bucket
+// //@accesss private
+// router.get('/', (req, res, next) => {
+//   s3.getObject({Bucket: process.env.BUCKETNAME, Key: "download.png"}, (err, data) => {
+//     if (err) {
+//       return res.send({"error": err})
+//     }
+//     res.send({data})
+//   })
+// })
+module.exports = upload;

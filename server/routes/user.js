@@ -12,6 +12,8 @@ const {
   authenticateValidationRules,
 } = require("../middleware/validator");
 
+const avatarUploader = require("./api/upload");
+
 const User = require("../models/User");
 
 // TODO: Find a more appropriate place to put this?
@@ -155,5 +157,21 @@ router.post("/session/end", authenticator, async (req, res) => {
   }
 });
 
-// router.get("/:id/avatar")
+// @route POST user/avatar
+// @desc   Upload avatar to s3 then changes user avatar field.
+// @access Public
+router.put('/avatar', authenticator, avatarUploader.single('avatar'), async (req, res) => {
+  try {
+    objectURL = `https://${process.env.BUCKETNAME}.s3-us-west-1.amazonaws.com/${req.file.key}`
+    console.log(objectURL)
+    await User.findByIdAndUpdate(req.user.id, {'avatar': objectURL})
+    res.status(200).end();
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .json({errors: {DEFAULT_SERVER_ERROR: "Something went wrong..."}})
+  }
+})
+
 module.exports = router;

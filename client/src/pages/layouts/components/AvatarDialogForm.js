@@ -1,13 +1,6 @@
 import React from 'react';
-import {
-  Typography,
-  IconButton,
-  Dialog,
-  DialogContent,
-} from '@material-ui/core/';
-
-import CloseIcon from '@material-ui/icons/Close';
-import {DropzoneArea} from 'material-ui-dropzone';
+import {DropzoneDialog} from 'material-ui-dropzone';
+import axios from 'axios';
 
 const AvatarDialogForm = (props) => {
   const {open} = props;
@@ -16,23 +9,40 @@ const AvatarDialogForm = (props) => {
     props.setOpen(false);
   };
 
+  const handleSave = (file) => {
+    const formData = new FormData();
+    formData.append('avatar', file[0]);
+    axios.put('user/avatar', formData);
+  };
+
+  // return (
+  //   <Dialog open={open} onClose={handleClose}>
+  //     <DialogContent>
+  //       <IconButton
+  //         aria-label="close"
+  //         className="closeButton"
+  //         onClick={handleClose}
+  //       >
+  //         <CloseIcon />
+  //       </IconButton>
+  //       <Typography variant="h4">Upload A New Avatar!</Typography>
+  //       <DropzoneArea
+  //         acceptedFiles={['image/*']}
+  //         dropzoneText="Drag and drop an image here or click"
+  //       />
+  //     </DialogContent>
+  //   </Dialog>
+  // );
+
   return (
-    <Dialog open={open} onClose={handleClose}>
-      <DialogContent>
-        <IconButton
-          aria-label="close"
-          className="closeButton"
-          onClick={handleClose}
-        >
-          <CloseIcon />
-        </IconButton>
-        <Typography variant="h4">Upload a new avatar</Typography>
-        <DropzoneArea
-          acceptedFiles={['image/*']}
-          dropzoneText="Drag and drop an image here or click"
-        />
-      </DialogContent>
-    </Dialog>
+    <DropzoneDialog
+      open={open}
+      onSave={handleSave}
+      acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+      showPreviews
+      maxFileSize={5000000}
+      onClose={handleClose}
+    />
   );
 };
 

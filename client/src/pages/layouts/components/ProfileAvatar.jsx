@@ -1,6 +1,7 @@
 import {Avatar, Button} from '@material-ui/core';
 import React, {useState} from 'react';
-import sampleAvatar from '../../static/sampleAvatar.png';
+import UserContext from '../../../contexts';
+// import sampleAvatar from '../../static/sampleAvatar.png';
 import AvatarDialogFrom from './AvatarDialogForm';
 
 const ProfileAvatar = () => {
@@ -13,7 +14,9 @@ const ProfileAvatar = () => {
   return (
     <div>
       <Button onClick={handleClickOpen}>
-        <Avatar alt="UserName" src={sampleAvatar} />
+        <UserContext.Consumer>
+          {(value) => <Avatar alt="UserName" src={value.user.avatar} />}
+        </UserContext.Consumer>
       </Button>
       {open && <AvatarDialogFrom open={open} setOpen={setOpen} />}
     </div>
