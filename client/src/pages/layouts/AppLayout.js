@@ -7,9 +7,10 @@ import CenteringBox from '../../components/CenteringBox';
 import CreateBoard from './components/CreateBoard';
 import ProfileAvatar from './components/ProfileAvatar';
 
-import KanbanBoard from '../draft-board-ui';
-
 const useStyles = makeStyles((theme) => ({
+  root: {
+    overflowY: 'scroll',
+  },
   logoContainer: {
     paddingLeft: theme.spacing(theme.pageIndent),
   },
@@ -22,7 +23,7 @@ const useStyles = makeStyles((theme) => ({
 const AppLayout = ({children}) => {
   const classes = useStyles();
   return (
-    <Box display="flex" flexDirection="column" height="100%">
+    <Box className={classes.root} flexDirection="column" height="100%">
       <Box
         display="flex"
         flexGrow={1}
@@ -74,11 +75,8 @@ const AppLayout = ({children}) => {
           </Box>
         </Box>
         <NavBar />
-        <CenteringBox flexGrow={1}>
-          <KanbanBoard />
-        </CenteringBox>
       </Box>
-      <Box flexGrow={1}>{children}</Box>
+      <CenteringBox flexGrow={1}>{children}</CenteringBox>
     </Box>
   );
 };
