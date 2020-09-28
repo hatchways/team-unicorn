@@ -3,6 +3,7 @@ import {Dialog} from '@material-ui/core';
 import CardDialogTitle from './CardDialogTitle';
 import CardDialogDesc from './CardDialogDesc';
 import CardDialogDeadline from './CardDialogDeadline';
+import CardDialogComments from './CardDialogComments';
 
 const CardDialog = ({
   title,
@@ -24,6 +25,7 @@ const CardDialog = ({
       </CardDialogTitle>
       <CardDialogDesc desc={desc} />
       <CardDialogDeadline date={deadline} />
+      <CardDialogComments comments={comments} />
     </Dialog>
   );
 };

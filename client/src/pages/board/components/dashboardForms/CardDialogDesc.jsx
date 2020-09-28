@@ -1,28 +1,14 @@
-import {
-  DialogContent,
-  makeStyles,
-  TextField,
-  Typography,
-} from '@material-ui/core';
+import {DialogContent, TextField} from '@material-ui/core';
 import React from 'react';
 import DescIcon from '@material-ui/icons/ImportContactsTwoTone';
-import TextWithIcon from '../../../../components/TextWithIcon';
-
-const useStyles = makeStyles({
-  labelText: {
-    fontWeight: 'bold',
-  },
-});
+import SectionTitle from './SectionTitle';
 
 const CardDialogDesc = ({desc}) => {
-  const classes = useStyles();
   return (
     <DialogContent dividers>
-      <TextWithIcon Icon={DescIcon} iconColor="primary">
-        <Typography className={classes.labelText} variant="h6">
-          Description
-        </Typography>
-      </TextWithIcon>
+      <SectionTitle icon={DescIcon} variant="h6">
+        Description
+      </SectionTitle>
       <TextField
         id="card-desc"
         name="card-desc"
