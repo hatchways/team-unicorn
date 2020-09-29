@@ -14,5 +14,10 @@ export const getBoard = async () => {
 
 // Save board
 export const saveBoard = async (boardId, columnOrder) => {
-  const res = await axios.put(`/api/boards/update/${boardId}`, columnOrder);
+  try {
+    await axios.put(`/api/boards/update/${boardId}`, columnOrder);
+    console.log('board saved at:', Date(Date.now()));
+  } catch (err) {
+    console.error(err);
+  }
 };
