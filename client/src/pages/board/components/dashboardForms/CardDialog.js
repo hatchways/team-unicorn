@@ -1,29 +1,16 @@
 import React from 'react';
 import {
   Dialog,
-  DialogContent,
   DialogActions,
   Button,
   Divider,
-  makeStyles,
   MuiThemeProvider,
-  Box,
 } from '@material-ui/core';
+import {MuiPickersUtilsProvider} from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 import CardDialogTitle from './CardDialogTitle';
-import CardDialogDesc from './CardDialogDesc';
-import CardDialogDeadline from './CardDialogDeadline';
-import CardDialogComments from './CardDialogComments';
-import CardDialogButtonMenu from './CardDialogButtonMenu';
 import {dialogTheme} from '../../../../themes/theme';
-
-const useStyles = makeStyles((theme) => ({
-  dialogContent: {
-    display: 'flex',
-    alignItems: 'flex-start',
-    justifyContent: 'space-between',
-    paddingBottom: theme.spacing(3),
-  },
-}));
+import CardDialogContentBody from './CardDialogContentBody';
 
 // TODO: Make Typography/TextField component
 //       (i.e Typography turns into text field
@@ -39,54 +26,38 @@ const CardDialog = ({
   tags,
   color,
   comments,
-  attachements,
+  attachments,
   onClose,
   ...rest
 }) => {
-  const classes = useStyles();
   const subtitle = `In list "${columnName}"`;
 
   return (
     <MuiThemeProvider theme={dialogTheme}>
-      <Dialog onClose={onClose} {...rest}>
-        <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
-          {title}
-        </CardDialogTitle>
-        <Divider
-          className={classes.horizontalDivider}
-          variant="fullWidth"
-          light
-        />
-        <DialogContent className={classes.dialogContent}>
-          <Box
-            display="flex"
-            flexGrow={3}
-            flexDirection="column"
-            justifyContent="space-evenly"
-          >
-            <CardDialogDesc desc={desc} />
-            <CardDialogDeadline date={deadline} />
-            <CardDialogComments comments={comments} />
-          </Box>
-          <Box
-            flexGrow={1}
-            alignSelf="stretch"
-            position="sticky"
-            top={0}
-            marginLeft={3}
-          >
-            <CardDialogButtonMenu />
-          </Box>
-        </DialogContent>
-        <DialogActions>
-          <Button variant="contained" size="small" color="primary">
-            Save
-          </Button>
-          <Button variant="contained" size="small" color="primary">
-            Discard
-          </Button>
-        </DialogActions>
-      </Dialog>
+      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <Dialog onClose={onClose} {...rest}>
+          <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
+            {title}
+          </CardDialogTitle>
+          <Divider variant="fullWidth" light />
+          <CardDialogContentBody
+            desc={desc}
+            deadline={deadline}
+            comments={comments}
+            attachments={attachments}
+            tags={tags}
+          />
+
+          <DialogActions>
+            <Button variant="contained" size="small" color="primary">
+              Save
+            </Button>
+            <Button variant="contained" size="small" color="primary">
+              Discard
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </MuiPickersUtilsProvider>
     </MuiThemeProvider>
   );
 };

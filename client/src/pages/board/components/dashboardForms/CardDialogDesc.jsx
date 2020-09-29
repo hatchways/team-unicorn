@@ -1,16 +1,12 @@
 import {TextField} from '@material-ui/core';
 import React from 'react';
 import DescIcon from '@material-ui/icons/ImportContactsTwoTone';
-import SectionTitle from './SectionTitle';
 import SectionContent from './SectionContent';
 import Section from './Section';
 
 const CardDialogDesc = ({desc}) => {
   return (
-    <Section>
-      <SectionTitle icon={DescIcon} variant="h6">
-        Description
-      </SectionTitle>
+    <Section title="Description" titleIcon={DescIcon}>
       <SectionContent>
         <TextField
           id="card-desc"

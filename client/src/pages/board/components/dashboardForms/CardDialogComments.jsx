@@ -1,17 +1,13 @@
 import {Box, List, ListItem, TextField} from '@material-ui/core';
 import React from 'react';
 import CommentsIcon from '@material-ui/icons/ForumOutlined';
-import SectionTitle from './SectionTitle';
 import SectionContent from './SectionContent';
 import Comment from './Comment';
 import Section from './Section';
 
 const CardDialogComments = ({comments}) => {
   return (
-    <Section>
-      <SectionTitle icon={CommentsIcon} variant="h6">
-        Comments
-      </SectionTitle>
+    <Section deletable title="Comments" titleIcon={CommentsIcon}>
       <SectionContent>
         <Box display="flex" flexDirection="column" alignItems="stretch">
           <List disablePadding>

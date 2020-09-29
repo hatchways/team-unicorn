@@ -1,56 +1,46 @@
 import React, {useState} from 'react';
 import {TextField} from '@material-ui/core';
-import ScheduleIcon from '@material-ui/icons/ScheduleOutlined';
-import {DatePicker, KeyboardTimePicker} from '@material-ui/pickers';
-// import DateIcon from '@material-ui/icons/CalendarTodayOutlined';
-import SectionTitle from './SectionTitle';
+import DeadlineIcon from '@material-ui/icons/ScheduleOutlined';
+import {KeyboardDatePicker} from '@material-ui/pickers';
 import SectionContent from './SectionContent';
 import Section from './Section';
 
 // TODO: Remove state and integrate form react hooks
-// TODO: Improve styling
+
 const CardDialogDeadline = () => {
   const [date, setDate] = useState(Date.now());
-  const [time, setTime] = useState(Date.now());
+  const [open, setOpen] = useState(false);
 
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   const handleDateChange = (val) => setDate(val);
-  const handleTimeChange = (val) => setTime(val);
-  const PickerTextFieldComponent = ({children, ...forwarded}) => (
+
+  const TextFieldComponent = ({...props}) => (
     <TextField
-      variant="outlined"
       color="primary"
-      margin="dense"
-      size="small"
-      {...forwarded}
-    >
-      {children}
-    </TextField>
+      {...props}
+      inputProps={{disabled: true}}
+      onClick={handleOpen}
+    />
   );
 
   return (
-    <Section>
-      <SectionTitle variant="h6" icon={ScheduleIcon}>
-        Deadline
-      </SectionTitle>
+    <Section deletable title="Deadline" titleIcon={DeadlineIcon}>
       <SectionContent>
-        <DatePicker
+        <KeyboardDatePicker
           id="deadline-date"
           name="deadline-date"
+          open={open}
+          onClose={handleClose}
           value={date}
           onChange={handleDateChange}
+          inputVariant="standard"
+          InputAdornmentProps={{color: 'primary'}}
+          TextFieldComponent={TextFieldComponent}
+          KeyboardButtonProps={{color: 'primary'}}
           disableToolbar
           autoOk
-          TextFieldComponent={PickerTextFieldComponent}
         />
-        <div>
-          <KeyboardTimePicker
-            disableToolbar
-            minutesStep={5}
-            value={time}
-            onChange={handleTimeChange}
-            TextFieldComponent={PickerTextFieldComponent}
-          />
-        </div>
       </SectionContent>
     </Section>
   );

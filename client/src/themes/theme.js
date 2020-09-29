@@ -43,5 +43,5 @@ const dialogTheme = createMuiTheme(
 
 const theme = createMuiTheme(baseThemeSettings);
 
-export {dialogTheme, theme};
+export {dialogTheme};
 export default theme;

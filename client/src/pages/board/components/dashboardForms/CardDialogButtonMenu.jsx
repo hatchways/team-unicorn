@@ -30,6 +30,7 @@ const CardDialogButtonMenu = () => {
         >
           <MenuButton>Tag</MenuButton>
           <MenuButton>Checklist</MenuButton>
+          <MenuButton>Deadline</MenuButton>
           <MenuButton>Attachment</MenuButton>
           <MenuButton>Cover</MenuButton>
         </Box>
