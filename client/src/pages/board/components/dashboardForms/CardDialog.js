@@ -7,12 +7,14 @@ import {
   Divider,
   Grid,
   makeStyles,
+  MuiThemeProvider,
 } from '@material-ui/core';
 import CardDialogTitle from './CardDialogTitle';
 import CardDialogDesc from './CardDialogDesc';
 import CardDialogDeadline from './CardDialogDeadline';
 import CardDialogComments from './CardDialogComments';
 import CardDialogButtons from './CardDialogButtons';
+import {dialogTheme} from '../../../../themes/theme';
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -36,45 +38,47 @@ const CardDialog = ({
   const subtitle = `In list "${columnName}"`;
 
   return (
-    <Dialog onClose={onClose} {...rest}>
-      <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
-        {title}
-      </CardDialogTitle>
-      <Divider className={classes.divider} variant="fullWidth" light />
-      <DialogContent>
-        <Grid container alignItems="stretch">
-          <Grid
-            container
-            item
-            direction="column"
-            justify="space-evenly"
-            spacing={2}
-            xs
-          >
-            <Grid item xs>
-              <CardDialogDesc desc={desc} />
+    <MuiThemeProvider theme={dialogTheme}>
+      <Dialog onClose={onClose} {...rest}>
+        <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
+          {title}
+        </CardDialogTitle>
+        <Divider className={classes.divider} variant="fullWidth" light />
+        <DialogContent>
+          <Grid container alignItems="stretch" spacing={3}>
+            <Grid
+              container
+              item
+              direction="column"
+              justify="space-evenly"
+              spacing={2}
+              xs
+            >
+              <Grid item xs>
+                <CardDialogDesc desc={desc} />
+              </Grid>
+              <Grid item xs>
+                <CardDialogDeadline date={deadline} />
+              </Grid>
+              <Grid item xs>
+                <CardDialogComments comments={comments} />
+              </Grid>
             </Grid>
-            <Grid item xs>
-              <CardDialogDeadline date={deadline} />
-            </Grid>
-            <Grid item xs>
-              <CardDialogComments comments={comments} />
+            <Grid container item direction="column" xs={3}>
+              <CardDialogButtons />
             </Grid>
           </Grid>
-          <Grid container item direction="column" xs={3}>
-            <CardDialogButtons />
-          </Grid>
-        </Grid>
-      </DialogContent>
-      <DialogActions>
-        <Button variant="contained" size="sm" color="primary">
-          Save
-        </Button>
-        <Button variant="contained" size="sm" color="primary">
-          Discard
-        </Button>
-      </DialogActions>
-    </Dialog>
+        </DialogContent>
+        <DialogActions>
+          <Button variant="contained" size="small" color="primary">
+            Save
+          </Button>
+          <Button variant="contained" size="small" color="primary">
+            Discard
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </MuiThemeProvider>
   );
 };
 
