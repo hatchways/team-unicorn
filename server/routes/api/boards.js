@@ -57,4 +57,19 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+router.put("/update/:id", auth, (req, res) => {
+  try {
+    console.log('body ' ,req.body)
+    Board.findByIdAndUpdate(req.params.id, req.body, (err, newColumnOrder) => {
+      if (!newColumnOrder) return res.status(400).send({msg: "Invalid Columns"});
+
+      console.log("Updated Columns: ", newColumnOrder)
+      res.send(newColumnOrder)
+    })
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).send("error")
+  }
+})
+
 module.exports = router;
