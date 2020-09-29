@@ -2,6 +2,8 @@ import React from 'react';
 import {
   Dialog,
   DialogContent,
+  DialogActions,
+  Button,
   Divider,
   Grid,
   makeStyles,
@@ -10,6 +12,7 @@ import CardDialogTitle from './CardDialogTitle';
 import CardDialogDesc from './CardDialogDesc';
 import CardDialogDeadline from './CardDialogDeadline';
 import CardDialogComments from './CardDialogComments';
+import CardDialogButtons from './CardDialogButtons';
 
 const useStyles = makeStyles((theme) => ({
   divider: {
@@ -33,24 +36,44 @@ const CardDialog = ({
   const subtitle = `In list "${columnName}"`;
 
   return (
-    <Dialog fullWidth onClose={onClose} {...rest}>
+    <Dialog onClose={onClose} {...rest}>
       <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
         {title}
       </CardDialogTitle>
       <Divider className={classes.divider} variant="fullWidth" light />
       <DialogContent>
-        <Grid container direction="column" justify="space-evenly" spacing={2}>
-          <Grid item xs>
-            <CardDialogDesc desc={desc} />
+        <Grid container alignItems="stretch">
+          <Grid
+            container
+            item
+            direction="column"
+            justify="space-evenly"
+            spacing={2}
+            xs
+          >
+            <Grid item xs>
+              <CardDialogDesc desc={desc} />
+            </Grid>
+            <Grid item xs>
+              <CardDialogDeadline date={deadline} />
+            </Grid>
+            <Grid item xs>
+              <CardDialogComments comments={comments} />
+            </Grid>
           </Grid>
-          <Grid item xs>
-            <CardDialogDeadline date={deadline} />
-          </Grid>
-          <Grid item xs>
-            <CardDialogComments comments={comments} />
+          <Grid container item direction="column" xs={3}>
+            <CardDialogButtons />
           </Grid>
         </Grid>
       </DialogContent>
+      <DialogActions>
+        <Button variant="contained" size="sm" color="primary">
+          Save
+        </Button>
+        <Button variant="contained" size="sm" color="primary">
+          Discard
+        </Button>
+      </DialogActions>
     </Dialog>
   );
 };

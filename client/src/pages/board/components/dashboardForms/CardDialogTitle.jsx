@@ -7,7 +7,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import TextWithIcon from '../../../../components/TextWithIcon';
+import WithIcon from '../../../../components/WithIcon';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -33,16 +33,16 @@ const CardDialogTitle = ({children, subtitle}) => {
   const classes = useStyles();
   return (
     <DialogTitle disableTypography>
-      <TextWithIcon spacing={2} Icon={TitleIcon} iconColor="primary">
+      <WithIcon spacing={2} Icon={TitleIcon} iconColor="primary">
         <Typography variant="h5" className={classes.title}>
           {children}
         </Typography>
-      </TextWithIcon>
-      <TextWithIcon spacing={2} isAligner>
+      </WithIcon>
+      <WithIcon spacing={2} aligner>
         <Typography className={classes.subtitle} variant="subtitle2">
           {subtitle}
         </Typography>
-      </TextWithIcon>
+      </WithIcon>
       <IconButton className={classes.closeButton}>
         <CloseIcon />
       </IconButton>

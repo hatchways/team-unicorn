@@ -1,6 +1,6 @@
 import React from 'react';
 import {Typography, makeStyles} from '@material-ui/core';
-import TextWithIcon from '../../../../components/TextWithIcon';
+import WithIcon from '../../../../components/WithIcon';
 
 const useStyles = makeStyles({
   labelText: {
@@ -12,11 +12,11 @@ const SectionTitle = ({variant, icon, children}) => {
   const classes = useStyles();
 
   return (
-    <TextWithIcon Icon={icon} iconColor="primary">
+    <WithIcon Icon={icon} iconColor="primary">
       <Typography className={classes.labelText} variant={variant}>
         {children}
       </Typography>
-    </TextWithIcon>
+    </WithIcon>
   );
 };
 

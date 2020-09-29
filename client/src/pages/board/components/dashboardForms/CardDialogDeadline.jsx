@@ -4,6 +4,7 @@ import ScheduleIcon from '@material-ui/icons/ScheduleOutlined';
 import {DatePicker, KeyboardTimePicker} from '@material-ui/pickers';
 // import DateIcon from '@material-ui/icons/CalendarTodayOutlined';
 import SectionTitle from './SectionTitle';
+import SectionContent from './SectionContent';
 
 // TODO: Remove state and integrate form react hooks
 // TODO: Improve styling
@@ -30,24 +31,26 @@ const CardDialogDeadline = () => {
       <SectionTitle variant="h6" icon={ScheduleIcon}>
         Deadline
       </SectionTitle>
-      <DatePicker
-        id="deadline-date"
-        name="deadline-date"
-        value={date}
-        onChange={handleDateChange}
-        disableToolbar
-        autoOk
-        TextFieldComponent={PickerTextFieldComponent}
-      />
-      <div>
-        <KeyboardTimePicker
+      <SectionContent>
+        <DatePicker
+          id="deadline-date"
+          name="deadline-date"
+          value={date}
+          onChange={handleDateChange}
           disableToolbar
-          minutesStep={5}
-          value={time}
-          onChange={handleTimeChange}
+          autoOk
           TextFieldComponent={PickerTextFieldComponent}
         />
-      </div>
+        <div>
+          <KeyboardTimePicker
+            disableToolbar
+            minutesStep={5}
+            value={time}
+            onChange={handleTimeChange}
+            TextFieldComponent={PickerTextFieldComponent}
+          />
+        </div>
+      </SectionContent>
     </>
   );
 };

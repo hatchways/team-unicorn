@@ -3,23 +3,23 @@ import React from 'react';
 import DefaultIcon from '@material-ui/icons/KeyboardArrowRight';
 
 const useStyles = makeStyles((theme) => ({
-  icon: ({spacing, isAligner}) => {
+  icon: ({spacing, aligner}) => {
     return {
       marginRight: theme.spacing(spacing),
-      visibility: isAligner ? 'hidden' : 'visible',
+      visibility: aligner ? 'hidden' : 'visible',
     };
   },
 }));
 
-const TextWithIcon = ({
+const WithIcon = ({
   spacing = 2,
-  isAligner = false,
+  aligner = false,
   Icon = DefaultIcon,
   iconColor = 'inherit',
   children,
   ...other
 }) => {
-  const classes = useStyles({spacing, isAligner});
+  const classes = useStyles({spacing, aligner});
   return (
     <Box display="flex" flexShrink={1} alignItems="center" {...other}>
       <Icon className={classes.icon} color={iconColor} />
@@ -28,4 +28,4 @@ const TextWithIcon = ({
   );
 };
 
-export default TextWithIcon;
+export default WithIcon;
