@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Get board
-const getBoard = async () => {
+export const getBoard = async () => {
   try {
     const res = await axios.get(`/api/boards/`);
     // eslint-disable-next-line no-console
@@ -12,4 +12,7 @@ const getBoard = async () => {
   }
 };
 
-export default getBoard;
+// Save board
+export const saveBoard = async (boardId, columnOrder) => {
+  const res = await axios.put(`/api/boards/update/${boardId}`, columnOrder);
+};

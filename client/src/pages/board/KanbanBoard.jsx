@@ -4,7 +4,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import { CardActions, Grid } from '@material-ui/core';
 import Column from './components/Column';
 
-import getBoard from '../../api/Board';
+import {getBoard, saveBoard} from '../../api/Board';
 
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
@@ -166,7 +166,7 @@ export default function KanbanBoard() {
   }, [update])
 
   const classes = useStyles();
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
 
     if (!destination) {
@@ -190,7 +190,8 @@ export default function KanbanBoard() {
         columnOrder: newColumnOrder,
       };
 
-      setData(newState);
+      await setData(newState);
+      await saveBoard(data.id, {columns: newState.columnOrder});      
       return;
     }
 
@@ -214,7 +215,8 @@ export default function KanbanBoard() {
           [newColumn.id]: newColumn,
         },
       };
-      setData(newState);
+      await setData(newState);
+      await saveBoard(data.id, {columns: newState.columnOrder})
       return;
     }
 
