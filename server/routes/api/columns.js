@@ -1,50 +1,73 @@
 const express = require("express");
-const { isValidObjectId, Mongoose } = require("mongoose");
 const router = express.Router();
+
 const Column = require("../../models/columns");
+const Board = require("../../models/boards");
+
+const auth = require("../../middleware/authenticator");
+const {
+  validate,
+  columnValidationRules
+} = require("../../middleware/validator");
 
 // @route POST api/columns/create
-// @desc Create a New Column
-// @access Public
-router.post("/create", (req, res) => {
-    console.log(req.body)
-    Column.create(req.body, (err, col) => {
+// @desc Create a New Column and push the new column to the board
+// @access private
+router.post(
+  "/create/:boardId",
+  [auth, columnValidationRules(), validate],
+  async (req, res) => {
+    console.log(req.body);
+    try {
+      const board = await Board.findById(req.params.boardId);
+
+      Column.create(req.body, async (err, col) => {
         if (err) {
-            console.log(err);
+          console.log(err);
         } else {
-            console.log(col);
-            res.send(col);
+          // Pushing the column to the board
+          board.columns.push({ _id: col.id });
+          await board.save();
+
+          console.log(col);
+          res.send(col);
         }
-    })
-})
+      });
+    } catch (err) {
+      if (err.name === "CastError")
+        return res.status(404).json({ msg: "Board not found" });
+      res.status(500).send("Server Error");
+    }
+  }
+);
 
 // @route PUT api/columns/update
 // @desc Either change name of column or changing location of card within column.
-// @access Public
-router.put("/update/:id", (req, res) => {
-    console.log(req.body)
+// @access private
+router.put(
+  "/update/:id",
+  [auth, columnValidationRules(), validate],
+  (req, res) => {
+    console.log(req.body);
     Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
-        if (err) {
-            console.log(err)
-            res.send(err)
-        } else {
-            console.log(updatedColumn)
-            res.send(updatedColumn)
-        }
-    })
-})
+      if (!updatedColumn)
+        return res.status(400).send({ msg: "Invalid Column" });
 
-// @route GET api/columns/update
-// @desc Either change name of column or changing location of card within column.
-// @access Public
-router.get("/show/:id", (req, res) => {
-    Column.findById(req.params.id, (err, col) => {
-        if (err) {
-            res.send(err)
-        } else {
-            res.send(col)
-        }
-    })
-})
+      console.log(updatedColumn);
+      res.send(updatedColumn);
+    });
+  }
+);
+
+// @route GET  /api/columns/show/:id
+// @desc Get the column by columnId
+// @access Private
+router.get("/show/:id", auth, (req, res) => {
+  Column.findById(req.params.id, (err, col) => {
+    if (!col) return res.status(400).send( { msg: "Invalid Column" } );
+
+    res.send(col);
+  });
+});
 
 module.exports = router;
