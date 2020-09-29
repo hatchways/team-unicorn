@@ -8,6 +8,7 @@ import {
   Typography,
 } from '@material-ui/core';
 import WithIcon from '../../../../components/WithIcon';
+import Colorbar from './Colorbar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -29,7 +30,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardDialogTitle = ({children, subtitle}) => {
+const CardDialogTitle = ({children, onClose, subtitle, cardColor}) => {
+  console.log(cardColor);
   const classes = useStyles();
   return (
     <DialogTitle disableTypography>
@@ -37,13 +39,14 @@ const CardDialogTitle = ({children, subtitle}) => {
         <Typography variant="h5" className={classes.title}>
           {children}
         </Typography>
+        <Colorbar color={cardColor} />
       </WithIcon>
       <WithIcon spacing={2} aligner>
         <Typography className={classes.subtitle} variant="subtitle2">
           {subtitle}
         </Typography>
       </WithIcon>
-      <IconButton className={classes.closeButton}>
+      <IconButton className={classes.closeButton} onClick={onClose}>
         <CloseIcon />
       </IconButton>
     </DialogTitle>

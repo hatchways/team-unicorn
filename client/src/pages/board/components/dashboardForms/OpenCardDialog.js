@@ -1,4 +1,4 @@
-import {Button} from '@material-ui/core';
+import {Button, colors} from '@material-ui/core';
 import React, {useState} from 'react';
 import CardDialog from './CardDialog';
 
@@ -12,7 +12,7 @@ const sampleCard = {
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum dolor at eleifend aliquam. Cras condimentum erat eget purus fermentum faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada.',
   deadline: Date.now(),
   tags: ['math', 'exam', 'important'],
-  color: 'primary',
+  color: colors.amber[500],
   comments: [
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare quam ac condimentum accumsan. Nulla eu efficitur dui, vitae gravida felis. In vitae turpis at nunc tincidunt vestibulum. Nulla facilisi. Nunc nisi est, efficitur in lobortis at, dapibus ac diam. Nunc a elit volutpat enim sodales porttitor at id lacus. Cras non tempor justo.',
     'Donec eu semper lacus, vitae vehicula nisl. Nullam sed mi vulputate, laoreet tellus id, porta neque. Nullam semper placerat nisi, sit amet gravida est gravida vel. Ut ut purus pulvinar velit ultrices pellentesque vel sit amet nisi.',
@@ -23,7 +23,7 @@ const sampleCard = {
 const OpenEditCardDialog = () => {
   const [open, setOpen] = useState(true);
 
-  const handleClick = () => !open && setOpen(true);
+  const handleClick = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const {

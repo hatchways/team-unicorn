@@ -36,7 +36,11 @@ const CardDialog = ({
     <MuiThemeProvider theme={dialogTheme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
         <Dialog onClose={onClose} {...rest}>
-          <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
+          <CardDialogTitle
+            onClose={onClose}
+            cardColor={color}
+            subtitle={subtitle}
+          >
             {title}
           </CardDialogTitle>
           <Divider variant="fullWidth" light />
