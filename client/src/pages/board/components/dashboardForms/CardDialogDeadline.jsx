@@ -5,6 +5,7 @@ import {DatePicker, KeyboardTimePicker} from '@material-ui/pickers';
 // import DateIcon from '@material-ui/icons/CalendarTodayOutlined';
 import SectionTitle from './SectionTitle';
 import SectionContent from './SectionContent';
+import Section from './Section';
 
 // TODO: Remove state and integrate form react hooks
 // TODO: Improve styling
@@ -27,7 +28,7 @@ const CardDialogDeadline = () => {
   );
 
   return (
-    <>
+    <Section>
       <SectionTitle variant="h6" icon={ScheduleIcon}>
         Deadline
       </SectionTitle>
@@ -51,7 +52,7 @@ const CardDialogDeadline = () => {
           />
         </div>
       </SectionContent>
-    </>
+    </Section>
   );
 };
 

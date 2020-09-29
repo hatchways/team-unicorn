@@ -3,10 +3,11 @@ import React from 'react';
 import DescIcon from '@material-ui/icons/ImportContactsTwoTone';
 import SectionTitle from './SectionTitle';
 import SectionContent from './SectionContent';
+import Section from './Section';
 
 const CardDialogDesc = ({desc}) => {
   return (
-    <>
+    <Section>
       <SectionTitle icon={DescIcon} variant="h6">
         Description
       </SectionTitle>
@@ -19,13 +20,13 @@ const CardDialogDesc = ({desc}) => {
           rows={2}
           rowsMax={6}
           placeholder="Enter a description..."
-          margin="normal"
+          margin="dense"
           multiline
           variant="outlined"
           fullWidth
         />
       </SectionContent>
-    </>
+    </Section>
   );
 };
 

@@ -5,22 +5,31 @@ import {
   DialogActions,
   Button,
   Divider,
-  Grid,
   makeStyles,
   MuiThemeProvider,
+  Box,
 } from '@material-ui/core';
 import CardDialogTitle from './CardDialogTitle';
 import CardDialogDesc from './CardDialogDesc';
 import CardDialogDeadline from './CardDialogDeadline';
 import CardDialogComments from './CardDialogComments';
-import CardDialogButtons from './CardDialogButtons';
+import CardDialogButtonMenu from './CardDialogButtonMenu';
 import {dialogTheme} from '../../../../themes/theme';
 
 const useStyles = makeStyles((theme) => ({
-  divider: {
-    marginBottom: theme.spacing(2),
+  dialogContent: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    paddingBottom: theme.spacing(3),
   },
 }));
+
+// TODO: Make Typography/TextField component
+//       (i.e Typography turns into text field
+//             onClick/onFocus and turns into
+//             onBlur typography)
+//       Useful for comments and description.
 
 const CardDialog = ({
   title,
@@ -43,31 +52,31 @@ const CardDialog = ({
         <CardDialogTitle onClose={onClose} color={color} subtitle={subtitle}>
           {title}
         </CardDialogTitle>
-        <Divider className={classes.divider} variant="fullWidth" light />
-        <DialogContent>
-          <Grid container alignItems="stretch" spacing={3}>
-            <Grid
-              container
-              item
-              direction="column"
-              justify="space-evenly"
-              spacing={2}
-              xs
-            >
-              <Grid item xs>
-                <CardDialogDesc desc={desc} />
-              </Grid>
-              <Grid item xs>
-                <CardDialogDeadline date={deadline} />
-              </Grid>
-              <Grid item xs>
-                <CardDialogComments comments={comments} />
-              </Grid>
-            </Grid>
-            <Grid container item direction="column" xs={3}>
-              <CardDialogButtons />
-            </Grid>
-          </Grid>
+        <Divider
+          className={classes.horizontalDivider}
+          variant="fullWidth"
+          light
+        />
+        <DialogContent className={classes.dialogContent}>
+          <Box
+            display="flex"
+            flexGrow={3}
+            flexDirection="column"
+            justifyContent="space-evenly"
+          >
+            <CardDialogDesc desc={desc} />
+            <CardDialogDeadline date={deadline} />
+            <CardDialogComments comments={comments} />
+          </Box>
+          <Box
+            flexGrow={1}
+            alignSelf="stretch"
+            position="sticky"
+            top={0}
+            marginLeft={3}
+          >
+            <CardDialogButtonMenu />
+          </Box>
         </DialogContent>
         <DialogActions>
           <Button variant="contained" size="small" color="primary">
