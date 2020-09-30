@@ -14,8 +14,16 @@ const sampleCard = {
   tags: ['math', 'exam', 'important'],
   color: colors.amber[500],
   comments: [
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare quam ac condimentum accumsan. Nulla eu efficitur dui, vitae gravida felis. In vitae turpis at nunc tincidunt vestibulum. Nulla facilisi. Nunc nisi est, efficitur in lobortis at, dapibus ac diam. Nunc a elit volutpat enim sodales porttitor at id lacus. Cras non tempor justo.',
-    'Donec eu semper lacus, vitae vehicula nisl. Nullam sed mi vulputate, laoreet tellus id, porta neque. Nullam semper placerat nisi, sit amet gravida est gravida vel. Ut ut purus pulvinar velit ultrices pellentesque vel sit amet nisi.',
+    {
+      id: 0,
+      comment:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare quam ac condimentum accumsan. Nulla eu efficitur dui, vitae gravida felis. In vitae turpis at nunc tincidunt vestibulum. Nulla facilisi. Nunc nisi est, efficitur in lobortis at, dapibus ac diam. Nunc a elit volutpat enim sodales porttitor at id lacus. Cras non tempor justo.',
+    },
+    {
+      id: 1,
+      comment:
+        'Donec eu semper lacus, vitae vehicula nisl. Nullam sed mi vulputate, laoreet tellus id, porta neque. Nullam semper placerat nisi, sit amet gravida est gravida vel. Ut ut purus pulvinar velit ultrices pellentesque vel sit amet nisi.',
+    },
   ],
   attachements: null,
 };

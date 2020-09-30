@@ -31,7 +31,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CardDialogTitle = ({children, onClose, subtitle, cardColor}) => {
-  console.log(cardColor);
   const classes = useStyles();
   return (
     <DialogTitle disableTypography>
