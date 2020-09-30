@@ -12,6 +12,7 @@ const UserMenu = (props) => {
   const openProfile = () => {
     setProfileOpen(true);
   };
+
   const handleClose = () => {
     setAnchorElem(null);
   };

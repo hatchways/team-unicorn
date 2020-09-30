@@ -6,7 +6,6 @@ const AvatarDialogForm = (props) => {
   const {open, setAvatar, closeMenu, handleOpenSnackbar} = props;
 
   const handleClose = () => {
-    // setOpen(false);
     closeMenu();
   };
 
