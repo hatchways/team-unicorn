@@ -12,36 +12,35 @@ const ProfileAvatar = () => {
   };
 
   return (
-    <div>
-      <UserContext.Consumer>
-        {(value) => {
-          if (value.user) {
-            if (avatar === '') {
-              setAvatar(value.user.avatar);
-            }
-            return (
-              <div>
-                <Button onClick={handleClickOpen}>
-                  <Avatar
-                    alt={value.user.name}
-                    src={avatar || value.user.avatar}
-                  />
-                </Button>
-
-                {Boolean(anchorElem) && (
-                  <UserMenu
-                    anchorElem={anchorElem}
-                    setAnchorElem={setAnchorElem}
-                    setAvatar={setAvatar}
-                  />
-                )}
-              </div>
-            );
+    <UserContext.Consumer>
+      {(value) => {
+        if (value.user) {
+          if (avatar === '') {
+            setAvatar(value.user.avatar);
           }
-          return <div />;
-        }}
-      </UserContext.Consumer>
-    </div>
+          return (
+            <div>
+              <Button onClick={handleClickOpen}>
+                <Avatar
+                  alt={value.user.name}
+                  src={avatar || value.user.avatar}
+                />
+              </Button>
+
+              {Boolean(anchorElem) && (
+                <UserMenu
+                  anchorElem={anchorElem}
+                  setAnchorElem={setAnchorElem}
+                  setAvatar={setAvatar}
+                />
+              )}
+            </div>
+          );
+        }
+        // added this for now since weird error with authentication signing out.
+        return <div />;
+      }}
+    </UserContext.Consumer>
   );
 };
 

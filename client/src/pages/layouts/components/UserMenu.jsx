@@ -1,17 +1,30 @@
 import React, {useState} from 'react';
-import {Menu, MenuItem} from '@material-ui/core';
+import {Button, IconButton, Menu, MenuItem, Snackbar} from '@material-ui/core';
+import CloseIcon from '@material-ui/icons/Close';
 import AvatarDialogForm from './AvatarDialogForm';
 import LogOutButton from '../../auth/components/LogoutButton';
 
 const UserMenu = (props) => {
   const {anchorElem, setAnchorElem, setAvatar} = props;
   const [profileOpen, setProfileOpen] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
   const openProfile = () => {
     setProfileOpen(true);
   };
   const handleClose = () => {
     setAnchorElem(null);
+  };
+
+  const handleCloseSnackbar = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpenSnackbar(false);
+  };
+
+  const handleOpenSnackbar = () => {
+    setOpenSnackbar(true);
   };
 
   return (
@@ -38,8 +51,38 @@ const UserMenu = (props) => {
           open={profileOpen}
           setAvatar={setAvatar}
           closeMenu={handleClose}
+          handleOpenSnackbar={handleOpenSnackbar}
         />
       )}
+      <Snackbar
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={handleCloseSnackbar}
+        message="Profile Picture Updated"
+        action={
+          <>
+            <Button
+              color="secondary"
+              size="small"
+              onClick={handleCloseSnackbar}
+            >
+              UNDO
+            </Button>
+            <IconButton
+              size="small"
+              aria-label="close"
+              color="inherit"
+              onClick={handleCloseSnackbar}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </>
+        }
+      />
     </div>
   );
 };

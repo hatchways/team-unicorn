@@ -3,7 +3,7 @@ import {DropzoneDialog} from 'material-ui-dropzone';
 import axios from 'axios';
 
 const AvatarDialogForm = (props) => {
-  const {open, setAvatar, closeMenu} = props;
+  const {open, setAvatar, closeMenu, handleOpenSnackbar} = props;
 
   const handleClose = () => {
     // setOpen(false);
@@ -16,7 +16,7 @@ const AvatarDialogForm = (props) => {
     axios
       .put('user/avatar', formData)
       .then((resp) => setAvatar(resp.data.avatar))
-      .then(() => handleClose());
+      .then(() => handleOpenSnackbar());
   };
 
   return (
