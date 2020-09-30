@@ -1,24 +1,46 @@
 import {Avatar, Button} from '@material-ui/core';
 import React, {useState} from 'react';
 import UserContext from '../../../contexts';
-// import sampleAvatar from '../../static/sampleAvatar.png';
-import AvatarDialogFrom from './AvatarDialogForm';
+import UserMenu from './UserMenu';
 
 const ProfileAvatar = () => {
-  const [open, setOpen] = useState(false);
+  const [anchorElem, setAnchorElem] = useState(null);
+  const [avatar, setAvatar] = useState('');
 
-  const handleClickOpen = () => {
-    setOpen(true);
+  const handleClickOpen = (event) => {
+    setAnchorElem(event.currentTarget);
   };
 
   return (
     <div>
-      <Button onClick={handleClickOpen}>
-        <UserContext.Consumer>
-          {(value) => <Avatar alt="UserName" src={value.user.avatar} />}
-        </UserContext.Consumer>
-      </Button>
-      {open && <AvatarDialogFrom open={open} setOpen={setOpen} />}
+      <UserContext.Consumer>
+        {(value) => {
+          if (value.user) {
+            if (avatar === '') {
+              setAvatar(value.user.avatar);
+            }
+            return (
+              <div>
+                <Button onClick={handleClickOpen}>
+                  <Avatar
+                    alt={value.user.name}
+                    src={avatar || value.user.avatar}
+                  />
+                </Button>
+
+                {Boolean(anchorElem) && (
+                  <UserMenu
+                    anchorElem={anchorElem}
+                    setAnchorElem={setAnchorElem}
+                    setAvatar={setAvatar}
+                  />
+                )}
+              </div>
+            );
+          }
+          return <div />;
+        }}
+      </UserContext.Consumer>
     </div>
   );
 };

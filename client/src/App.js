@@ -31,7 +31,10 @@ function App() {
       } else {
         // TODO: Do we want to display any messages
         //       regarding session resolution errors?
-        console.log(errors);
+
+        // disabling for now, was here when i merged changes
+        // eslint-disable-next-line no-console
+        console.error(errors);
         setAuthenticated(false);
       }
       setSessionResolved(true);

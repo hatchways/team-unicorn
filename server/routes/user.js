@@ -172,10 +172,9 @@ router.post("/session/end", authenticator, async (req, res) => {
 // @access Public
 router.put('/avatar', authenticator, avatarUploader.single('avatar'), async (req, res) => {
   try {
-    objectURL = `https://${process.env.BUCKETNAME}.s3-us-west-1.amazonaws.com/${req.file.key}`
-    console.log(objectURL)
-    await User.findByIdAndUpdate(req.user.id, {'avatar': objectURL})
-    res.status(200).end();
+    const avatar = {'avatar': `https://${process.env.BUCKETNAME}.s3-us-west-1.amazonaws.com/${req.file.key}`}
+    await User.findByIdAndUpdate(req.user.id, avatar)
+    res.status(200).send(avatar);
   } catch (err) {
     console.error(err.message);
     res

@@ -3,42 +3,28 @@ import {DropzoneDialog} from 'material-ui-dropzone';
 import axios from 'axios';
 
 const AvatarDialogForm = (props) => {
-  const {open} = props;
+  const {open, setAvatar, closeMenu} = props;
 
   const handleClose = () => {
-    props.setOpen(false);
+    // setOpen(false);
+    closeMenu();
   };
 
   const handleSave = (file) => {
     const formData = new FormData();
     formData.append('avatar', file[0]);
-    axios.put('user/avatar', formData);
+    axios
+      .put('user/avatar', formData)
+      .then((resp) => setAvatar(resp.data.avatar))
+      .then(() => handleClose());
   };
-
-  // return (
-  //   <Dialog open={open} onClose={handleClose}>
-  //     <DialogContent>
-  //       <IconButton
-  //         aria-label="close"
-  //         className="closeButton"
-  //         onClick={handleClose}
-  //       >
-  //         <CloseIcon />
-  //       </IconButton>
-  //       <Typography variant="h4">Upload A New Avatar!</Typography>
-  //       <DropzoneArea
-  //         acceptedFiles={['image/*']}
-  //         dropzoneText="Drag and drop an image here or click"
-  //       />
-  //     </DialogContent>
-  //   </Dialog>
-  // );
 
   return (
     <DropzoneDialog
       open={open}
       onSave={handleSave}
       acceptedFiles={['image/jpeg', 'image/png', 'image/bmp']}
+      filesLimit={1}
       showPreviews
       maxFileSize={5000000}
       onClose={handleClose}
