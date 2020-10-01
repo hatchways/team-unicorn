@@ -18,10 +18,21 @@ const boardSchema = new mongoose.Schema({
   }
 });
 
+//on hindsight prob change cuz i was assuming
+//need the default columns no matter what
 boardSchema.pre("save", async function () {
   if (this.columns.length === 0) {
     const cols = await createCols();
     this.columns = await cols.map((col) => col._id);
   }
 });
+
+boardSchema.virtual('id').get(function(){
+  return this._id.toHexString();
+});
+
+boardSchema.set('toJSON', {
+  virtuals: true
+});
+
 module.exports = mongoose.model("Board", boardSchema);

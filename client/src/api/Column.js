@@ -10,11 +10,7 @@ const addColumnByBoardId = async (boardId, formData) => {
     };
     const body = JSON.stringify(formData);
 
-    const res = await axios.post(
-      `/api/columns/create/${boardId}`,
-      body,
-      config,
-    );
+    const res = await axios.post(`/api/columns/${boardId}`, body, config);
 
     return {data: res.data, error: false};
   } catch (err) {
