@@ -36,17 +36,20 @@ router.post(
   }
 );
 
-// @route GET /api/board/
+// @route GET /api/boards/
 // @desc Create Card
 // @access Private
 router.get("/", auth, async (req, res) => {
   try {
     console.log(req.user._id);
 
-    await Board.findOne({
+    await Board.find({
       user: req.user._id
     })
-      .populate({ path: "columns", populate: { path: "cards", model: "Card",  select: 'name' } })
+      .populate({
+        path: "columns",
+        populate: { path: "cards", model: "Card", select: ["name", "deadline"] }
+      })
       .exec((err, board) => {
         console.log(board);
         res.json(board);
