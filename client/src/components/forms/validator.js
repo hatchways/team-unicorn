@@ -9,6 +9,11 @@ const formValidation = {
       required: 'Please enter title',
     },
   },
+  addBoard: {
+    title: {
+      required: 'Please enter title',
+    },
+  },
   getMuiErrorProps: (errors, name) => {
     const isValid = !Object.prototype.hasOwnProperty.call(errors, name);
     const result = {error: !isValid};

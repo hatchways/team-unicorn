@@ -31,6 +31,7 @@ function App() {
       } else {
         // TODO: Do we want to display any messages
         //       regarding session resolution errors?
+        // eslint-disable-next-line no-console
         console.log(errors);
         setAuthenticated(false);
       }
@@ -63,12 +64,6 @@ function App() {
             <PrivateRoute
               authed={authenticated}
               path="/dashboard"
-              component={Dashboard}
-            />
-            <PrivateRoute
-              authed={authenticated}
-              path="/calendar"
-              // TODO: Update component to calendar
               component={Dashboard}
             />
           </Switch>

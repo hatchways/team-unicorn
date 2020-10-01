@@ -5,6 +5,7 @@ export default makeStyles((theme) => ({
     display: 'flex',
     justifyContent: 'space-between',
     overflow: 'hidden',
+    marginTop: ' 40px',
   },
   addColumnContainer: {
     width: '5%',
@@ -73,7 +74,6 @@ export default makeStyles((theme) => ({
   },
   columnsContainer: {
     width: '90%',
-    '& .boardText': {margin: '20px 0 20px 10px'},
     '& .addCard': {
       backgroundColor: 'lightblue',
       display: 'block',

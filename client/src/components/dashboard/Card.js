@@ -10,7 +10,8 @@ const CardItem = ({card}) => {
   const [detailCardError, setDetailCardError] = useState(false);
 
   const getCardData = async () => {
-    const payload = await getCardById(card);
+    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+    const payload = await getCardById(card._id);
     setDetailCardData(payload.data);
     setDetailCardError(payload.error);
   };
