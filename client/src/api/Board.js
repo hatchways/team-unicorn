@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 // helper function to convertBoard backend to frontend
+// leaving this separate from exported Board because want to keep this private
 const convertBoardAPI = async (board) => {
   const newBoard = {
     id: board.id,
