@@ -46,7 +46,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
-const InnerList = memo(({ tasks }) =>
+const Tasks = memo(({ tasks }) =>
   tasks.map((task, index) => <Task key={task.id} task={task} index={index} />),
 );
 
@@ -81,7 +81,7 @@ export default function Column({ column, index, tasks, setUpdate}) {
                     : 'white',
                 }}
               >
-                <InnerList tasks={tasks} />
+                <Tasks tasks={tasks} />
                 {providedForDroppable.placeholder}
                 <Button className={classes.button} size="large" onClick={handleClickOpen}>
                   <Typography>Add a card</Typography>
@@ -90,7 +90,6 @@ export default function Column({ column, index, tasks, setUpdate}) {
                   <AddCardDialogForm
                     open={open}
                     setOpen={setOpen}
-                    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
                     columnId={column.id}
                     setUpdate={setUpdate}
                   />

@@ -102,9 +102,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AddColumnDialogForm = (props) => {
-  const {open, boardId, setLoadBoard, data, setData} = props;
-
-  console.log({props})
+  const {open, boardId, setLoadBoard} = props;
   
   const classes = useStyles();
 
@@ -122,8 +120,6 @@ const AddColumnDialogForm = (props) => {
 
     setError(payload.error);
     setColumnData(payload.data);
-    // data.columns.push(payload.data);
-    // setData(data);
 
     if (!error) {
       document.getElementById('name').value = '';

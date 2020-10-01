@@ -1,7 +1,7 @@
 import React, { useState, useEffect, memo } from 'react';
 import { DragDropContext, Droppable } from 'react-beautiful-dnd';
 import { makeStyles } from '@material-ui/core/styles';
-import { CardActions, Grid } from '@material-ui/core';
+import { Grid } from '@material-ui/core';
 import Column from './components/Column';
 
 import {getBoard, saveBoard} from '../../api/Board';
@@ -114,13 +114,31 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
-const InnerList = memo((props) => {
-  const { column, taskMap, index, setUpdate = { setUpdate } } = props;
+const MemoizedColumn = memo((props) => {
+  const { column, taskMap, index } = props;
   const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-  return <Column column={column} tasks={tasks} index={index} setUpdate={setUpdate} />;
+  return <Column column={column} tasks={tasks} index={index} />;
 });
 
+const Columns = ({data}) => {
+  const {columns, columnOrder, tasks} = data;
+  return columnOrder.map((columnId, index) => {
+    const column = columns[columnId];
+    return (
+      <MemoizedColumn
+        key={column.id}
+        column={column}
+        taskMap={tasks}
+        index={index}
+      />
+    );
+  })
+};
+
+
 export default function KanbanBoard() {
+  const classes = useStyles();
+  
   const [data, setData] = useState({
     id: '',
     tasks: {},
@@ -128,44 +146,23 @@ export default function KanbanBoard() {
     columnOrder: []
   });
 
-  const [update, setUpdate] = useState(true)
+  const [update, setUpdate] = useState(true);
 
-  const convertAPIData = async () => {
-    const boardData = await getBoard()
+  const fetchBoard = async () => {
+    const boardData = await getBoard();
     
-    const data = await boardData.data
+    const data = await boardData.data;
     
-    const newData = {
-      id: data._id,
-      tasks: {},
-      columns: {},
-      columnOrder: [],
-    }
-    await data.columns.map(column => {
-      newData.columns[column._id] = {
-        id: column._id,
-        title: column.name,
-        taskIds: column.cards.map(card => card._id)
-      }
-      column.cards.map(card => {
-        newData.tasks[card._id] = {
-          id: card._id,
-          content: card.name
-        }
-      })
-      newData.columnOrder.push(column._id)
-    })
-    setData(newData)
+    setData(data);
   }
 
   useEffect(() => {
     if (update) {
-      convertAPIData()
-      setUpdate(false)
+      fetchBoard();
+      setUpdate(false);
     }
   }, [update])
 
-  const classes = useStyles();
   const onDragEnd = async (result) => {
     const { destination, source, draggableId, type } = result;
 
@@ -181,6 +178,7 @@ export default function KanbanBoard() {
     }
 
     if (type === 'column') {
+      console.log('moving column!')
       const newColumnOrder = Array.from(data.columnOrder);
       newColumnOrder.splice(source.index, 1);
       newColumnOrder.splice(destination.index, 0, draggableId);
@@ -198,6 +196,7 @@ export default function KanbanBoard() {
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
 
+    // within list
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
@@ -216,7 +215,7 @@ export default function KanbanBoard() {
         },
       };
       await setData(newState);
-      await saveBoard(data.id, {columns: newState.columnOrder})
+      // save task order inside column
       return;
     }
 
@@ -244,11 +243,11 @@ export default function KanbanBoard() {
       },
     };
     setData(newState);
+    // save task order inside two lists
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-    {/* // Add Left and Right Hover Bars for adding columns */}
     <div className={classes.addColumnContainer} id="leftNav"> 
       {data.columns ? (
         <AddColumnSidebar 
@@ -266,18 +265,7 @@ export default function KanbanBoard() {
             {...provided.droppableProps}
             innerRef={provided.innerRef}
           >
-            {data.columnOrder.map((columnId, index) => {
-              const column = data.columns[columnId];
-              return (
-                <InnerList
-                  key={column.id}
-                  column={column}
-                  taskMap={data.tasks}
-                  index={index}
-                  setUpdate={setUpdate}
-                />
-              );
-            })}
+            <Columns data={data} />
             {provided.placeholder}
           </Grid>
         )}
