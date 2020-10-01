@@ -3,10 +3,34 @@ import axios from 'axios';
 // Get board
 export const getBoard = async () => {
   try {
-    const res = await axios.get(`/api/boards/`);
+    const {data} = await axios.get(`/api/boards/`);
     // eslint-disable-next-line no-console
-    console.log('server', res.data);
-    return {data: res.data, loading: false, error: false};
+    console.log('server', data);
+
+    // convert to react state
+    const state = {
+      id: data._id,
+      tasks: {},
+      columns: {},
+      columnOrder: [],
+    }
+
+    await data.columns.forEach(column => {
+      state.columns[column._id] = {
+        id: column._id,
+        title: column.name,
+        taskIds: column.cards.map(card => card._id)
+      }
+      column.cards.forEach(card => {
+        state.tasks[card._id] = {
+          id: card._id,
+          content: card.name
+        }
+      })
+      state.columnOrder.push(column._id)
+    })
+
+    return {data: state, loading: false, error: false};
   } catch (err) {
     return {data: [], loading: false, error: true};
   }
