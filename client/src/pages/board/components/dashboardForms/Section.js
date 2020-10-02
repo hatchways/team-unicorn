@@ -13,7 +13,16 @@ const useStyles = makeStyles({
 
 const Section = React.forwardRef(
   (
-    {name, title, titleIcon, optional = false, handleDelete, children, ...rest},
+    {
+      name,
+      title,
+      titleIcon,
+      optional = false,
+      lockPropName = 'locked',
+      handleDelete,
+      children,
+      ...rest
+    },
     ref,
   ) => {
     console.log('Rendered,', name);
@@ -51,7 +60,7 @@ const Section = React.forwardRef(
             </IconButton>
           </Box>
         </Box>
-        {React.cloneElement(children, {locked})}
+        {React.cloneElement(children, {[lockPropName]: locked})}
       </Box>
     );
   },

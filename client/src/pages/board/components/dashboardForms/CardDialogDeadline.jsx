@@ -7,8 +7,8 @@ import Section from './Section';
 
 // TODO: Remove state and integrate form react hooks
 
-const CardDialogDeadline = () => {
-  const [date, setDate] = useState(Date.now());
+const CardDialogDeadline = ({deadline, ...other}) => {
+  const [date, setDate] = useState(deadline);
   const [open, setOpen] = useState(false);
 
   const handleOpen = () => setOpen(true);
@@ -25,7 +25,14 @@ const CardDialogDeadline = () => {
   );
 
   return (
-    <Section deletable title="Deadline" titleIcon={DeadlineIcon}>
+    <Section
+      name="deadline"
+      {...other}
+      optional
+      title="Deadline"
+      titleIcon={DeadlineIcon}
+      lockPropName="disabled"
+    >
       <SectionContent>
         <KeyboardDatePicker
           id="deadline-date"

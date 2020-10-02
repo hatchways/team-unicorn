@@ -23,9 +23,10 @@ const useStyles = makeStyles((theme) => ({
     lineHeight: '1.1em',
     borderRadius: theme.shape.borderRadius,
     minHeight: theme.typography.body1.lineHeight * 4,
-    backgroundColor: theme.palette.grey[200],
+    backgroundColor: ({locked}) =>
+      locked ? theme.palette.grey[200] : theme.palette.grey[300],
     '&:hover': {
-      backgroundColor: ({locked}) => (locked ? null : theme.palette.grey[300]),
+      backgroundColor: ({locked}) => (locked ? null : theme.palette.grey[400]),
       cursor: ({locked}) => (locked ? null : 'pointer'),
     },
   },

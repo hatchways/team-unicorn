@@ -7,8 +7,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const MenuButton = ({children, ...other}) => {
+const MenuButton = ({onClick, children, ...other}) => {
   const classes = useStyles();
+
   return (
     <Button
       className={classes.root}
@@ -17,6 +18,7 @@ const MenuButton = ({children, ...other}) => {
       color="primary"
       fullWidth
       {...other}
+      onClick={onClick}
     >
       {children}
     </Button>

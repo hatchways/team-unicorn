@@ -4,13 +4,18 @@ import SectionContent from './SectionContent';
 import Section from './Section';
 import TextFieldOnFocusTypography from './TextFieldOnFocusTypography';
 
-const CardDialogDesc = ({desc: initDesc}) => {
+const CardDialogDesc = ({desc: initDesc, handleDelete}) => {
   const [desc, setDesc] = useState(initDesc);
 
   const save = (val) => setDesc(val);
 
   return (
-    <Section name="description" title="Description" titleIcon={DescIcon}>
+    <Section
+      name="description"
+      title="Description"
+      titleIcon={DescIcon}
+      handleDelete={handleDelete}
+    >
       <SectionContent>
         <TextFieldOnFocusTypography
           TextFieldProps={{

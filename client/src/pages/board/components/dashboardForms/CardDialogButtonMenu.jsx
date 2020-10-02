@@ -8,7 +8,7 @@ const useStyles = makeStyles({
   },
 });
 
-const CardDialogButtonMenu = () => {
+const CardDialogButtonMenu = ({handleAdd}) => {
   const classes = useStyles();
   return (
     <Box
@@ -19,7 +19,7 @@ const CardDialogButtonMenu = () => {
       justifyContent="space-evenly"
       height="100%"
     >
-      <div>
+      <Box marginBottom={3}>
         <Typography variant="subtitle2">ADD TO CARD:</Typography>
         <Box
           display="flex"
@@ -28,13 +28,19 @@ const CardDialogButtonMenu = () => {
           justifyContent="space-evenly"
           paddingX={2}
         >
-          <MenuButton>Tag</MenuButton>
-          <MenuButton>Checklist</MenuButton>
-          <MenuButton>Deadline</MenuButton>
-          <MenuButton>Attachment</MenuButton>
-          <MenuButton>Cover</MenuButton>
+          <MenuButton onClick={() => handleAdd('tags')}>Tag</MenuButton>
+          <MenuButton onClick={() => handleAdd('checklist')}>
+            Checklist
+          </MenuButton>
+          <MenuButton onClick={() => handleAdd('deadline')}>
+            Deadline
+          </MenuButton>
+          <MenuButton onClick={() => handleAdd('attachment')}>
+            Attachment
+          </MenuButton>
+          <MenuButton onClick={() => handleAdd('attachment')}>Cover</MenuButton>
         </Box>
-      </div>
+      </Box>
       <div>
         <Typography variant="subtitle2">ACTIONS:</Typography>
         <Box
