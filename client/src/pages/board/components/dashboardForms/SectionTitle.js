@@ -1,5 +1,7 @@
 import React from 'react';
 import {Typography, makeStyles, Box, IconButton} from '@material-ui/core';
+import LockedIcon from '@material-ui/icons/LockOutlined';
+import UnlockedIcon from '@material-ui/icons/LockOpenOutlined';
 import DeleteIcon from '@material-ui/icons/DeleteOutlineRounded';
 import WithIcon from '../../../../components/WithIcon';
 
@@ -14,19 +16,34 @@ const useStyles = makeStyles({
 //       component, by the Section component itself.
 //       Might be changed later to facilitate modifying section titles.
 
-const SectionTitle = ({deletable = false, variant, icon, children}) => {
+const SectionTitle = ({
+  handleDelete,
+  deletable = false,
+  variant,
+  icon,
+  children,
+  locked,
+  handleLock,
+}) => {
   const classes = useStyles();
 
+  const LockIcon = locked ? LockedIcon : UnlockedIcon;
+  const onLockClick = () => handleLock(locked);
   return (
-    <Box display="flex" justifyContent="space-between" width="100%">
+    <Box display="flex" justifyContent="space-between" width="100%" marginY={1}>
       <WithIcon Icon={icon} iconColor="primary">
         <Typography className={classes.labelText} variant={variant}>
           {children}
         </Typography>
       </WithIcon>
-      <IconButton disabled={!deletable}>
-        <DeleteIcon />
-      </IconButton>
+      <Box>
+        <IconButton size="small" onClick={onLockClick}>
+          <LockIcon />
+        </IconButton>
+        <IconButton size="small" disabled={!deletable} onClick={handleDelete}>
+          <DeleteIcon />
+        </IconButton>
+      </Box>
     </Box>
   );
 };

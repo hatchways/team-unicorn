@@ -25,8 +25,8 @@ const useStyles = makeStyles((theme) => ({
     minHeight: theme.typography.body1.lineHeight * 4,
     backgroundColor: theme.palette.grey[200],
     '&:hover': {
-      cursor: 'pointer',
-      backgroundColor: theme.palette.grey[300],
+      backgroundColor: ({locked}) => (locked ? null : theme.palette.grey[300]),
+      cursor: ({locked}) => (locked ? null : 'pointer'),
     },
   },
 }));
@@ -37,8 +37,9 @@ const TextFieldOnFocusTypography = ({
   text,
   saveText,
   placeholder,
+  locked,
 }) => {
-  const classes = useStyles();
+  const classes = useStyles({locked});
   const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
@@ -86,7 +87,7 @@ const TextFieldOnFocusTypography = ({
         <Typography
           variant="body1"
           className={classes.typography}
-          onClick={handleFocus}
+          onClick={locked ? null : handleFocus}
           {...TypographyProps}
         >
           {text || placeholder}

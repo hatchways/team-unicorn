@@ -1,15 +1,29 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Box} from '@material-ui/core';
 import SectionTitle from './SectionTitle';
 
 const Section = React.forwardRef(
-  ({deletable, title, titleIcon, children, ...rest}, ref) => {
+  (
+    {name, title, titleIcon, optional, handleDelete, children, ...rest},
+    ref,
+  ) => {
+    console.log('Rendered,', name);
+    const [locked, setLocked] = useState(false);
+    const deleteIconClickHandler = () => handleDelete(name);
+    const lockIconClickHandler = (lockState) => setLocked(!lockState);
     return (
       <Box marginBottom={3} ref={ref} {...rest}>
-        <SectionTitle deletable={deletable} variant="h6" icon={titleIcon}>
+        <SectionTitle
+          deletable={optional}
+          locked={locked}
+          variant="h6"
+          icon={titleIcon}
+          handleDelete={deleteIconClickHandler}
+          handleLock={lockIconClickHandler}
+        >
           {title}
         </SectionTitle>
-        {children}
+        {React.cloneElement(children, {locked})}
       </Box>
     );
   },
