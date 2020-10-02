@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import {
   Typography,
@@ -14,6 +14,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import { addCardByColumnId } from '../../../../api/Card.js';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
+
+//yeah will need to make absolute paths soon
+import { BoardContext } from '../../../../contexts/boardContext';
 
 const useStyles = makeStyles((theme) => ({
   addCardDialogModal: {
@@ -104,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddCardDialogForm = (props) => {
   const classes = useStyles();
-  const { open, columnId, setUpdate } = props;
+  const { open, columnId } = props;
 
   // const classes = dialogStyles();
   const { register, handleSubmit, errors } = useForm();
@@ -116,9 +119,17 @@ const AddCardDialogForm = (props) => {
   const { textField: textFieldProps } = formProps.style;
   const { title: titleValidation } = formValidation.addCard;
 
+  const {dispatch} = useContext(BoardContext)
+
   const onSubmitForm = async (formData) => {
     const payload = await addCardByColumnId(columnId, { name: formData.name });
-    await setUpdate(true)
+
+    dispatch({
+      type: 'ADD_CARD',
+      columnId: columnId,
+      task: payload.data
+    })
+
     setError(payload.error);
     setCardData(payload.data);
 
@@ -128,6 +139,7 @@ const AddCardDialogForm = (props) => {
     setTimeout(() => {
       setError(false);
       setCardData();
+      props.setUpdate(true)
       props.setOpen(false);
     }, 1000);
   };
@@ -159,7 +171,7 @@ const AddCardDialogForm = (props) => {
           id="addColumnForm"
         >
           {error && <div>Something went wrong. Please try again!!</div>}
-          {cardData?.name ? <div>Added Successfully</div> : ' '}
+          {/* {cardData?.name ? <div>Added Successfully</div> : ' '} */}
 
           <TextField
             {...textFieldProps}

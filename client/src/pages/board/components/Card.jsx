@@ -10,6 +10,7 @@ const CardItem = (props) => {
   const [cardLoading, setCardLoading] = useState(true);
   const [cardError, setCardError] = useState(false);
 
+  
   const getCardData = async () => {
     const payload = await getCardById(card);
     setCardData(payload.data);
