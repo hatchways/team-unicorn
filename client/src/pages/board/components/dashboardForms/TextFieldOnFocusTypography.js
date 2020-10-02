@@ -1,4 +1,10 @@
-import React, {useState, useCallback, useEffect} from 'react';
+import React, {useState, useCallback} from 'react';
+import {makeStyles, TextField, Typography, Box} from '@material-ui/core';
+
+// TODO: Documentation
+// TODO: Needs to be tested more throughly
+// TODO: Consider UX implications (e.g. no
+//       undo once component is blurred)
 
 /**
  * @description
@@ -7,61 +13,86 @@ import React, {useState, useCallback, useEffect} from 'react';
  *
  */
 
+const useStyles = makeStyles((theme) => ({
+  inputMultiline: {
+    lineHeight: '1.1em',
+    padding: theme.spacing(2),
+  },
+  typography: {
+    padding: theme.spacing(2),
+    lineHeight: '1.1em',
+    borderRadius: theme.shape.borderRadius,
+    minHeight: theme.typography.body1.lineHeight * 4,
+    backgroundColor: theme.palette.grey[200],
+    '&:hover': {
+      cursor: 'pointer',
+      backgroundColor: theme.palette.grey[300],
+    },
+  },
+}));
+
 const TextFieldOnFocusTypography = ({
-  TextFieldComponent,
-  TypographyComponent,
+  TextFieldProps,
+  TypographyProps,
   text,
   saveText,
-  focusAreaRef,
-  cooldown = 200,
+  placeholder,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const classes = useStyles();
+  const [focused, setFocused] = useState(false);
 
   const handleFocus = () => {
-    setIsEditing(true);
+    setFocused(true);
   };
 
   const handleBlur = (e) => {
     const newText = e.target.value;
     saveText(newText);
-    setIsEditing(false);
+    setFocused(false);
   };
 
-  useEffect(() => {
-    const ref = focusAreaRef;
-    let timeout;
-    if (!isEditing && ref) {
-      timeout = setTimeout(
-        () => ref.current.addEventListener('click', handleFocus),
-        cooldown,
-      );
+  const setRefFocus = useCallback((node) => {
+    if (node !== null) {
+      node.focus();
+      node.setSelectionRange(node.value.length, node.value.length);
     }
-    return () => {
-      clearTimeout(timeout);
-      if (ref?.current) {
-        ref.current.removeEventListener('click', handleFocus);
-      }
-    };
-  }, [isEditing, focusAreaRef, cooldown]);
+  }, []);
 
-  const setRefFocus = useCallback(
-    (node) => {
-      if (node !== null) {
-        focusAreaRef.current.removeEventListener('click', handleFocus);
-        node.focus();
-      }
-    },
-    [focusAreaRef],
-  );
-
-  return isEditing ? (
-    <TextFieldComponent
-      inputRef={setRefFocus}
-      defaultValue={text}
-      onBlur={handleBlur}
-    />
-  ) : (
-    <TypographyComponent>{text}</TypographyComponent>
+  return (
+    <Box
+      width="100%"
+      display="flex"
+      flexDirection="column"
+      alignItems="stretch"
+    >
+      {focused ? (
+        <TextField
+          inputRef={setRefFocus}
+          defaultValue={text}
+          onBlur={handleBlur}
+          InputProps={{
+            root: {},
+            classes: {
+              multiline: classes.inputMultiline,
+            },
+          }}
+          margin="none"
+          multiline
+          variant="outlined"
+          placeholder={placeholder}
+          {...TextFieldProps}
+        />
+      ) : (
+        <Typography
+          variant="body1"
+          className={classes.typography}
+          onClick={handleFocus}
+          {...TypographyProps}
+        >
+          {text || placeholder}
+        </Typography>
+      )}
+    </Box>
   );
 };
 
