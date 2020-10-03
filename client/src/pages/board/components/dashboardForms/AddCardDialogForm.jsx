@@ -1,5 +1,5 @@
-import React, { useState, useContext } from 'react';
-import { useForm } from 'react-hook-form';
+import React, {useState, useContext} from 'react';
+import {useForm} from 'react-hook-form';
 import {
   Typography,
   Button,
@@ -11,14 +11,14 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { addCardByColumnId } from '../../../../api/Card.js';
+import {addCardByColumnId} from '../../../../api/Card';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-//yeah will need to make absolute paths soon
-import { BoardContext } from '../../../../contexts/boardContext';
+// yeah will need to make absolute paths soon
+import {BoardContext} from '../../../../contexts/boardContext';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   addCardDialogModal: {
     '& .closeButton': {
       position: 'absolute',
@@ -107,28 +107,28 @@ const useStyles = makeStyles((theme) => ({
 
 const AddCardDialogForm = (props) => {
   const classes = useStyles();
-  const { open, columnId } = props;
+  const {open, columnId} = props;
 
   // const classes = dialogStyles();
-  const { register, handleSubmit, errors } = useForm();
+  const {register, handleSubmit, errors} = useForm();
 
   const [cardData, setCardData] = useState();
   const [error, setError] = useState(false);
 
-  const { title: titleProps } = formProps.html.addCard;
-  const { textField: textFieldProps } = formProps.style;
-  const { title: titleValidation } = formValidation.addCard;
+  const {title: titleProps} = formProps.html.addCard;
+  const {textField: textFieldProps} = formProps.style;
+  const {title: titleValidation} = formValidation.addCard;
 
-  const {dispatch} = useContext(BoardContext)
+  const {dispatch} = useContext(BoardContext);
 
   const onSubmitForm = async (formData) => {
-    const payload = await addCardByColumnId(columnId, { name: formData.name });
+    const payload = await addCardByColumnId(columnId, {name: formData.name});
 
     dispatch({
       type: 'ADD_CARD',
-      columnId: columnId,
-      task: payload.data
-    })
+      columnId,
+      task: payload.data,
+    });
 
     setError(payload.error);
     setCardData(payload.data);
@@ -139,7 +139,7 @@ const AddCardDialogForm = (props) => {
     setTimeout(() => {
       setError(false);
       setCardData();
-      props.setUpdate(true)
+      // props.setUpdate(true)
       props.setOpen(false);
     }, 1000);
   };
@@ -171,7 +171,7 @@ const AddCardDialogForm = (props) => {
           id="addColumnForm"
         >
           {error && <div>Something went wrong. Please try again!!</div>}
-          {/* {cardData?.name ? <div>Added Successfully</div> : ' '} */}
+          {cardData?.name ? <div>Added Successfully</div> : ' '}
 
           <TextField
             {...textFieldProps}

@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext, memo} from 'react';
+import React, {useContext, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
@@ -8,7 +8,7 @@ import Board from '../../api/Board';
 
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
-import { BoardContext } from '../../contexts/boardContext';
+import {BoardContext} from '../../contexts/boardContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -116,25 +116,34 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
-const InnerList = memo((props) => {
-  const {column, taskMap, index, setUpdate} = props;
+const MemoizedColumn = memo((props) => {
+  const {column, taskMap, index} = props;
   const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-  return (
-    <Column column={column} tasks={tasks} index={index} setUpdate={setUpdate}/>
-  );
-}, );
+  return <Column column={column} tasks={tasks} index={index} />;
+});
+
+const Columns = ({data}) => {
+  const {columns, columnOrder, tasks} = data;
+  return columnOrder.map((columnId, index) => {
+    const column = columns[columnId];
+    return (
+      <MemoizedColumn
+        key={column.id}
+        column={column}
+        taskMap={tasks}
+        index={index}
+      />
+    );
+  });
+};
 
 export default function KanbanBoard() {
-  const [update, setUpdate] = useState(true);
-  const {data, dispatch} = useContext(BoardContext)
-
-  useEffect(() => {
-    setUpdate(false)
-  }, [data])
+  const {data, dispatch} = useContext(BoardContext);
 
   const classes = useStyles();
+
   const onDragEnd = async (result) => {
-    const {destination, source, draggableId, type} = result;
+    const {destination, source, type} = result;
 
     if (!destination) {
       return;
@@ -148,102 +157,34 @@ export default function KanbanBoard() {
     }
 
     if (type === 'column') {
-      // const newColumnOrder = Array.from(data.columnOrder);
-      // newColumnOrder.splice(source.index, 1);
-      // newColumnOrder.splice(destination.index, 0, draggableId);
-
-      // const newState = {
-      //   ...data,
-      //   columnOrder: newColumnOrder,
-      // };
-
-      // await setData(newState);
       await dispatch({
         type: 'MOVE_COL',
         fromIndex: source.index,
-        toIndex: destination.index
-      })
+        toIndex: destination.index,
+      });
       await Board.saveData(data.id, data.columnOrder);
       return;
     }
 
-    const start = data.columns[source.droppableId];
-    const finish = data.columns[destination.droppableId];
-
-    //if moving card within same column
-    if (start === finish) {
-      // const newTaskIds = Array.from(start.taskIds);
-      // newTaskIds.splice(source.index, 1);
-      // newTaskIds.splice(destination.index, 0, draggableId);
-
-      // const newColumn = {
-      //   ...start,
-      //   taskIds: newTaskIds,
-      // };
-
-      // const newState = {
-      //   ...data,
-      //   columns: {
-      //     ...data.columns,
-      //     [newColumn.id]: newColumn,
-      //   },
-      // };
-      await dispatch({
-        type: 'MOVE_CARD',
-        prevCol: source.droppableId,
-        nextCol: destination.droppableId,
-        fromIndex: source.index,
-        toIndex: destination.index
-      })
-      // await setData(newState);
-      await Board.saveData(data.id, data.columnOrder);
-      return;
-    }
-
-    // between lists
-    // const startTaskIds = Array.from(start.taskIds);
-    // startTaskIds.splice(source.index, 1);
-    // const newStart = {
-    //   ...start,
-    //   taskIds: startTaskIds,
-    // };
-
-    // const finishTaskIds = Array.from(finish.taskIds);
-    // finishTaskIds.splice(destination.index, 0, draggableId);
-    // const newFinish = {
-    //   ...finish,
-    //   taskIds: finishTaskIds,
-    // };
-
-    // const newState = {
-    //   ...data,
-    //   columns: {
-    //     ...data.columns,
-    //     [newStart.id]: newStart,
-    //     [newFinish.id]: newFinish,
-    //   },
-    // };
-    // setData(newState);
     await dispatch({
       type: 'MOVE_CARD',
       prevCol: source.droppableId,
       nextCol: destination.droppableId,
       fromIndex: source.index,
-      toIndex: destination.index
-    })
-    await Board.saveData(data.id, data.columnOrder)
-    console.log('saved')
+      toIndex: destination.index,
+    });
+
+    await Board.saveData(data.id, data.columnOrder);
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
-      {/* // Add Left and Right Hover Bars for adding columns */}
       <div className={classes.addColumnContainer} id="leftNav">
         {data.columns ? (
           <AddColumnSidebar
             data={data}
             // setData={setData}
-            setLoadBoard={setUpdate}
+            // setLoadBoard={setUpdate}
             boardId={data.id}
           />
         ) : null}
@@ -255,18 +196,7 @@ export default function KanbanBoard() {
             {...provided.droppableProps}
             innerRef={provided.innerRef}
           >
-            {data.columnOrder.map((columnId, index) => {
-              const column = data.columns[columnId];
-              return (
-                <InnerList
-                  key={column.id}
-                  column={column}
-                  taskMap={data.tasks}
-                  index={index}
-                  setUpdate={setUpdate}
-                />
-              );
-            })}
+            <Columns data={data} />
             {provided.placeholder}
           </Grid>
         )}
@@ -275,7 +205,7 @@ export default function KanbanBoard() {
         {data.columns ? (
           <AddColumnSidebar
             data={data}
-            setLoadBoard={setUpdate}
+            // setLoadBoard={setUpdate}
             // setData={setData}
             boardId={data.id}
           />

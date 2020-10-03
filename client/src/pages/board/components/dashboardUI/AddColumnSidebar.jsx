@@ -5,7 +5,7 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircle';
 import AddColumnDialogForm from '../dashboardForms/AddColumnDialogForm';
 
 const AddColumnSidebar = (props) => {
-  const {boardId, setLoadBoard, data, setData} = props;
+  const {boardId, data} = props;
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = (event) => {
@@ -27,9 +27,9 @@ const AddColumnSidebar = (props) => {
           open={open}
           setOpen={setOpen}
           boardId={boardId}
-          setLoadBoard={setLoadBoard}
+          // setLoadBoard={setLoadBoard}
           data={data}
-          setData={setData}
+          // setData={setData}
         />
       )}
     </Fragment>
