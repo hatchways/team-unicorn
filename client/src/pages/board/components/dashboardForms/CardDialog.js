@@ -8,7 +8,7 @@ import {
 } from '@material-ui/core';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import CardDialogTitle from './CardDialogTitle';
+import CardDialogTitle from './dialogSections/CardDialogTitle';
 import {dialogTheme} from '../../../../themes/theme';
 import CardDialogContentBody from './CardDialogContentBody';
 
@@ -35,7 +35,7 @@ const CardDialog = ({
   return (
     <MuiThemeProvider theme={dialogTheme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Dialog onClose={onClose} {...rest}>
+        <Dialog fullWidth onClose={onClose} {...rest}>
           <CardDialogTitle
             onClose={onClose}
             cardColor={color}

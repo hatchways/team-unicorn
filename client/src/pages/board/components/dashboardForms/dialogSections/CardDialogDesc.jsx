@@ -1,21 +1,17 @@
 import React, {useState} from 'react';
-import DescIcon from '@material-ui/icons/ImportContactsTwoTone';
-import SectionContent from './SectionContent';
-import Section from './Section';
-import TextFieldOnFocusTypography from './TextFieldOnFocusTypography';
+import SectionContent from './components/SectionContent';
+import Section from './components/Section';
+import TextFieldOnFocusTypography from './components/TextFieldOnFocusTypography';
 
-const CardDialogDesc = ({desc: initDesc, handleDelete}) => {
+const CardDialogDesc = ({initState: initDesc, ...other}) => {
   const [desc, setDesc] = useState(initDesc);
+  const [locked, setLocked] = useState(false);
 
   const save = (val) => setDesc(val);
+  const toggleLock = () => setLocked((prevLocked) => !prevLocked);
 
   return (
-    <Section
-      name="description"
-      title="Description"
-      titleIcon={DescIcon}
-      handleDelete={handleDelete}
-    >
+    <Section locked={locked} handleToggleLock={toggleLock} {...other}>
       <SectionContent>
         <TextFieldOnFocusTypography
           TextFieldProps={{
@@ -29,6 +25,7 @@ const CardDialogDesc = ({desc: initDesc, handleDelete}) => {
           placeholder="Enter a description..."
           text={desc}
           saveText={save}
+          disabled={locked}
         />
       </SectionContent>
     </Section>

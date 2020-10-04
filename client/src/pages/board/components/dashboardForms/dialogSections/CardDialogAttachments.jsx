@@ -1,7 +1,7 @@
 import React from 'react';
 import AttachmentIcon from '@material-ui/icons/AttachFileOutlined';
-import Section from './Section';
-import SectionContent from './SectionContent';
+import Section from './components/Section';
+import SectionContent from './components/SectionContent';
 
 const CardDialogAttachments = () => {
   return (

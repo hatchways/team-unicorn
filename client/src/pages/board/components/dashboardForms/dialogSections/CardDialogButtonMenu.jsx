@@ -1,6 +1,7 @@
+import React, {useMemo} from 'react';
 import {Box, Typography, makeStyles} from '@material-ui/core';
-import React from 'react';
-import MenuButton from './MenuButton';
+import MenuButton from './components/MenuButton';
+import SectionInfos from './enums';
 
 const useStyles = makeStyles({
   root: {
@@ -10,6 +11,18 @@ const useStyles = makeStyles({
 
 const CardDialogButtonMenu = ({handleAdd}) => {
   const classes = useStyles();
+  const AddSectionButtons = useMemo(
+    () =>
+      Object.keys(SectionInfos).map((sectionCode) => {
+        const {title} = SectionInfos[sectionCode];
+        return (
+          <MenuButton key={sectionCode} onClick={() => handleAdd(sectionCode)}>
+            {title}
+          </MenuButton>
+        );
+      }),
+    [handleAdd],
+  );
   return (
     <Box
       className={classes.root}
@@ -28,17 +41,7 @@ const CardDialogButtonMenu = ({handleAdd}) => {
           justifyContent="space-evenly"
           paddingX={2}
         >
-          <MenuButton onClick={() => handleAdd('tags')}>Tag</MenuButton>
-          <MenuButton onClick={() => handleAdd('checklist')}>
-            Checklist
-          </MenuButton>
-          <MenuButton onClick={() => handleAdd('deadline')}>
-            Deadline
-          </MenuButton>
-          <MenuButton onClick={() => handleAdd('attachment')}>
-            Attachment
-          </MenuButton>
-          <MenuButton onClick={() => handleAdd('attachment')}>Cover</MenuButton>
+          {AddSectionButtons}
         </Box>
       </Box>
       <div>

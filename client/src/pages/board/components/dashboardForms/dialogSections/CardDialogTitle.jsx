@@ -7,7 +7,7 @@ import {
   makeStyles,
   Typography,
 } from '@material-ui/core';
-import WithIcon from '../../../../components/WithIcon';
+import WithIcon from './components/WithIcon';
 import Colorbar from './Colorbar';
 
 const useStyles = makeStyles((theme) => ({

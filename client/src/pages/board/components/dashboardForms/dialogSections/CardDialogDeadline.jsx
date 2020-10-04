@@ -1,37 +1,34 @@
 import React, {useState} from 'react';
 import {TextField} from '@material-ui/core';
-import DeadlineIcon from '@material-ui/icons/ScheduleOutlined';
 import {KeyboardDatePicker} from '@material-ui/pickers';
-import SectionContent from './SectionContent';
-import Section from './Section';
+import SectionContent from './components/SectionContent';
+import Section from './components/Section';
 
-// TODO: Remove state and integrate form react hooks
-
-const CardDialogDeadline = ({deadline, ...other}) => {
-  const [date, setDate] = useState(deadline);
+const CardDialogDeadline = ({initState: initDeadline, ...other}) => {
+  const [deadline, setDeadline] = useState(initDeadline);
   const [open, setOpen] = useState(false);
+  const [locked, setLocked] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleDateChange = (val) => setDate(val);
+  const handleDateChange = (val) => setDeadline(val);
+  const handleToggleLock = () => setLocked((prevLock) => !prevLock);
 
   const TextFieldComponent = ({...props}) => (
     <TextField
       color="primary"
       {...props}
       inputProps={{disabled: true}}
-      onClick={handleOpen}
+      onClick={locked ? null : handleOpen}
     />
   );
 
   return (
     <Section
-      name="deadline"
-      {...other}
+      locked={locked}
+      handleToggleLock={handleToggleLock}
       optional
-      title="Deadline"
-      titleIcon={DeadlineIcon}
-      lockPropName="disabled"
+      {...other}
     >
       <SectionContent>
         <KeyboardDatePicker
@@ -39,7 +36,7 @@ const CardDialogDeadline = ({deadline, ...other}) => {
           name="deadline-date"
           open={open}
           onClose={handleClose}
-          value={date}
+          value={deadline}
           onChange={handleDateChange}
           inputVariant="standard"
           InputAdornmentProps={{color: 'primary'}}
@@ -47,6 +44,7 @@ const CardDialogDeadline = ({deadline, ...other}) => {
           KeyboardButtonProps={{color: 'primary'}}
           disableToolbar
           autoOk
+          disabled={locked}
         />
       </SectionContent>
     </Section>

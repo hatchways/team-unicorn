@@ -1,11 +1,7 @@
-import React, {useState} from 'react';
+import React, {useState, useMemo} from 'react';
 import {Box, DialogContent, makeStyles} from '@material-ui/core';
-import CardDialogDesc from './CardDialogDesc';
-import CardDialogDeadline from './CardDialogDeadline';
-// import CardDialogComments from './CardDialogComments';
-// import CardDialogAttachments from './CardDialogAttachments';
-// import CardDialogTags from './CardDialogTags';
-import CardDialogButtonMenu from './CardDialogButtonMenu';
+import CardDialogButtonMenu from './dialogSections/CardDialogButtonMenu';
+import SectionInfos from './dialogSections/enums';
 
 const useStyles = makeStyles({
   root: {
@@ -15,29 +11,48 @@ const useStyles = makeStyles({
   },
 });
 
-// TODO: Refactor hardcoded section names into enums.
 const CardDialogContentBody = ({
   desc,
+  checklist,
   deadline,
-  // comments,
-  // tags,
-  // attachments,
+  comments,
+  attachments,
+  tags,
+  cover,
 }) => {
   const classes = useStyles();
-  const [sections, setSections] = useState(['description', 'deadline']);
+  const initSectionStates = useMemo(
+    () => ({
+      DESC: desc,
+      CHCK: checklist,
+      DEDL: deadline,
+      COMM: comments,
+      ATCH: attachments,
+      TAGS: tags,
+      COVR: cover,
+    }),
+    [desc, checklist, deadline, comments, attachments, tags, cover],
+  );
 
-  const addSection = (name) => {
-    if (!sections.includes(name)) {
-      const updated = [...sections, name];
+  const [sections, setSections] = useState(
+    Object.keys(initSectionStates).filter(
+      (sectionCode) => initSectionStates[sectionCode],
+    ),
+  );
+
+  const addSection = (sectionCode) => {
+    if (!sections.includes(sectionCode)) {
+      const updated = [...sections, sectionCode];
       setSections(updated);
     }
   };
 
-  const deleteSection = (name) => {
-    const updated = sections.filter((secName) => secName !== name);
+  const deleteSection = (sectionCode) => {
+    const updated = sections.filter((code) => code !== sectionCode);
     setSections(updated);
   };
 
+  console.log(sections);
   // TODO: Ensure state changes don't re-render every section
   return (
     <DialogContent className={classes.root}>
@@ -49,19 +64,29 @@ const CardDialogContentBody = ({
         justifyContent="space-evenly"
         paddingBottom={3}
       >
-        {sections.includes('description') && (
-          <CardDialogDesc handleDelete={deleteSection} desc={desc} />
-        )}
-        {sections.includes('deadline') && (
-          <CardDialogDeadline handleDelete={deleteSection} date={deadline} />
-        )}
-        {/* 
-        <CardDialogComments handleDelete={deleteSection} comments={comments} />
-        <CardDialogAttachments
-          handleDelete={deleteSection}
-          attachments={attachments}
-        />
-        <CardDialogTags handleDelete={deleteSection} tags={tags} /> */}
+        {
+          /* NOTE: We map the enum so the section order is preserved. 
+                   (state `sections` doesn't maintain order.)
+          */
+          Object.keys(SectionInfos).map((sectionCode) => {
+            const {title, IconComponent, SectionComponent} = SectionInfos[
+              sectionCode
+            ];
+
+            const render = sections.includes(sectionCode);
+            const result = render && (
+              <SectionComponent
+                key={sectionCode}
+                code={sectionCode}
+                title={title}
+                IconComponent={IconComponent}
+                handleDelete={deleteSection}
+                initState={initSectionStates[sectionCode]}
+              />
+            );
+            return result;
+          })
+        }
       </Box>
       <Box
         width="130px"

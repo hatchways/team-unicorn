@@ -14,13 +14,17 @@ const sampleCard = {
   tags: ['math', 'exam', 'important'],
   color: colors.amber[500],
   comments: [
+    // NOTE: The timestamp is intended to
+    //      serve as a unique id to distinguish comments
+    //      on frontend. As far as the backend is concerned
+    //      this is just part of the data to save.
     {
-      id: 0,
+      timestamp: 0,
       comment:
         'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec ornare quam ac condimentum accumsan. Nulla eu efficitur dui, vitae gravida felis. In vitae turpis at nunc tincidunt vestibulum. Nulla facilisi. Nunc nisi est, efficitur in lobortis at, dapibus ac diam. Nunc a elit volutpat enim sodales porttitor at id lacus. Cras non tempor justo.',
     },
     {
-      id: 1,
+      timestamp: 1,
       comment:
         'Donec eu semper lacus, vitae vehicula nisl. Nullam sed mi vulputate, laoreet tellus id, porta neque. Nullam semper placerat nisi, sit amet gravida est gravida vel. Ut ut purus pulvinar velit ultrices pellentesque vel sit amet nisi.',
     },
