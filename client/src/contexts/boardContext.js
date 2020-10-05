@@ -11,13 +11,10 @@ const BoardContext = createContext(initialState);
 
 const reducers = {
   addCard: (state, task, colId) => {
-    const newTaskIds = Array.from(state.columns[colId].taskIds);
-    newTaskIds.push(task.id);
     const newColumn = {
       ...state.columns[colId],
-      taskIds: newTaskIds,
+      taskIds: state.columns[colId].taskIds.concat(task.id),
     };
-
     const newState = {
       ...state,
       columns: {
@@ -27,62 +24,53 @@ const reducers = {
     };
 
     newState.tasks[task.id] = {id: task.id, content: task.name};
-
     return newState;
   },
   moveCard: (state, prevColId, nextColId, oldIndex, newIndex) => {
     const taskId = state.columns[prevColId].taskIds[oldIndex];
-    if (prevColId === nextColId) {
-      const newTaskIds = Array.from(state.columns[prevColId].taskIds);
-      newTaskIds.splice(oldIndex, 1);
-      newTaskIds.splice(newIndex, 0, taskId);
 
-      const newColumn = {
-        ...state.columns[prevColId],
-        taskIds: newTaskIds,
-      };
-
-      const newState = {
-        ...state,
-        columns: {
-          ...state.columns,
-          [newColumn.id]: newColumn,
-        },
-      };
-      return newState;
-    }
+    // remove card from previous column
     const prevTaskIds = Array.from(state.columns[prevColId].taskIds);
     prevTaskIds.splice(oldIndex, 1);
-
     const prevColumn = {
       ...state.columns[prevColId],
       taskIds: prevTaskIds,
     };
 
-    const nextTaskIds = Array.from(state.columns[nextColId].taskIds);
-    nextTaskIds.splice(newIndex, 0, taskId);
-    const nextColumn = {
-      ...state.columns[nextColId],
-      taskIds: nextTaskIds,
-    };
+    const newState = {...state};
+    if (prevColId === nextColId) {
+      // Moving cards within same column
+      prevTaskIds.splice(newIndex, 0, taskId);
+      newState.columns = {
+        ...state.columns,
+        [prevColumn.id]: prevColumn,
+      };
+    } else {
+      // Moving cards between different columns
+      const nextTaskIds = Array.from(state.columns[nextColId].taskIds);
+      nextTaskIds.splice(newIndex, 0, taskId);
+      const nextColumn = {
+        ...state.columns[nextColId],
+        taskIds: nextTaskIds,
+      };
 
-    const newState = {
-      ...state,
-      columns: {
+      newState.columns = {
         ...state.columns,
         [prevColumn.id]: prevColumn,
         [nextColumn.id]: nextColumn,
-      },
-    };
+      };
+    }
+
     return newState;
   },
   addCol: (state, col) => {
+    const newColumns = {
+      ...state.columns,
+      [col.id]: {id: col.id, title: col.name, taskIds: []},
+    };
     const newState = {
       ...state,
-      columns: {
-        ...state.columns,
-        [col.id]: {id: col.id, title: col.name, taskIds: []},
-      },
+      columns: newColumns,
       columnOrder: state.columnOrder.concat(col.id),
     };
     return newState;
