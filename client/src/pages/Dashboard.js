@@ -1,9 +1,13 @@
 import React from 'react';
+import KanbanBoard from './board/KanbanBoard';
 import AppLayout from './layouts/AppLayout';
 
 const Dashboard = () => {
-  // TODO: Wrap dashboard component with AppLayout.
-  return <AppLayout />;
+  return (
+    <AppLayout>
+      <KanbanBoard />
+    </AppLayout>
+  );
 };
 
 export default Dashboard;
