@@ -1,12 +1,14 @@
-import React from 'react';
-import AttachmentIcon from '@material-ui/icons/AttachFileOutlined';
+import React, {useState} from 'react';
 import Section from './components/Section';
 import SectionContent from './components/SectionContent';
 
-const CardDialogAttachments = () => {
+const CardDialogAttachments = ({initState: initAttachments, ...other}) => {
+  const [locked, setLocked] = useState(false);
+
+  const toggleLock = () => setLocked((prevLockState) => !prevLockState);
   return (
-    <Section deletable title="Attachments" titleIcon={AttachmentIcon}>
-      <SectionContent>Hi</SectionContent>
+    <Section optional locked={locked} handleToggleLock={toggleLock} {...other}>
+      <SectionContent>Attachments</SectionContent>
     </Section>
   );
 };
