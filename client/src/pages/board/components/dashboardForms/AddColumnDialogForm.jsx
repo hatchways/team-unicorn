@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core/';
 import {makeStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import addColumnByBoardId from '../../../../api/Column';
+import {addColumnByBoardId} from '../../../../api/Column';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
