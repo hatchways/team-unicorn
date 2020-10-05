@@ -181,12 +181,7 @@ export default function KanbanBoard() {
     <DragDropContext onDragEnd={onDragEnd}>
       <div className={classes.addColumnContainer} id="leftNav">
         {data.columns ? (
-          <AddColumnSidebar
-            data={data}
-            // setData={setData}
-            // setLoadBoard={setUpdate}
-            boardId={data.id}
-          />
+          <AddColumnSidebar data={data} boardId={data.id} />
         ) : null}
       </div>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -203,12 +198,7 @@ export default function KanbanBoard() {
       </Droppable>
       <div className={classes.addColumnContainer} id="rightNav">
         {data.columns ? (
-          <AddColumnSidebar
-            data={data}
-            // setLoadBoard={setUpdate}
-            // setData={setData}
-            boardId={data.id}
-          />
+          <AddColumnSidebar data={data} boardId={data.id} />
         ) : null}
       </div>
     </DragDropContext>
