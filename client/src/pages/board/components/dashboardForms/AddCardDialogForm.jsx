@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useForm } from 'react-hook-form';
+import React, {useState} from 'react';
+import {useForm} from 'react-hook-form';
 import {
   Typography,
   Button,
@@ -11,11 +11,11 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
-import { addCardByColumnId } from '../../../../api/Card.js';
+import {addCardByColumnId} from '../../../../api/Card';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(() => ({
   addCardDialogModal: {
     '& .closeButton': {
       position: 'absolute',
@@ -104,21 +104,21 @@ const useStyles = makeStyles((theme) => ({
 
 const AddCardDialogForm = (props) => {
   const classes = useStyles();
-  const { open, columnId, setUpdate } = props;
+  const {open, columnId, setUpdate} = props;
 
   // const classes = dialogStyles();
-  const { register, handleSubmit, errors } = useForm();
+  const {register, handleSubmit, errors} = useForm();
 
   const [cardData, setCardData] = useState();
   const [error, setError] = useState(false);
 
-  const { title: titleProps } = formProps.html.addCard;
-  const { textField: textFieldProps } = formProps.style;
-  const { title: titleValidation } = formValidation.addCard;
+  const {title: titleProps} = formProps.html.addCard;
+  const {textField: textFieldProps} = formProps.style;
+  const {title: titleValidation} = formValidation.addCard;
 
   const onSubmitForm = async (formData) => {
-    const payload = await addCardByColumnId(columnId, { name: formData.name });
-    await setUpdate(true)
+    const payload = await addCardByColumnId(columnId, {name: formData.name});
+    await setUpdate(true);
     setError(payload.error);
     setCardData(payload.data);
 

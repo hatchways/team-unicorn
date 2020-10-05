@@ -1,11 +1,10 @@
-import React, {Fragment, useState} from 'react';
+import React, {useState} from 'react';
 import {IconButton} from '@material-ui/core/';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircle';
 
 import AddColumnDialogForm from '../dashboardForms/AddColumnDialogForm';
 
-const AddColumnSidebar = (props) => {
-  const {boardId, setLoadBoard, data, setData} = props;
+const AddColumnSidebar = ({boardId, setLoadBoard, data, setData}) => {
   const [open, setOpen] = useState(false);
 
   const handleClickOpen = (event) => {
@@ -13,8 +12,7 @@ const AddColumnSidebar = (props) => {
     setOpen(true);
   };
   return (
-    // eslint-disable-next-line react/jsx-fragments
-    <Fragment>
+    <>
       <div className="addColumnContent">
         <a href="/#" onClick={handleClickOpen}>
           <IconButton edge="start" aria-label="menu">
@@ -32,7 +30,7 @@ const AddColumnSidebar = (props) => {
           setData={setData}
         />
       )}
-    </Fragment>
+    </>
   );
 };
 export default AddColumnSidebar;
