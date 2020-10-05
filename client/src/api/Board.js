@@ -1,47 +1,55 @@
 import axios from 'axios';
 
-// Get board
-export const getBoard = async () => {
-  try {
-    const {data} = await axios.get(`/api/boards/`);
-    // eslint-disable-next-line no-console
-    console.log('server', data);
+// helper function to convertBoard backend to frontend
+// leaving this separate from exported Board because want to keep this private
+const convertBoardAPI = async (board) => {
+  const newBoard = {
+    id: board.id,
+    tasks: {},
+    columns: {},
+    columnOrder: [],
+  };
 
-    // convert to react state
-    const state = {
-      id: data._id,
-      tasks: {},
-      columns: {},
-      columnOrder: [],
+  // eslint-disable-next-line
+  await board.columns.map(column => {
+    newBoard.columns[column.id] = {
+      id: column.id,
+      title: column.name,
+      taskIds: column.cards.map((card) => card.id),
+    };
+
+    // eslint-disable-next-line
+    column.cards.map(card => {
+      newBoard.tasks[card.id] = {
+        id: card.id,
+        content: card.name,
+      };
+    });
+    newBoard.columnOrder.push(column.id);
+  });
+  return newBoard;
+};
+
+const Board = {
+  getData: async () => {
+    try {
+      const res = await axios.get(`/api/boards/`);
+      const convertedBoard = await convertBoardAPI(res.data);
+      return {data: convertedBoard, loading: false, error: false};
+    } catch (err) {
+      return {data: [], loading: false, error: true};
     }
-
-    await data.columns.forEach(column => {
-      state.columns[column._id] = {
-        id: column._id,
-        title: column.name,
-        taskIds: column.cards.map(card => card._id)
-      }
-      column.cards.forEach(card => {
-        state.tasks[card._id] = {
-          id: card._id,
-          content: card.name
-        }
-      })
-      state.columnOrder.push(column._id)
-    })
-
-    return {data: state, loading: false, error: false};
-  } catch (err) {
-    return {data: [], loading: false, error: true};
-  }
+  },
+  saveData: async (boardId, columnOrder) => {
+    try {
+      await axios.put(`/api/boards/${boardId}`, columnOrder);
+      // eslint-disable-next-line no-console
+      console.log('board saved at:', Date(Date.now()));
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.error(err);
+    }
+  },
 };
 
-// Save board
-export const saveBoard = async (boardId, columnOrder) => {
-  try {
-    await axios.put(`/api/boards/update/${boardId}`, columnOrder);
-    console.log('board saved at:', Date(Date.now()));
-  } catch (err) {
-    console.error(err);
-  }
-};
+export default Board;

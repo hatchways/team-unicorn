@@ -13,7 +13,7 @@ const Board = require("../../models/boards");
 // @desc Create Card
 // @access Private
 router.post(
-  "/create",
+  "/",
   [auth, boardValidationRules(), validate],
   async (req, res) => {
     console.log(req.body);
@@ -57,7 +57,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.put("/update/:id", auth, (req, res) => {
+router.put("/:id", auth, (req, res) => {
   try {
     Board.findByIdAndUpdate(req.params.id, req.body, (err, newColumnOrder) => {
       if (!newColumnOrder) return res.status(400).send({msg: "Invalid Columns"});

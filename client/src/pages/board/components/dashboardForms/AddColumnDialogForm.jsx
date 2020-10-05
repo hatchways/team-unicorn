@@ -14,7 +14,8 @@ import {addColumnByBoardId} from '../../../../api/Column';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-const useStyles = makeStyles((theme) => ({
+// there used to be theme in the argument, not sure what happened here
+const useStyles = makeStyles(() => ({
   addColumnDialogModal: {
     '& .closeButton': {
       position: 'absolute',
@@ -103,7 +104,7 @@ const useStyles = makeStyles((theme) => ({
 
 const AddColumnDialogForm = (props) => {
   const {open, boardId, setLoadBoard} = props;
-  
+
   const classes = useStyles();
 
   const {register, handleSubmit, errors} = useForm();

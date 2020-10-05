@@ -25,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Task({task, index}) {
   const classes = useStyles();
-  
+
   const {id, content, date} = task;
 
   return (

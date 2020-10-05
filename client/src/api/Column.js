@@ -10,11 +10,7 @@ export const addColumnByBoardId = async (boardId, formData) => {
     };
     const body = JSON.stringify(formData);
 
-    const res = await axios.post(
-      `/api/columns/create/${boardId}`,
-      body,
-      config,
-    );
+    const res = await axios.post(`/api/columns/${boardId}`, body, config);
 
     return {data: res.data, error: false};
   } catch (err) {
@@ -25,14 +21,9 @@ export const addColumnByBoardId = async (boardId, formData) => {
 // Update column
 export const updateColumn = async (columnId, updatedColumn) => {
   try {
-    await axios.put(`/api/columns/update/${columnId}`, updatedColumn);
-    console.log(
-      `column ${columnId.substring(
-        columnId.length - 4,
-        columnId.length,
-      )} updated at ${Date(Date.now())}`,
-    );
+    const res = await axios.put(`/api/columns/${columnId}`, updatedColumn);
+    return {data: res.data, error: false};
   } catch (err) {
-    console.log(err);
+    return {data: [], error: true};
   }
 };
