@@ -5,6 +5,7 @@ import { Grid } from '@material-ui/core';
 import Column from './components/Column';
 
 import {getBoard, saveBoard} from '../../api/Board';
+import {updateColumn} from '../../api/Column';
 
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
@@ -196,7 +197,7 @@ export default function KanbanBoard() {
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
 
-    // within list
+    // within column
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
@@ -214,12 +215,16 @@ export default function KanbanBoard() {
           [newColumn.id]: newColumn,
         },
       };
+      
       await setData(newState);
-      // save task order inside column
+
+      // save cards order inside column in db
+      const updatedColumn = {_id: newColumn.id, cards: newColumn.taskIds}
+      await updateColumn(newColumn.id, updatedColumn)
       return;
     }
 
-    // between lists
+    // between columns
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -242,8 +247,13 @@ export default function KanbanBoard() {
         [newFinish.id]: newFinish,
       },
     };
-    setData(newState);
-    // save task order inside two lists
+    await setData(newState);
+
+    // save cards order inside both columns in db
+    const newStartCol = {_id: newStart.id, cards: newStart.taskIds}
+    const newFinishCol = {_id: newFinish.id, cards: newFinish.taskIds}
+    await updateColumn(newStart.id, newStartCol)
+    await updateColumn(newFinish.id, newFinishCol)
   };
 
   return (
