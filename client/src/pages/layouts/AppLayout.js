@@ -8,9 +8,6 @@ import CreateBoard from './components/CreateBoard';
 import ProfileAvatar from './components/ProfileAvatar';
 
 const useStyles = makeStyles((theme) => ({
-  root: {
-    overflowY: 'scroll',
-  },
   logoContainer: {
     paddingLeft: theme.spacing(theme.pageIndent),
   },
@@ -23,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
 const AppLayout = ({children}) => {
   const classes = useStyles();
   return (
-    <Box className={classes.root} flexDirection="column" height="100%">
+    <Box>
       <Box
         display="flex"
         flexGrow={1}

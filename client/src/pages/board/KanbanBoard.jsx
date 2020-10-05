@@ -5,6 +5,7 @@ import {Grid} from '@material-ui/core';
 import Column from './components/Column';
 
 import Board from '../../api/Board';
+import {updateColumn} from '../../api/Column';
 
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
@@ -114,15 +115,30 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
-const InnerList = memo((props) => {
-  const {column, taskMap, index, setUpdate} = props;
+const MemoizedColumn = memo((props) => {
+  const {column, taskMap, index} = props;
   const tasks = column.taskIds.map((taskId) => taskMap[taskId]);
-  return (
-    <Column column={column} tasks={tasks} index={index} setUpdate={setUpdate} />
-  );
+  return <Column column={column} tasks={tasks} index={index} />;
 });
 
+const Columns = ({data}) => {
+  const {columns, columnOrder, tasks} = data;
+  return columnOrder.map((columnId, index) => {
+    const column = columns[columnId];
+    return (
+      <MemoizedColumn
+        key={column.id}
+        column={column}
+        taskMap={tasks}
+        index={index}
+      />
+    );
+  });
+};
+
 export default function KanbanBoard() {
+  const classes = useStyles();
+
   const [data, setData] = useState({
     id: '',
     tasks: {},
@@ -133,15 +149,14 @@ export default function KanbanBoard() {
   const [update, setUpdate] = useState(true);
 
   useEffect(() => {
-    async function fetchData() {
+    async function fetchBoard() {
       const boardData = await Board.getData();
       setData(boardData.data);
       setUpdate(false);
     }
-    fetchData();
+    fetchBoard();
   }, [update]);
 
-  const classes = useStyles();
   const onDragEnd = async (result) => {
     const {destination, source, draggableId, type} = result;
 
@@ -174,6 +189,7 @@ export default function KanbanBoard() {
     const start = data.columns[source.droppableId];
     const finish = data.columns[destination.droppableId];
 
+    // within column
     if (start === finish) {
       const newTaskIds = Array.from(start.taskIds);
       newTaskIds.splice(source.index, 1);
@@ -191,12 +207,13 @@ export default function KanbanBoard() {
           [newColumn.id]: newColumn,
         },
       };
+
       await setData(newState);
       await Board.saveData(data.id, {columns: newState.columnOrder});
       return;
     }
 
-    // between lists
+    // between columns
     const startTaskIds = Array.from(start.taskIds);
     startTaskIds.splice(source.index, 1);
     const newStart = {
@@ -219,7 +236,13 @@ export default function KanbanBoard() {
         [newFinish.id]: newFinish,
       },
     };
-    setData(newState);
+    await setData(newState);
+
+    // save cards order inside both columns in db
+    const newStartCol = {_id: newStart.id, cards: newStart.taskIds};
+    const newFinishCol = {_id: newFinish.id, cards: newFinish.taskIds};
+    await updateColumn(newStart.id, newStartCol);
+    await updateColumn(newFinish.id, newFinishCol);
   };
 
   return (
@@ -242,18 +265,7 @@ export default function KanbanBoard() {
             {...provided.droppableProps}
             innerRef={provided.innerRef}
           >
-            {data.columnOrder.map((columnId, index) => {
-              const column = data.columns[columnId];
-              return (
-                <InnerList
-                  key={column.id}
-                  column={column}
-                  taskMap={data.tasks}
-                  index={index}
-                  setUpdate={setUpdate}
-                />
-              );
-            })}
+            <Columns data={data} />
             {provided.placeholder}
           </Grid>
         )}

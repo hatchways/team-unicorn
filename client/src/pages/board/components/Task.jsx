@@ -26,26 +26,25 @@ const useStyles = makeStyles((theme) => ({
 export default function Task({task, index}) {
   const classes = useStyles();
 
+  const {id, content, date} = task;
+
   return (
-    <Draggable draggableId={task.id} index={index}>
-      {(provided) => (
+    <Draggable draggableId={id} index={index}>
+      {({draggableProps, dragHandleProps, innerRef}) => (
         <Card
           className={classes.card}
-          {...provided.draggableProps}
-          {...provided.dragHandleProps}
-          innerRef={provided.innerRef}
+          {...draggableProps}
+          {...dragHandleProps}
+          innerRef={innerRef}
           style={{
-            ...provided.draggableProps.style,
+            ...draggableProps.style,
           }}
         >
-          <Typography gutterBottom>{task.content}</Typography>
+          <Typography gutterBottom>{content}</Typography>
           <div className={classes['card-footer']}>
-            <Typography style={{textAlign: 'right'}} variant="caption">
-              id: {task.id}
-            </Typography>
-            {task.date ? (
+            {date ? (
               <Typography style={{textAlign: 'right'}} variant="caption">
-                deadline: {task.date}
+                deadline: {date}
               </Typography>
             ) : null}
           </div>

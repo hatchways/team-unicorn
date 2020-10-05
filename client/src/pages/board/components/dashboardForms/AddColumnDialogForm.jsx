@@ -10,7 +10,7 @@ import {
 } from '@material-ui/core/';
 import {makeStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
-import addColumnByBoardId from '../../../../api/Column';
+import {addColumnByBoardId} from '../../../../api/Column';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
@@ -104,8 +104,6 @@ const useStyles = makeStyles(() => ({
 
 const AddColumnDialogForm = (props) => {
   const {open, boardId, setLoadBoard} = props;
-  // eslint-disable-next-line no-console
-  console.log({props});
 
   const classes = useStyles();
 
@@ -123,8 +121,6 @@ const AddColumnDialogForm = (props) => {
 
     setError(payload.error);
     setColumnData(payload.data);
-    // data.columns.push(payload.data);
-    // setData(data);
 
     if (!error) {
       document.getElementById('name').value = '';
