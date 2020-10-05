@@ -41,14 +41,13 @@ router.post(
   }
 );
 
-// @route PUT api/columns/update
+// @route PUT api/columns/
 // @desc Either change name of column or changing location of card within column.
 // @access private
 router.put(
   "/:id",
   [auth, columnValidationRules(), validate],
   (req, res) => {
-    console.log(req.body);
     Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
       if (!updatedColumn)
         return res.status(400).send({ msg: "Invalid Column" });
@@ -59,7 +58,7 @@ router.put(
   }
 );
 
-// @route GET  /api/columns/show/:id
+// @route GET  /api/columns/:id
 // @desc Get the column by columnId
 // @access Private
 router.get("/:id", auth, (req, res) => {
@@ -70,4 +69,13 @@ router.get("/:id", auth, (req, res) => {
   });
 });
 
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    await Column.findByIdAndDelete(req.params.id)
+    res.sendStatus(200)
+  } catch(e) {
+    console.log(e)
+    res.status(500).send(e)
+  }
+})
 module.exports = router;

@@ -51,6 +51,10 @@ const reducers = {
 
     return newState;
   },
+  deleteTask: (state) => {
+    // TODO
+    return state;
+  },
   addCol: (state, col) => {
     const newColumns = {
       ...state.columns,
@@ -69,6 +73,27 @@ const reducers = {
     newState.columnOrder.splice(fromIndex, 1);
     newState.columnOrder.splice(toIndex, 0, col);
     return newState;
+  },
+  changeColTitle: (state, colId, newTitle) => {
+    const newColumn = {
+      ...state.columns[colId],
+      title: newTitle,
+    };
+    const newColumns = {
+      ...state.columns,
+      [newColumn.id]: newColumn,
+    };
+    const newState = {...state, columns: newColumns};
+    return newState;
+  },
+  deleteCol: (state, colId) => {
+    // TODO
+    const newColumns = {...state.columns};
+    delete newColumns[colId];
+    const newColumnOrder = [...state.columnOrder].filter(
+      (val) => val !== colId,
+    );
+    return {...state, columns: newColumns, columnOrder: newColumnOrder};
   },
   initBoard: (boardData) => {
     return boardData;

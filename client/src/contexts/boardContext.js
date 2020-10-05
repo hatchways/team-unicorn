@@ -27,6 +27,8 @@ const boardReducer = (state, action) => {
       return reducers.addCol(state, action.col);
     case 'MOVE_COL':
       return reducers.moveCol(state, action.fromIndex, action.toIndex);
+    case 'DELETE_COL':
+      return reducers.deleteCol(state, action.colId);
     case 'INIT_BOARD':
       return reducers.initBoard(action.boardData);
     default:
