@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Typography, Card, CardContent} from '@material-ui/core/';
-import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
-import {getCardById} from '../../api/Card';
+import EditCardDialogForm from './dashboardForms/EditCardDialogForm';
+import {getCardById} from '../../../api/Card';
 
 const CardItem = ({card}) => {
   const [open, setOpen] = useState(false);

@@ -11,14 +11,12 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import AssignmentOutlinedIcon from '@material-ui/icons/AssignmentOutlined';
 import ImportContactsTwoToneIcon from '@material-ui/icons/ImportContactsTwoTone';
-import dialogStyles from '../styles/DialogStyles';
 
 import formProps from '../forms/props';
 
-import {updateCard} from '../../api/Card';
+import {updateCard} from '../../../../api/Card';
 
 const EditCardDialogForm = ({open, setOpen, detailCardData}) => {
-  const classes = dialogStyles();
   const {register, handleSubmit} = useForm();
 
   const [updatedData, setUpdatedData] = useState();
@@ -58,7 +56,7 @@ const EditCardDialogForm = ({open, setOpen, detailCardData}) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      className={classes.editCardDialogModal}
+      // className={classes.editCardDialogModal}
     >
       <DialogContent>
         {detailCardData?.column ? (
