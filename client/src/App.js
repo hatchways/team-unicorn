@@ -88,7 +88,7 @@ function App() {
                 authed={authenticated}
                 path="/subscription"
                 // TODO: Update component to calendar
-                component={() => <Subscription email={user.email} />}
+                component={() => <Subscription user={user} />}
               />
             </Switch>
           </BrowserRouter>

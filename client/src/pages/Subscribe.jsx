@@ -25,10 +25,13 @@ const useStyles = makeStyles({
   },
 });
 
-const Subscription = ({email}) => {
+const Subscription = ({user}) => {
   const classes = useStyles();
   const stripe = useStripe();
   const elements = useElements();
+  const {_id, email} = user;
+  console.log(_id)
+  console.log(email)
 
   const handleSubmitPay = async (event) => {
     if (!stripe || !elements) {
@@ -74,7 +77,7 @@ const Subscription = ({email}) => {
     if (result.error) {
       console.log(result.error.message);
     } else {
-      const res = await axios.post('/stripe/subscribe', {'payment_method': result.paymentMethod.id, 'email': email});
+      const res = await axios.post('/stripe/subscribe', {'payment_method': result.paymentMethod.id, 'email': email, 'customer': _id});
       const {client_secret, status} = res.data;
 
       if (status === 'requires_action') {
