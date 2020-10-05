@@ -21,10 +21,7 @@ export const addColumnByBoardId = async (boardId, formData) => {
 // Update column
 export const updateColumn = async (columnId, updatedColumn) => {
   try {
-    const res = await axios.put(
-      `/api/columns/update/${columnId}`,
-      updatedColumn,
-    );
+    const res = await axios.put(`/api/columns/${columnId}`, updatedColumn);
     return {data: res.data, error: false};
   } catch (err) {
     return {data: [], error: true};
