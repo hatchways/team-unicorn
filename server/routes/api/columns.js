@@ -46,7 +46,7 @@ router.post(
 // @access private
 router.put(
   "/update/:id",
-  [auth, columnValidationRules(), validate],
+  [auth, validate],
   (req, res) => {
     console.log(req.body);
     Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
