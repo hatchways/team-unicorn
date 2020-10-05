@@ -2,7 +2,6 @@ import React, {useState, useCallback} from 'react';
 import {makeStyles, TextField, Typography, Box} from '@material-ui/core';
 
 // TODO: Documentation
-// TODO: Needs to be tested more throughly
 // TODO: Consider UX implications (e.g. no
 //       undo once component is blurred)
 

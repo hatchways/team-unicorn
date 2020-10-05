@@ -12,16 +12,11 @@ import CardDialogTitle from './dialogSections/CardDialogTitle';
 import {dialogTheme} from '../../../../themes/theme';
 import CardDialogContentBody from './CardDialogContentBody';
 
-// TODO: Make Typography/TextField component
-//       (i.e Typography turns into text field
-//             onClick/onFocus and turns into
-//             onBlur typography)
-//       Useful for comments and description.
-
 const CardDialog = ({
   title,
   columnName,
   desc,
+  checklist,
   deadline,
   tags,
   color,
@@ -47,6 +42,7 @@ const CardDialog = ({
           <CardDialogContentBody
             desc={desc}
             deadline={deadline}
+            checklist={checklist}
             comments={comments}
             attachments={attachments}
             tags={tags}

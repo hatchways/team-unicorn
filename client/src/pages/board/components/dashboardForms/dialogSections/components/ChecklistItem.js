@@ -1,51 +1,58 @@
 import React from 'react';
-import {IconButton, ListItem, ListItemSecondaryAction} from '@material-ui/core';
+import {
+  Checkbox,
+  IconButton,
+  ListItem,
+  ListItemSecondaryAction,
+} from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/HighlightOffRounded';
 import TextFieldOnFocusTypography from './TextFieldOnFocusTypography';
 
 // TODO: make it draggable to reorder?
-const Comment = ({
-  comment,
-  disabled,
+const ChecklistItem = ({
+  text,
   timestamp,
-  handleUpdate,
+  disabled,
+  checked,
+  handleToggle,
+  handleTextChange,
   handleDelete,
+  ...other
 }) => {
-  // If comment is empty, delete it.
-  const saveComment = (value) => {
-    if (!value) {
-      handleDelete(timestamp);
-    } else if (value !== comment) {
-      handleUpdate(timestamp, value);
-    }
-  };
-
+  const onToggle = () => handleToggle(timestamp, !checked);
+  const saveText = (value) => handleTextChange(timestamp, value);
   const onDelete = () => handleDelete(timestamp);
+
   // NOTE: Consider using useMemo here?
   const TextFieldProps = {
-    id: `card-comment-${timestamp}`,
-    name: `card-comment-${timestamp}`,
+    id: `card-check-item-text-${timestamp}`,
+    name: `card-check-item-text-${timestamp}`,
     autoComplete: 'off',
-    rows: 2,
+    rows: 1,
     rowsMax: 6,
     fullWidth: true,
   };
-
   return (
-    <ListItem alignItems="flex-start" disableGutters>
+    <ListItem alignItems="center" disableGutters>
+      <Checkbox
+        checked={checked}
+        disabled={disabled}
+        onChange={onToggle}
+        {...other}
+      />
       <TextFieldOnFocusTypography
         TextFieldProps={TextFieldProps}
-        text={comment}
-        saveText={saveComment}
-        placeholder="Enter a comment..."
+        text={text}
+        saveText={saveText}
+        placeholder="Enter checklist item..."
         disabled={disabled}
       />
       <ListItemSecondaryAction>
         <IconButton
           disabled={disabled}
+          onClick={onDelete}
           size="small"
           color="secondary"
-          onClick={onDelete}
         >
           <DeleteIcon />
         </IconButton>
@@ -53,4 +60,4 @@ const Comment = ({
     </ListItem>
   );
 };
-export default Comment;
+export default ChecklistItem;

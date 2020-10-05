@@ -10,6 +10,15 @@ const sampleCard = {
   columnName: 'Col',
   desc:
     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum dolor at eleifend aliquam. Cras condimentum erat eget purus fermentum faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada.',
+  checklist: [
+    {timestamp: 123123, checked: true, text: 'Do A,B and C'},
+    {
+      timestamp: 123,
+      checked: false,
+      text:
+        'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas dictum dolor at eleifend aliquam. Cras condimentum erat eget purus fermentum faucibus. Pellentesque habitant morbi tristique senectus et netus et malesuada.',
+    },
+  ],
   deadline: Date.now(),
   tags: ['math', 'exam', 'important'],
   color: colors.amber[500],
@@ -42,6 +51,7 @@ const OpenEditCardDialog = () => {
     title,
     columnName,
     desc,
+    checklist,
     deadline,
     tags,
     color,
@@ -54,6 +64,7 @@ const OpenEditCardDialog = () => {
       <CardDialog
         open={open}
         columnName={columnName}
+        checklist={checklist}
         title={title}
         desc={desc}
         deadline={deadline}
