@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useReducer, useState} from 'react';
-import Board from '../api/Board';
-
+import Board from 'api/Board';
+// import {updateColumn} from 'api/Column'
 const initialState = {
   id: null,
   columns: {},
@@ -73,6 +73,7 @@ const reducers = {
       columns: newColumns,
       columnOrder: state.columnOrder.concat(col.id),
     };
+
     return newState;
   },
   moveCol: (state, fromIndex, toIndex) => {
