@@ -1,8 +1,6 @@
 const createError = require("http-errors");
 const express = require("express");
 const { join } = require("path");
-const cors = require('cors');
-const bodyParser = require('body-parser');
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const connectDB = require("./config/db");
@@ -14,6 +12,7 @@ const userRouter = require("./routes/user");
 const cardsRouter = require("./routes/api/cards");
 const colRouter = require("./routes/api/columns");
 const boardRouter = require("./routes/api/boards");
+const stripeRouter = require("./routes/api/stripe");
 
 const { json, urlencoded } = express;
 
@@ -35,6 +34,7 @@ app.use("/api/cards", cardsRouter);
 app.use("/api/columns", colRouter);
 app.use("/api/boards", boardRouter);
 app.use("/user", userRouter);
+app.use("/stripe", stripeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
@@ -51,47 +51,5 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.json({ error: err });
 });
-
-// STRIPE 
-app.use(cors());
-app.use(bodyParser.json());
-
-const stripe = require('stripe')(process.env.STRIPESECRET);
-
-app.post('/pay', async (req, res) => {
-  const {email} = req.body;
-  
-  const paymentIntent = await stripe.paymentIntents.create({
-      amount: 500,
-      currency: 'usd',
-      metadata: {integration_check: 'accept_a_payment'},
-      receipt_email: email,
-    });
-
-    res.json({'client_secret': paymentIntent['client_secret']})
-})
-
-app.post('/subscribe', async (req, res) => {
-  const {email, payment_method} = req.body;
-
-  const customer = await stripe.customers.create({
-    payment_method: payment_method,
-    email: email,
-    invoice_settings: {
-      default_payment_method: payment_method,
-    },
-  });
-
-  const subscription = await stripe.subscriptions.create({
-    customer: customer.id,
-    items: [{ plan: 'price_1HX6TzD9AsNutHPovtPPJ9yY' }],
-    expand: ['latest_invoice.payment_intent']
-  });
-  
-  const status = subscription['latest_invoice']['payment_intent']['status'] 
-  const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
-
-  res.json({'client_secret': client_secret, 'status': status});
-})
 
 module.exports = app;
