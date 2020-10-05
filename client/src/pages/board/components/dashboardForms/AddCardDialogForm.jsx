@@ -11,12 +11,10 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
+import {BoardContext} from 'contexts/boardContext';
 import {addCardByColumnId} from '../../../../api/Card';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
-
-// yeah will need to make absolute paths soon
-import {BoardContext} from '../../../../contexts/boardContext';
 
 const useStyles = makeStyles(() => ({
   addCardDialogModal: {

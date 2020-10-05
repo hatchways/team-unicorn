@@ -11,9 +11,9 @@ import {
 } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 
+import {updateColumn, removeColumn} from 'api/Column';
 import Task from './Task';
 import AddCardDialogForm from './dashboardForms/AddCardDialogForm';
-import {editColumnTitle, removeColumn} from '../../../api/Column';
 import boardActions from '../../../contexts/boardActions';
 import {BoardContext} from '../../../contexts/boardContext';
 
@@ -77,7 +77,7 @@ export default function Column({column, index, tasks, setUpdate}) {
 
   const finishEdit = () => {
     setEditing(false);
-    editColumnTitle(column.id, title);
+    updateColumn(column.id, {name: title});
   };
 
   const handleKeyDown = (e) => {

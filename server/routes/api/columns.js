@@ -41,19 +41,22 @@ router.post(
   }
 );
 
-// @route PUT api/columns/
+// @route PUT api/columns/:id
 // @desc Either change name of column or changing location of card within column.
 // @access private
 router.put(
   "/:id",
-  [auth, columnValidationRules(), validate],
+  [auth, validate],
   (req, res) => {
+    console.log(req.body)
     Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
-      if (!updatedColumn)
+      if (!updatedColumn) {
+        console.log(updatedColumn)
         return res.status(400).send({ msg: "Invalid Column" });
+      }
 
       console.log(updatedColumn);
-      res.send(updatedColumn);
+      res.status(200).send(updatedColumn);
     });
   }
 );

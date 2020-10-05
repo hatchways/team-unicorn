@@ -7,7 +7,6 @@ const connectDB = require("./config/db");
 
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
-const uploadRouter = require("./routes/api/upload");
 const userRouter = require("./routes/user");
 const columnsRouter = require("./routes/api/columns");
 const cardsRouter = require("./routes/api/cards");
@@ -28,7 +27,6 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
-app.use("/api/upload", uploadRouter);
 app.use("/user", userRouter);
 app.use("/api/columns", columnsRouter);
 app.use("/api/cards", cardsRouter);

@@ -2,13 +2,11 @@ import React, {useContext, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
+import Board from 'api/Board';
+import {BoardContext} from 'contexts/boardContext';
+import boardActions from 'contexts/boardActions';
 import Column from './components/Column';
-
-import Board from '../../api/Board';
-
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
-
-import {BoardContext} from '../../contexts/boardContext';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -157,28 +155,23 @@ export default function KanbanBoard() {
     }
 
     if (type === 'column') {
-      await dispatch({
-        type: 'MOVE_COL',
-        fromIndex: source.index,
-        toIndex: destination.index,
-      });
-      await Board.saveData(data.id, data.columnOrder);
-      return;
+      boardActions.moveColumn(source.index, destination.index, dispatch);
+      await Board.saveData(data.id, {columns: data.columnOrder});
     }
 
-    await dispatch({
-      type: 'MOVE_CARD',
-      prevCol: source.droppableId,
-      nextCol: destination.droppableId,
-      fromIndex: source.index,
-      toIndex: destination.index,
-    });
-
-    await Board.saveData(data.id, data.columnOrder);
+    // moving cards
+    await boardActions.moveCard(
+      source.droppableId,
+      destination.droppableId,
+      source.index,
+      destination.index,
+      dispatch,
+    );
   };
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      {/* // Add Left and Right Hover Bars for adding columns */}
       <div className={classes.addColumnContainer} id="leftNav">
         {data.columns ? (
           <AddColumnSidebar data={data} boardId={data.id} />

@@ -1,11 +1,11 @@
 import React from 'react';
-import KanbanBoard from './board/KanbanBoard';
 import AppLayout from './layouts/AppLayout';
+import KanbanBoard from './board/KanbanBoard';
 
-import { BoardProvider } from '../contexts/boardContext';
-
+import {BoardProvider} from '../contexts/boardContext';
 
 const Dashboard = () => {
+  // TODO: Wrap dashboard component with AppLayout.
   return (
     <AppLayout>
       <BoardProvider>

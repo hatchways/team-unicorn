@@ -6,8 +6,8 @@ module.exports = {
       task,
     });
   },
-  moveCard: (prevCol, nextCol, fromIndex, toIndex, dispatch) => {
-    dispatch({
+  moveCard: async (prevCol, nextCol, fromIndex, toIndex, dispatch) => {
+    await dispatch({
       type: 'MOVE_CARD',
       prevCol,
       nextCol,

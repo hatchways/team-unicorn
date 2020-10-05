@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Add column
-const addColumnByBoardId = async (boardId, formData) => {
+export const addColumnByBoardId = async (boardId, formData) => {
   try {
     const config = {
       headers: {
@@ -18,21 +18,26 @@ const addColumnByBoardId = async (boardId, formData) => {
   }
 };
 
-// Edit Column
-export const editColumnTitle = async (colId, title) => {
+// Update column
+export const updateColumn = async (columnId, updatedColumn) => {
   try {
     const config = {
       headers: {
         'Content-Type': 'application/json',
       },
     };
-    const payload = {
-      name: title,
-    };
-    const body = JSON.stringify(payload);
-    const res = await axios.put(`/api/columns/${colId}`, body, config);
-
-    return {data: res.data, error: false};
+    const resp = await axios.put(
+      `/api/columns/${columnId}`,
+      updatedColumn,
+      config,
+    );
+    // console.log(
+    //   `column ${columnId.substring(
+    //     columnId.length - 4,
+    //     columnId.length,
+    //   )} updated at ${Date(Date.now())}`,
+    // );
+    return {data: resp.data, error: false};
   } catch (err) {
     return {data: [], error: true};
   }

@@ -1,3 +1,5 @@
+import {updateColumn} from 'api/Column';
+
 const reducers = {
   addCard: (state, task, colId) => {
     const newColumn = {
@@ -26,13 +28,14 @@ const reducers = {
     };
 
     const newState = {...state};
+    // Moving cards within same column
     if (prevColId === nextColId) {
-      // Moving cards within same column
       prevTaskIds.splice(newIndex, 0, taskId);
       newState.columns = {
         ...state.columns,
         [prevColumn.id]: prevColumn,
       };
+      updateColumn(prevColumn.id, {cards: prevTaskIds});
     } else {
       // Moving cards between different columns
       const nextTaskIds = Array.from(state.columns[nextColId].taskIds);
@@ -47,6 +50,8 @@ const reducers = {
         [prevColumn.id]: prevColumn,
         [nextColumn.id]: nextColumn,
       };
+      updateColumn(prevColumn.id, {cards: prevTaskIds});
+      updateColumn(nextColumn.id, {cards: nextTaskIds});
     }
 
     return newState;
@@ -72,6 +77,8 @@ const reducers = {
     const col = newState.columnOrder[fromIndex];
     newState.columnOrder.splice(fromIndex, 1);
     newState.columnOrder.splice(toIndex, 0, col);
+
+    // await Board.saveData(newState.id, newState.columnOrder);
     return newState;
   },
   changeColTitle: (state, colId, newTitle) => {
