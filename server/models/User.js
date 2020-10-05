@@ -17,6 +17,10 @@ const UserSchema = new mongoose.Schema({
   date: {
     type: Date,
     default: Date.now
+  },
+  avatar: {
+    type: String,
+    default: "https://unicorn-profile-pictures.s3-us-west-1.amazonaws.com/download.png"
   }
 });
 
