@@ -42,7 +42,7 @@ function App() {
 
     resolveAndAssignUser();
   }, []);
-
+  console.log(userContextValue);
   return !sessionResolved ? null : (
     <MuiThemeProvider theme={theme}>
       <UserContext.Provider value={userContextValue}>
