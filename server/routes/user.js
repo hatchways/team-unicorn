@@ -12,6 +12,8 @@ const {
   authenticateValidationRules,
 } = require("../middleware/validator");
 
+const avatarUploader = require("./api/upload");
+
 const User = require("../models/User");
 const Board = require("../models/boards");
 
@@ -27,6 +29,7 @@ const issueJWT = (user) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
     },
   };
 
@@ -164,5 +167,21 @@ router.post("/session/end", authenticator, async (req, res) => {
       .json({ errors: { DEFAULT_SERVER_ERROR: "Something went wrong..." } });
   }
 });
+
+// @route POST user/avatar
+// @desc   Upload avatar to s3 then changes user avatar field.
+// @access Public
+router.put('/avatar', authenticator, avatarUploader.single('avatar'), async (req, res) => {
+  try {
+    const avatar = {'avatar': `https://${process.env.BUCKETNAME}.s3-us-west-1.amazonaws.com/${req.file.key}`}
+    await User.findByIdAndUpdate(req.user.id, avatar)
+    res.status(200).send(avatar);
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .json({errors: {DEFAULT_SERVER_ERROR: "Something went wrong..."}})
+  }
+})
 
 module.exports = router;

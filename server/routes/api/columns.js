@@ -41,7 +41,7 @@ router.post(
   }
 );
 
-// @route PUT api/columns/update
+// @route PUT api/columns/:id
 // @desc Either change name of column or changing location of card within column.
 // @access private
 router.put(

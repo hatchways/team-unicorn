@@ -22,7 +22,7 @@ export const addCardByColumnId = async (columnId, formData) => {
 export const getCardById = async (card) => {
   try {
     // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    const res = await axios.get(`/api/cards/${card._id}`);
+    const res = await axios.get(`/api/cards/${card.id}`);
 
     return {data: res.data, loading: false, error: false};
   } catch (err) {

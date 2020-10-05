@@ -2,13 +2,13 @@ import React, {useContext, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
+import Board from 'api/Board';
+import {BoardContext} from 'contexts/boardContext';
 import Column from './components/Column';
 
-import Board from '../../api/Board';
-// import Column from '../../api/Column';
-import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
+// import {updateColumn} from '../../api/Column';
 
-import {BoardContext} from '../../contexts/boardContext';
+import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -179,6 +179,7 @@ export default function KanbanBoard() {
 
   return (
     <DragDropContext onDragEnd={onDragEnd}>
+      {/* // Add Left and Right Hover Bars for adding columns */}
       <div className={classes.addColumnContainer} id="leftNav">
         {data.columns ? (
           <AddColumnSidebar data={data} boardId={data.id} />

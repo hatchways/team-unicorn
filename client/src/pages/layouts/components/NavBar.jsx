@@ -31,14 +31,16 @@ const NavBar = () => {
   const open = Boolean(anchorEl);
   const userContext = useContext(UserContext);
   const handleLogout = useCallback(async () => {
-    const {success, errors} = await User.endSession();
+    const {success} = await User.endSession();
     if (success) {
       userContext.setUser(null);
       userContext.setAuthenticated(false);
-    } else {
-      console.log(errors);
-      // TODO: Display toaster
     }
+    // else {
+    //   //es-lint
+    //   console.log(errors);
+    //   // TODO: Display toaster
+    // }
   }, [userContext]);
 
   const handleMenu = (event) => {
