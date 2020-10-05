@@ -5,7 +5,7 @@ import {Grid} from '@material-ui/core';
 import Column from './components/Column';
 
 import Board from '../../api/Board';
-
+// import Column from '../../api/Column';
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
 import {BoardContext} from '../../contexts/boardContext';
