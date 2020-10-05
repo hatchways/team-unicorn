@@ -35,7 +35,7 @@ const Subscription = ({email}) => {
       return;
     }
 
-    const res = await axios.post('http://localhost:3000/pay', {email: email});
+    const res = await axios.post('/stripe/pay', {email: email});
 
     const clientSecret = res.data['client_secret'];
 
@@ -74,7 +74,7 @@ const Subscription = ({email}) => {
     if (result.error) {
       console.log(result.error.message);
     } else {
-      const res = await axios.post('/subscribe', {'payment_method': result.paymentMethod.id, 'email': email});
+      const res = await axios.post('/stripe/subscribe', {'payment_method': result.paymentMethod.id, 'email': email});
       const {client_secret, status} = res.data;
 
       if (status === 'requires_action') {
