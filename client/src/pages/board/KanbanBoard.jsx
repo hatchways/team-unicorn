@@ -1,11 +1,12 @@
-import React, {useState, useEffect, memo} from 'react';
+import React, {useContext, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
+import Board from 'api/Board';
+import {BoardContext} from 'contexts/boardContext';
 import Column from './components/Column';
 
-import Board from '../../api/Board';
-import {updateColumn} from '../../api/Column';
+// import {updateColumn} from '../../api/Column';
 
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
@@ -137,28 +138,12 @@ const Columns = ({data}) => {
 };
 
 export default function KanbanBoard() {
+  const {data, dispatch} = useContext(BoardContext);
+
   const classes = useStyles();
 
-  const [data, setData] = useState({
-    id: '',
-    tasks: {},
-    columns: {},
-    columnOrder: [],
-  });
-
-  const [update, setUpdate] = useState(true);
-
-  useEffect(() => {
-    async function fetchBoard() {
-      const boardData = await Board.getData();
-      setData(boardData.data);
-      setUpdate(false);
-    }
-    fetchBoard();
-  }, [update]);
-
   const onDragEnd = async (result) => {
-    const {destination, source, draggableId, type} = result;
+    const {destination, source, type} = result;
 
     if (!destination) {
       return;
@@ -172,77 +157,24 @@ export default function KanbanBoard() {
     }
 
     if (type === 'column') {
-      const newColumnOrder = Array.from(data.columnOrder);
-      newColumnOrder.splice(source.index, 1);
-      newColumnOrder.splice(destination.index, 0, draggableId);
-
-      const newState = {
-        ...data,
-        columnOrder: newColumnOrder,
-      };
-
-      await setData(newState);
-      await Board.saveData(data.id, {columns: newState.columnOrder});
+      await dispatch({
+        type: 'MOVE_COL',
+        fromIndex: source.index,
+        toIndex: destination.index,
+      });
+      await Board.saveData(data.id, data.columnOrder);
       return;
     }
 
-    const start = data.columns[source.droppableId];
-    const finish = data.columns[destination.droppableId];
+    await dispatch({
+      type: 'MOVE_CARD',
+      prevCol: source.droppableId,
+      nextCol: destination.droppableId,
+      fromIndex: source.index,
+      toIndex: destination.index,
+    });
 
-    // within column
-    if (start === finish) {
-      const newTaskIds = Array.from(start.taskIds);
-      newTaskIds.splice(source.index, 1);
-      newTaskIds.splice(destination.index, 0, draggableId);
-
-      const newColumn = {
-        ...start,
-        taskIds: newTaskIds,
-      };
-
-      const newState = {
-        ...data,
-        columns: {
-          ...data.columns,
-          [newColumn.id]: newColumn,
-        },
-      };
-
-      await setData(newState);
-      await Board.saveData(data.id, {columns: newState.columnOrder});
-      return;
-    }
-
-    // between columns
-    const startTaskIds = Array.from(start.taskIds);
-    startTaskIds.splice(source.index, 1);
-    const newStart = {
-      ...start,
-      taskIds: startTaskIds,
-    };
-
-    const finishTaskIds = Array.from(finish.taskIds);
-    finishTaskIds.splice(destination.index, 0, draggableId);
-    const newFinish = {
-      ...finish,
-      taskIds: finishTaskIds,
-    };
-
-    const newState = {
-      ...data,
-      columns: {
-        ...data.columns,
-        [newStart.id]: newStart,
-        [newFinish.id]: newFinish,
-      },
-    };
-    await setData(newState);
-
-    // save cards order inside both columns in db
-    const newStartCol = {_id: newStart.id, cards: newStart.taskIds};
-    const newFinishCol = {_id: newFinish.id, cards: newFinish.taskIds};
-    await updateColumn(newStart.id, newStartCol);
-    await updateColumn(newFinish.id, newFinishCol);
+    await Board.saveData(data.id, data.columnOrder);
   };
 
   return (
@@ -250,12 +182,7 @@ export default function KanbanBoard() {
       {/* // Add Left and Right Hover Bars for adding columns */}
       <div className={classes.addColumnContainer} id="leftNav">
         {data.columns ? (
-          <AddColumnSidebar
-            data={data}
-            setData={setData}
-            setLoadBoard={setUpdate}
-            boardId={data.id}
-          />
+          <AddColumnSidebar data={data} boardId={data.id} />
         ) : null}
       </div>
       <Droppable droppableId="all-columns" direction="horizontal" type="column">
@@ -272,12 +199,7 @@ export default function KanbanBoard() {
       </Droppable>
       <div className={classes.addColumnContainer} id="rightNav">
         {data.columns ? (
-          <AddColumnSidebar
-            data={data}
-            setData={setData}
-            setLoadBoard={setUpdate}
-            boardId={data.id}
-          />
+          <AddColumnSidebar data={data} boardId={data.id} />
         ) : null}
       </div>
     </DragDropContext>

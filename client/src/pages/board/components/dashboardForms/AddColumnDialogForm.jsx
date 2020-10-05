@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {useForm} from 'react-hook-form';
 import {
   Typography,
@@ -13,6 +13,8 @@ import CloseIcon from '@material-ui/icons/Close';
 import {addColumnByBoardId} from '../../../../api/Column';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
+
+import {BoardContext} from '../../../../contexts/boardContext';
 
 // there used to be theme in the argument, not sure what happened here
 const useStyles = makeStyles(() => ({
@@ -103,8 +105,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const AddColumnDialogForm = (props) => {
-  const {open, boardId, setLoadBoard} = props;
-
+  const {open, boardId} = props;
   const classes = useStyles();
 
   const {register, handleSubmit, errors} = useForm();
@@ -116,15 +117,22 @@ const AddColumnDialogForm = (props) => {
   const {textField: textFieldProps} = formProps.style;
   const {title: titleValidation} = formValidation.addColumn;
 
+  const {dispatch} = useContext(BoardContext);
+
   const onSubmitForm = async (formData) => {
     const payload = await addColumnByBoardId(boardId, {name: formData.name});
 
     setError(payload.error);
     setColumnData(payload.data);
 
+    dispatch({
+      type: 'ADD_COL',
+      col: payload.data,
+    });
+
     if (!error) {
       document.getElementById('name').value = '';
-      setLoadBoard(true);
+      // setLoadBoard(true);
     }
     setTimeout(() => {
       setError(false);

@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {useForm} from 'react-hook-form';
 import {
   Typography,
@@ -11,6 +11,7 @@ import {
 import {makeStyles} from '@material-ui/core/styles';
 import CloseIcon from '@material-ui/icons/Close';
 
+import {BoardContext} from 'contexts/boardContext';
 import {addCardByColumnId} from '../../../../api/Card';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
@@ -104,7 +105,7 @@ const useStyles = makeStyles(() => ({
 
 const AddCardDialogForm = (props) => {
   const classes = useStyles();
-  const {open, columnId, setUpdate} = props;
+  const {open, columnId} = props;
 
   // const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
@@ -116,9 +117,17 @@ const AddCardDialogForm = (props) => {
   const {textField: textFieldProps} = formProps.style;
   const {title: titleValidation} = formValidation.addCard;
 
+  const {dispatch} = useContext(BoardContext);
+
   const onSubmitForm = async (formData) => {
     const payload = await addCardByColumnId(columnId, {name: formData.name});
-    await setUpdate(true);
+
+    dispatch({
+      type: 'ADD_CARD',
+      columnId,
+      task: payload.data,
+    });
+
     setError(payload.error);
     setCardData(payload.data);
 
@@ -128,6 +137,7 @@ const AddCardDialogForm = (props) => {
     setTimeout(() => {
       setError(false);
       setCardData();
+      // props.setUpdate(true)
       props.setOpen(false);
     }, 1000);
   };
