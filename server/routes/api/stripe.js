@@ -15,9 +15,10 @@ router.post('/pay', async (req, res) => {
 })
 
 router.post('/subscribe', async (req, res) => {
-  const {email, payment_method} = req.body;
+  const {_id, email, payment_method} = req.body;
 
   const customer = await stripe.customers.create({
+    id: _id,
     payment_method: payment_method,
     email: email,
     invoice_settings: {
@@ -25,11 +26,14 @@ router.post('/subscribe', async (req, res) => {
     },
   });
 
+  console.log(customer.id)
+
   const subscription = await stripe.subscriptions.create({
     customer: customer.id,
     items: [{ plan: 'price_1HX6TzD9AsNutHPovtPPJ9yY' }],
     expand: ['latest_invoice.payment_intent']
   });
+
   
   const status = subscription['latest_invoice']['payment_intent']['status'] 
   const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
