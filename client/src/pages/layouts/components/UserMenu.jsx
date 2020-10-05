@@ -11,8 +11,8 @@ const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
   };
 
   const handleClose = () => {
+    setProfileOpen(false);
     setAnchorElem(null);
-    setOpenSnackbar(true);
   };
 
   return (
@@ -40,6 +40,7 @@ const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
           open={profileOpen}
           setAvatar={setAvatar}
           closeMenu={handleClose}
+          setOpenSnackbar={setOpenSnackbar}
         />
       )}
     </>
