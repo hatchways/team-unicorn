@@ -8,13 +8,19 @@ const CalendarActions = ({currentBoard}) => {
   const [calendarEvents, setCalendarEvents] = useState();
   const [draggableEvents, setDraggableEvents] = useState();
   const [loading, setLoading] = useState(true);
+  const [inProgessId, setInProgessId] = useState();
 
   useEffect(() => {
     const loadData = async () => {
       const cards = [];
       const draggableCards = [];
-      currentBoard.columns.forEach((columns) => {
-        columns.cards.forEach((cardObject) => {
+      currentBoard.columns.forEach((column) => {
+        if (column.name === 'In Progress') {
+          // eslint-disable-next-line no-param-reassign, no-underscore-dangle
+          setInProgessId(column._id);
+        }
+
+        column.cards.forEach((cardObject) => {
           const card = {};
           card.title = cardObject.name;
           // eslint-disable-next-line no-param-reassign, no-underscore-dangle
@@ -43,7 +49,10 @@ const CalendarActions = ({currentBoard}) => {
           ) : (
             ' '
           )}
-          <CalendarView calendarEvents={calendarEvents} />
+          <CalendarView
+            calendarEvents={calendarEvents}
+            inProgessId={inProgessId}
+          />
         </>
       )}
     </div>

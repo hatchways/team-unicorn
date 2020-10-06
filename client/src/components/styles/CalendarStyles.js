@@ -25,7 +25,7 @@ export default makeStyles((theme) => ({
     '& .cardItem': {
       padding: '10px',
       width: '100%',
-      margin: '0 5px',
+      margin: '0 2px',
     },
     '& .fc .fc-daygrid-day-top': {
       flexDirection: 'row',

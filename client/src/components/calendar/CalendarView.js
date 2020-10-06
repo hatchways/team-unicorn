@@ -3,14 +3,14 @@ import React, {useState} from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import {Typography, Card} from '@material-ui/core/';
 
 import CalendarStyles from '../styles/CalendarStyles';
 
+import CalendarCard from './CalendarCard';
 import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
-import {getCardById, updateCard} from '../../api/Card';
+import {getCardById, updateCard, addCardByColumnId} from '../../api/Card';
 
-const CalendarView = ({calendarEvents}) => {
+const CalendarView = ({calendarEvents, inProgessId}) => {
   const classes = CalendarStyles();
 
   const [open, setOpen] = useState(false);
@@ -23,14 +23,29 @@ const CalendarView = ({calendarEvents}) => {
     setDetailCardError(payload.error);
     if (!detailCardError) setOpen(true);
   };
+
+  const handleEventDateClick = async (info) => {
+    const calendarApi = info.view.calendar;
+    const name = 'Add title ...';
+    const deadline = info.date;
+    const payload = await addCardByColumnId(inProgessId, {
+      name,
+      deadline,
+    });
+    if (!payload.error) {
+      calendarApi.addEvent({
+        title: name,
+        start: deadline,
+        // eslint-disable-next-line no-underscore-dangle
+        id: payload.data._id,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+      });
+    }
+  };
+
   const renderEventContent = (eventInfo) => {
-    return (
-      <>
-        <Card className="cardItem" color="background.default">
-          <Typography>{eventInfo.event.title}</Typography>
-        </Card>
-      </>
-    );
+    return <CalendarCard eventInfo={eventInfo} />;
   };
 
   const handleEventChange = async (info) => {
@@ -38,10 +53,12 @@ const CalendarView = ({calendarEvents}) => {
     const editedCard = {};
     // eslint-disable-next-line no-underscore-dangle
     editedCard._id = changeEvent.id;
+
     editedCard.deadline = changeEvent.start;
     // eslint-disable-next-line no-unused-vars
     const payload = await updateCard(editedCard);
   };
+
   const handleEventDidMount = () => {
     const cardCountElements = document.querySelectorAll('.card-count');
     // Remove count element
@@ -86,6 +103,7 @@ const CalendarView = ({calendarEvents}) => {
           eventContent={renderEventContent}
           events={calendarEvents}
           eventClick={handleEventClick}
+          dateClick={handleEventDateClick}
           eventChange={handleEventChange}
           eventReceive={handleEventChange}
           eventDidMount={handleEventDidMount}
