@@ -87,7 +87,7 @@ const CardDialogChecklist = ({initState: initChecklistItems, ...other}) => {
               <Button
                 variant="contained"
                 size="small"
-                color="action"
+                color="default"
                 startIcon={
                   <AddItemIcon color={locked ? 'disabled' : 'action'} />
                 }

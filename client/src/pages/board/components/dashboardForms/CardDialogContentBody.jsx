@@ -52,7 +52,6 @@ const CardDialogContentBody = ({
     setSections(updated);
   };
 
-  console.log(sections);
   // TODO: Ensure state changes don't re-render every section
   return (
     <DialogContent className={classes.root}>

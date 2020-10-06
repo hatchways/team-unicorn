@@ -4,6 +4,7 @@ import CommentsIcon from '@material-ui/icons/ForumOutlined';
 import AttachmentIcon from '@material-ui/icons/AttachFileOutlined';
 import ChecklistIcon from '@material-ui/icons/PlaylistAddCheckRounded';
 import TagsIcon from '@material-ui/icons/LabelRounded';
+import {colors} from '@material-ui/core';
 import CardDialogDesc from './CardDialogDesc';
 import CardDialogChecklist from './CardDialogChecklist';
 import CardDialogDeadline from './CardDialogDeadline';
@@ -45,4 +46,13 @@ const SectionInfos = {
   // COVR: {title: 'Cover', IconComponent: CoverIcon},
 };
 
+const CardColorsFactory = (shade) => ({
+  GREEN: colors.green[shade],
+  AMBER: colors.amber[shade],
+  RED: colors.red[shade],
+  INDIGO: colors.indigo[shade],
+  BLUE: colors.blue[shade],
+});
+
 export default SectionInfos;
+export {CardColorsFactory};

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Dialog,
   DialogActions,
@@ -19,7 +19,7 @@ const CardDialog = ({
   checklist,
   deadline,
   tags,
-  color,
+  color: initColor,
   comments,
   attachments,
   onClose,
@@ -27,6 +27,8 @@ const CardDialog = ({
 }) => {
   const subtitle = `In list "${columnName}"`;
 
+  const [color, setColor] = useState(initColor);
+  const onColorChange = (val) => setColor(val);
   return (
     <MuiThemeProvider theme={dialogTheme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -35,6 +37,7 @@ const CardDialog = ({
             onClose={onClose}
             cardColor={color}
             subtitle={subtitle}
+            onColorChange={onColorChange}
           >
             {title}
           </CardDialogTitle>

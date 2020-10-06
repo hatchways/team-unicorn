@@ -78,7 +78,7 @@ const CardDialogComments = ({initState: initComments, ...other}) => {
               <Button
                 variant="contained"
                 size="small"
-                color="action"
+                color="default"
                 startIcon={
                   <AddCommentIcon color={locked ? 'disabled' : 'action'} />
                 }

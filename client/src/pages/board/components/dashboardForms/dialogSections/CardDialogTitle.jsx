@@ -30,7 +30,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const CardDialogTitle = ({children, onClose, subtitle, cardColor}) => {
+const CardDialogTitle = ({
+  children,
+  onClose,
+  subtitle,
+  cardColor,
+  onColorChange,
+}) => {
   const classes = useStyles();
   return (
     <DialogTitle disableTypography>
@@ -38,7 +44,7 @@ const CardDialogTitle = ({children, onClose, subtitle, cardColor}) => {
         <Typography variant="h5" className={classes.title}>
           {children}
         </Typography>
-        <Colorbar color={cardColor} />
+        <Colorbar color={cardColor} onColorChange={onColorChange} />
       </WithIcon>
       <WithIcon spacing={2} aligner>
         <Typography className={classes.subtitle} variant="subtitle2">
