@@ -1,8 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import AppLayout from './layouts/AppLayout';
-import DashboardActions from '../components/dashboard/DashboardActions';
+// import DashboardActions from '../components/dashboard/DashboardActions';
 import CalendarActions from '../components/calendar/CalendarActions';
 import {getBoards} from '../api/Board';
+import KanbanBoard from './board/KanbanBoard';
+import {BoardProvider} from '../contexts/boardContext';
 
 const Dashboard = () => {
   // TODO: Wrap dashboard component with AppLayout.
@@ -39,11 +41,13 @@ const Dashboard = () => {
           setCurrentBoard={setCurrentBoard}
           setCurrentView={setCurrentView}
         >
-          {currentView === 'dashboard' ? (
-            <DashboardActions currentBoard={currentBoard} />
-          ) : (
-            <CalendarActions currentBoard={currentBoard} />
-          )}
+          <BoardProvider>
+            {currentView === 'dashboard' ? (
+              <KanbanBoard />
+            ) : (
+              <CalendarActions currentBoard={currentBoard} />
+            )}
+          </BoardProvider>
         </AppLayout>
       ) : (
         ''

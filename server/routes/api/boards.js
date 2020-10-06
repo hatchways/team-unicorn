@@ -13,7 +13,7 @@ const Board = require("../../models/boards");
 // @desc Create Card
 // @access Private
 router.post(
-  "/create",
+  "/",
   [auth, boardValidationRules(), validate],
   async (req, res) => {
     console.log(req.body);
@@ -42,7 +42,7 @@ router.post(
 );
 
 // @route GET /api/boards/
-// @desc Create Card
+// @desc Get Board by User
 // @access Private
 router.get("/", auth, async (req, res) => {
   try {
@@ -56,7 +56,6 @@ router.get("/", auth, async (req, res) => {
         populate: { path: "cards", model: "Card", select: ["name", "deadline"] }
       })
       .exec((err, board) => {
-        console.log(board);
         res.json(board);
       });
   } catch (err) {
@@ -64,5 +63,19 @@ router.get("/", auth, async (req, res) => {
     res.status(500).send("Server Error");
   }
 });
+
+router.put("/:id", auth, (req, res) => {
+  try {
+    Board.findByIdAndUpdate(req.params.id, req.body, (err, newColumnOrder) => {
+      if (!newColumnOrder) return res.status(400).send({msg: "Invalid Columns"});
+
+      console.log("Updated Columns: ", newColumnOrder)
+      res.send(newColumnOrder)
+    })
+  } catch (err) {
+    console.error(err.message)
+    res.status(500).send("error")
+  }
+})
 
 module.exports = router;

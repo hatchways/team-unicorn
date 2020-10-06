@@ -12,8 +12,9 @@ import {getCardById, updateCard, addCardByColumnId} from '../../api/Card';
 
 const CalendarView = ({calendarEvents, inProgessId}) => {
   const classes = CalendarStyles();
-
+  // eslint-disable-next-line
   const [open, setOpen] = useState(false);
+  // eslint-disable-next-line
   const [detailCardData, setDetailCardData] = useState(false);
   const [detailCardError, setDetailCardError] = useState(false);
 

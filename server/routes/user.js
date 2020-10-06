@@ -12,6 +12,8 @@ const {
   authenticateValidationRules,
 } = require("../middleware/validator");
 
+const avatarUploader = require("./api/upload");
+
 const User = require("../models/User");
 const Board = require("../models/boards");
 
@@ -27,6 +29,7 @@ const issueJWT = (user) => {
       id: user.id,
       name: user.name,
       email: user.email,
+      avatar: user.avatar,
     },
   };
 
@@ -128,23 +131,12 @@ router.post(
 // @access  Authenticated
 //TODO: Invalidate old token?
 router.post("/session/extend", authenticator, async (req, res) => {
-  // NOTE: Auth middleware will verify jwt and decode user from jwt
-  //       if there is a valid jwt.
-  const payload = {
-    user: req.user,
-  };
-
+  // NOTE: Auth middleware will verify jwt and attach user from db
+  //       if there is one.
   try {
-    jwt.sign(
-      payload,
-      process.env.JWTSECRET,
-      { expiresIn: AuthTokenTTL },
-      (err, token) => {
-        if (err) throw err;
-        res.cookie("auth-token", token, { httpOnly: true });
-        res.json({ user: payload.user });
-      }
-    );
+    const { payload: user, token } = issueJWT(req.user);
+    res.cookie("auth-token", token, { httpOnly: true });
+    res.status(200).json({ user });
   } catch (err) {
     console.error(err.message);
     res
@@ -164,4 +156,32 @@ router.get("/session/resolve", authenticator, async (req, res) => {
 // @route POST user/session/end
 // @desc   Invalidate jwt and end user session.
 // @access Authenticated
+router.post("/session/end", authenticator, async (req, res) => {
+  try {
+    res.clearCookie("auth-token");
+    res.status(200).end();
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .json({ errors: { DEFAULT_SERVER_ERROR: "Something went wrong..." } });
+  }
+});
+
+// @route POST user/avatar
+// @desc   Upload avatar to s3 then changes user avatar field.
+// @access Public
+router.put('/avatar', authenticator, avatarUploader.single('avatar'), async (req, res) => {
+  try {
+    const avatar = {'avatar': `https://${process.env.BUCKETNAME}.s3-us-west-1.amazonaws.com/${req.file.key}`}
+    await User.findByIdAndUpdate(req.user.id, avatar)
+    res.status(200).send(avatar);
+  } catch (err) {
+    console.error(err.message);
+    res
+      .status(500)
+      .json({errors: {DEFAULT_SERVER_ERROR: "Something went wrong..."}})
+  }
+})
+
 module.exports = router;

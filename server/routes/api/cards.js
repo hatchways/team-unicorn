@@ -11,7 +11,7 @@ const Column = require("../../models/columns");
 // @desc Create Card
 // @access Private
 router.post(
-  "/create/:columnId",
+  "/:columnId",
   [auth, cardValidationRules(), validate],
   async (req, res) => {
     try {
@@ -44,7 +44,7 @@ router.post(
 // @desc Move Card to another column
 // @access private
 
-router.put("/detail/update/:id", auth, (req, res) => {
+router.put("/:id", auth, (req, res) => {
   try {
     console.log(req.body);
     Card.findByIdAndUpdate(req.params.id, req.body, (err, updatedCard) => {
@@ -61,7 +61,7 @@ router.put("/detail/update/:id", auth, (req, res) => {
 // @route PUT api/cards/update
 // @desc Move Card to another column
 // @access Public
-router.put("/update/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const index = req.body.index;
     const newColId = req.body.newCol;
@@ -100,7 +100,7 @@ router.put("/update/:id", async (req, res) => {
 // @desc Get Card by Id
 // @access Private
 
-router.get("/show/:id", auth, (req, res) => {
+router.get("/:id", auth, (req, res) => {
   try {
     console.log(req.params.id);
     Card.findById(req.params.id)

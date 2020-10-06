@@ -13,4 +13,13 @@ const columnSchema = mongoose.Schema({
   }
 });
 
+columnSchema.virtual('id').get(function(){
+  return this._id.toHexString();
+});
+
+columnSchema.set('toJSON', {
+  virtuals: true
+});
+
+
 module.exports = mongoose.model("Column", columnSchema);
