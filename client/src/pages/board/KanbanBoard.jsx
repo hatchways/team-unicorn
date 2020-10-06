@@ -157,6 +157,7 @@ export default function KanbanBoard() {
     if (type === 'column') {
       boardActions.moveColumn(source.index, destination.index, dispatch);
       await Board.saveData(data.id, {columns: data.columnOrder});
+      return;
     }
 
     // moving cards
