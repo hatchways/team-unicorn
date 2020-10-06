@@ -13,7 +13,6 @@ import {dialogTheme} from '../../../../themes/theme';
 import CardDialogContentBody from './CardDialogContentBody';
 
 const detailsReducer = (details, updatedSection) => {
-  console.log(details, updatedSection);
   return {...details, ...updatedSection};
 };
 
@@ -34,7 +33,7 @@ const CardDialog = ({
   const {
     title,
     color,
-    desc,
+    description: desc,
     checklist,
     deadline,
     comments,
@@ -42,6 +41,7 @@ const CardDialog = ({
     tags,
   } = cardFields;
 
+  console.log(desc);
   const saveAndExit = () => {
     onSave(cardFields);
     onClose();

@@ -19,9 +19,10 @@ const CardDialogContentBody = ({
   attachments,
   tags,
   cover,
+  dispatchUpdate,
 }) => {
   const classes = useStyles();
-  const initSectionStates = useMemo(
+  const sectionValues = useMemo(
     () => ({
       DESC: desc,
       CHCK: checklist,
@@ -37,7 +38,7 @@ const CardDialogContentBody = ({
   const [sections, setSections] = useState(
     Object.keys(SectionInfos).filter(
       (sectionCode) =>
-        !SectionInfos[sectionCode].optional || initSectionStates[sectionCode],
+        !SectionInfos[sectionCode].optional || sectionValues[sectionCode],
     ),
   );
 
@@ -81,7 +82,9 @@ const CardDialogContentBody = ({
                 title={title}
                 IconComponent={IconComponent}
                 handleDelete={deleteSection}
-                initState={initSectionStates[sectionCode]}
+                value={sectionValues[sectionCode]}
+                propName={SectionInfos[sectionCode].dbPropName}
+                dispatchUpdate={dispatchUpdate}
                 optional={SectionInfos[sectionCode].optional}
               />
             );

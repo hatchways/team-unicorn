@@ -18,6 +18,9 @@ const useStyles = makeStyles((theme) => ({
     userSelect: 'none',
     padding: theme.spacing(2),
     margin: theme.spacing(1),
+    '&:hover': {
+      cursor: 'pointer',
+    },
   },
   'card-footer': {
     display: 'flex',

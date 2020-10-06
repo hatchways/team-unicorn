@@ -14,36 +14,42 @@ import CardDialogTags from './CardDialogTags';
 
 const SectionInfos = {
   DESC: {
+    dbPropName: 'description',
     title: 'Description',
     IconComponent: DescIcon,
     SectionComponent: CardDialogDesc,
     optional: false,
   },
   CHCK: {
+    dbPropName: 'checklist',
     title: 'Checklist',
     IconComponent: ChecklistIcon,
     SectionComponent: CardDialogChecklist,
     optional: true,
   },
   DEDL: {
+    dbPropName: 'deadline',
     title: 'Deadline',
     IconComponent: DeadlineIcon,
     SectionComponent: CardDialogDeadline,
     optional: true,
   },
   COMM: {
+    dbPropName: 'comments',
     title: 'Comments',
     IconComponent: CommentsIcon,
     SectionComponent: CardDialogComments,
     optional: true,
   },
   ATCH: {
+    dbPropName: 'attachments',
     title: 'Attachments',
     IconComponent: AttachmentIcon,
     SectionComponent: CardDialogAttachments,
     optional: true,
   },
   TAGS: {
+    dbPropName: 'tags',
     title: 'Tags',
     IconCompnent: TagsIcon,
     SectionComponent: CardDialogTags,

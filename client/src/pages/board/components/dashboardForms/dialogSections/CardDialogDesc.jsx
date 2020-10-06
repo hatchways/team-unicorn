@@ -3,11 +3,10 @@ import SectionContent from './components/SectionContent';
 import Section from './components/Section';
 import TextFieldOnFocusTypography from './components/TextFieldOnFocusTypography';
 
-const CardDialogDesc = ({initState: initDesc, ...other}) => {
-  const [desc, setDesc] = useState(initDesc);
+const CardDialogDesc = ({value: desc, propName, dispatchUpdate, ...other}) => {
   const [locked, setLocked] = useState(false);
 
-  const save = (val) => setDesc(val);
+  const save = (val) => dispatchUpdate({[propName]: val});
   const toggleLock = () => setLocked((prevLocked) => !prevLocked);
 
   return (
