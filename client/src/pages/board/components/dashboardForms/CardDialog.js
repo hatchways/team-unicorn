@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useReducer} from 'react';
 import {
   Dialog,
   DialogActions,
@@ -12,23 +12,34 @@ import CardDialogTitle from './dialogSections/CardDialogTitle';
 import {dialogTheme} from '../../../../themes/theme';
 import CardDialogContentBody from './CardDialogContentBody';
 
+const detailsReducer = (details, updatedSection) => {
+  return {...details, updatedSection};
+};
+
 const CardDialog = ({
-  title,
+  title: initTitle,
   columnName,
-  desc,
-  checklist,
-  deadline,
-  tags,
-  color: initColor,
-  comments,
-  attachments,
+  details: initDetails,
   onClose,
   ...rest
 }) => {
   const subtitle = `In list "${columnName}"`;
 
-  const [color, setColor] = useState(initColor);
-  const onColorChange = (val) => setColor(val);
+  const [cardFields, dispatchCardUpdate] = useReducer(detailsReducer, {
+    initTitle,
+    ...initDetails,
+  });
+  const {
+    title,
+    color,
+    desc,
+    checklist,
+    deadline,
+    comments,
+    attachments,
+    tags,
+  } = cardFields;
+
   return (
     <MuiThemeProvider theme={dialogTheme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -37,7 +48,7 @@ const CardDialog = ({
             onClose={onClose}
             cardColor={color}
             subtitle={subtitle}
-            onColorChange={onColorChange}
+            dispatch={dispatchCardUpdate}
           >
             {title}
           </CardDialogTitle>

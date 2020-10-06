@@ -1,4 +1,16 @@
 import axios from 'axios';
+import ApiResultFactory from './ApiResult';
+
+const defaultErrorHandler = (error) => {
+  // Check if error is axios error
+  if (error.response) {
+    const {errors} = error.response.data;
+    return ApiResultFactory.withErrors(errors);
+  }
+
+  console.log(error.message);
+  return {};
+};
 
 // post card
 export const addCardByColumnId = async (columnId, formData) => {
@@ -19,33 +31,24 @@ export const addCardByColumnId = async (columnId, formData) => {
 };
 
 // Get card by Id
-export const getCardById = async (card) => {
+export const getCardById = async (id) => {
   try {
-    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    const res = await axios.get(`/api/cards/${card.id}`);
+    const {data: respData} = await axios.get(`/api/cards/${id}`);
 
-    return {data: res.data, loading: false, error: false};
+    return ApiResultFactory.withData(respData);
   } catch (err) {
     return {data: [], loading: false, error: true};
   }
 };
 
 // Update Card by Id
-export const updateCard = async (card) => {
+export const updateCard = async ({id, title: name, details}) => {
   try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const body = JSON.stringify(card);
-    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    const url = `/api/cards/${card._id}`;
+    const url = `/api/cards/${id}`;
 
-    const res = await axios.put(url, body, config);
-
-    return {data: res.data, error: false};
+    const {data} = await axios.put(url, {name, details});
+    return ApiResultFactory.withData(data);
   } catch (err) {
-    return {data: [], error: true};
+    return defaultErrorHandler(err);
   }
 };
