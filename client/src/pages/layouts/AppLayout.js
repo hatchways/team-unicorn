@@ -17,7 +17,14 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppLayout = ({children}) => {
+const AppLayout = ({
+  children,
+  boards,
+  currentBoard,
+  setCurrentBoard,
+  setCurrentView,
+  setBoards,
+}) => {
   const classes = useStyles();
   return (
     <Box display="flex" flexDirection="column" height="100%">
@@ -48,7 +55,7 @@ const AppLayout = ({children}) => {
             <AppLogo />
           </Box>
           <CenteringBox boxSizing="border-box" flexBasis="40%" flexGrow={1}>
-            <SwitchView />
+            <SwitchView setCurrentView={setCurrentView} />
           </CenteringBox>
           <Box
             display="flex"
@@ -59,7 +66,7 @@ const AppLayout = ({children}) => {
             flexGrow={1}
           >
             <CenteringBox flexGrow={1}>
-              <CreateBoard />
+              <CreateBoard setBoards={setBoards} />
             </CenteringBox>
             <Box
               display="flex"
@@ -72,7 +79,11 @@ const AppLayout = ({children}) => {
           </Box>
         </Box>
         <Box flexGrow={1}>
-          <NavBar />
+          <NavBar
+            boards={boards}
+            currentBoard={currentBoard}
+            setCurrentBoard={setCurrentBoard}
+          />
         </Box>
       </Box>
       <Box flexGrow={1}>{children}</Box>

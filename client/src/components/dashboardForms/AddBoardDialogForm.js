@@ -11,42 +11,42 @@ import {
 import CloseIcon from '@material-ui/icons/Close';
 import dialogStyles from '../styles/DialogStyles';
 
-import addColumnByBoardId from '../../api/Column';
+import {addBoard} from '../../api/Board';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-const AddColumnDialogForm = ({open, setOpen, currentBoard}) => {
+const AddBoardDialogForm = ({open, setOpen, setBoards}) => {
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
-  const [columnData, setColumnData] = useState();
+  const [boardData, setBoardData] = useState();
   const [error, setError] = useState(false);
 
-  const {title: titleProps} = formProps.html.addColumn;
+  const {title: titleProps} = formProps.html.addBoard;
   const {textField: textFieldProps} = formProps.style;
-  const {title: titleValidation} = formValidation.addColumn;
+  const {title: titleValidation} = formValidation.addBoard;
 
   const onSubmitForm = async (formData) => {
-    // eslint-disable-next-line no-underscore-dangle
-    const payload = await addColumnByBoardId(currentBoard._id, {
-      name: formData.name,
-    });
+    const payload = await addBoard({name: formData.name});
 
     setError(payload.error);
-    setColumnData(payload.data);
+    setBoardData(payload.data);
 
     if (!error) {
       document.getElementById('name').value = '';
+      setBoards((prevState) => {
+        return [...prevState, payload.data];
+      });
     }
     setTimeout(() => {
       setError(false);
-      setColumnData();
+      setBoardData();
       setOpen(false);
     }, 500);
   };
   const handleClose = () => {
     setError(false);
-    setColumnData();
+    setBoardData();
     setOpen(false);
   };
   return (
@@ -63,16 +63,20 @@ const AddColumnDialogForm = ({open, setOpen, currentBoard}) => {
         >
           <CloseIcon />
         </IconButton>
-        <Typography variant="h3">Create a new column</Typography>
+        <Typography variant="h3">Create new board</Typography>
 
         <form
           onSubmit={handleSubmit(onSubmitForm)}
           noValidate
           autoComplete="off"
-          id="addColumnForm"
+          id="addBoardForm"
         >
           {error && <div>Something went wrong. Please try again!!</div>}
-          {columnData?.cards.length === 0 ? <div>Added Successfully</div> : ' '}
+          {boardData?.columns.length === 2 ? (
+            <div>Added Successfully</div>
+          ) : (
+            ' '
+          )}
 
           <TextField
             {...textFieldProps}
@@ -88,4 +92,4 @@ const AddColumnDialogForm = ({open, setOpen, currentBoard}) => {
     </Dialog>
   );
 };
-export default AddColumnDialogForm;
+export default AddBoardDialogForm;

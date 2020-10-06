@@ -33,6 +33,14 @@ const formProps = {
         type: 'text',
       },
     },
+    addBoard: {
+      title: {
+        id: 'name',
+        label: 'Add Title *',
+        name: 'name',
+        type: 'text',
+      },
+    },
   },
 };
 

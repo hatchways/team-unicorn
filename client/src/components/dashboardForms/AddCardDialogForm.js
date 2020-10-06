@@ -15,7 +15,7 @@ import {addCardByColumnId} from '../../api/Card';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-const AddCardDialogForm = ({open, setOpen, columnId, setLoadBoard}) => {
+const AddCardDialogForm = ({open, setOpen, columnId}) => {
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
@@ -34,7 +34,6 @@ const AddCardDialogForm = ({open, setOpen, columnId, setLoadBoard}) => {
 
     if (!error) {
       document.getElementById('name').value = '';
-      setLoadBoard(true);
     }
     setTimeout(() => {
       setError(false);
@@ -51,7 +50,7 @@ const AddCardDialogForm = ({open, setOpen, columnId, setLoadBoard}) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      className={classes.addColumnDialogModal}
+      className={classes.addDialogModal}
     >
       <DialogContent>
         <IconButton
@@ -67,7 +66,7 @@ const AddCardDialogForm = ({open, setOpen, columnId, setLoadBoard}) => {
           onSubmit={handleSubmit(onSubmitForm)}
           noValidate
           autoComplete="off"
-          id="addColumnForm"
+          id="addCardForm"
         >
           {error && <div>Something went wrong. Please try again!!</div>}
           {cardData?.name ? <div>Added Successfully</div> : ' '}

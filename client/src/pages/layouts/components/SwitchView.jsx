@@ -1,6 +1,5 @@
 import React from 'react';
 import {Box, makeStyles, Button} from '@material-ui/core';
-import {Link as RouterLink} from 'react-router-dom';
 import DashboardIcon from '@material-ui/icons/DashboardOutlined';
 import CalendarIcon from '@material-ui/icons/CalendarTodayOutlined';
 
@@ -11,8 +10,9 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const SwitchView = () => {
+const SwitchView = ({setCurrentView}) => {
   const classes = useStyle();
+
   return (
     <Box>
       <Button
@@ -20,8 +20,7 @@ const SwitchView = () => {
         color="primary"
         startIcon={<DashboardIcon />}
         size="medium"
-        component={RouterLink}
-        to="/dashboard"
+        onClick={() => setCurrentView('dashboard')}
       >
         Dashboard
       </Button>
@@ -31,8 +30,7 @@ const SwitchView = () => {
         color="primary"
         startIcon={<CalendarIcon />}
         size="medium"
-        component={RouterLink}
-        to="/calendar"
+        onClick={() => setCurrentView('calendar')}
       >
         Calendar
       </Button>

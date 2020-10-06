@@ -19,10 +19,10 @@ export const addCardByColumnId = async (columnId, formData) => {
 };
 
 // Get card by Id
-export const getCardById = async (card) => {
+export const getCardById = async (cardId) => {
   try {
     // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    const res = await axios.get(`/api/cards/show/${card._id}`);
+    const res = await axios.get(`/api/cards/show/${cardId}`);
 
     return {data: res.data, loading: false, error: false};
   } catch (err) {

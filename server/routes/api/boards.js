@@ -19,16 +19,21 @@ router.post(
     console.log(req.body);
     const { name } = req.body;
     try {
-      const boardFields = {};
-      boardFields.user = req.user.id;
-      boardFields.name = name;
-
-      console.log(boardFields);
-      const board = new Board(boardFields);
-
-      await board.save();
-
-      res.json(board);
+      const board = new Board({ user: req.user.id, name: name });
+      const newBoard = await board.save();
+      await Board.findById(newBoard._id)
+        .populate({
+          path: "columns",
+          populate: {
+            path: "cards",
+            model: "Card",
+            select: ["name", "deadline"]
+          }
+        })
+        .exec((err, board) => {
+          console.log(board);
+          res.json(board);
+        });
     } catch (err) {
       console.error(err.message);
       res.status(500).send("Server Error");
@@ -36,17 +41,20 @@ router.post(
   }
 );
 
-// @route GET /api/board/
+// @route GET /api/boards/
 // @desc Create Card
 // @access Private
 router.get("/", auth, async (req, res) => {
   try {
     console.log(req.user._id);
 
-    await Board.findOne({
+    await Board.find({
       user: req.user._id
     })
-      .populate({ path: "columns", populate: { path: "cards", model: "Card",  select: 'name' } })
+      .populate({
+        path: "columns",
+        populate: { path: "cards", model: "Card", select: ["name", "deadline"] }
+      })
       .exec((err, board) => {
         console.log(board);
         res.json(board);

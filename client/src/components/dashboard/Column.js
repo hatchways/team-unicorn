@@ -4,7 +4,7 @@ import {Paper, Typography, Button} from '@material-ui/core/';
 import AddCardDialogForm from '../dashboardForms/AddCardDialogForm';
 import CardItem from './Card';
 
-const Column = ({column, setLoadBoard}) => {
+const Column = ({column}) => {
   const [open, setOpen] = useState(false);
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,7 +32,6 @@ const Column = ({column, setLoadBoard}) => {
           <AddCardDialogForm
             open={open}
             setOpen={setOpen}
-            setLoadBoard={setLoadBoard}
             // eslint-disable-next-line no-param-reassign, no-underscore-dangle
             columnId={column._id}
           />

@@ -68,6 +68,7 @@ const theme = createMuiTheme({
       cardSubTitle: '#9BA9CC',
       textAreaBorder: '#D8DFE8',
       dialogClose: '#BCBCBC',
+      calendarBackground: '#F4F6FF',
     },
   },
   pageIndent: 5,

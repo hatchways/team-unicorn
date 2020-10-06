@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Get board
-const getBoard = async () => {
+export const getBoards = async () => {
   try {
     const res = await axios.get(`/api/boards/`);
     // eslint-disable-next-line no-console
@@ -12,4 +12,20 @@ const getBoard = async () => {
   }
 };
 
-export default getBoard;
+// Add Board
+export const addBoard = async (formData) => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify(formData);
+
+    const res = await axios.post(`/api/boards/create/`, body, config);
+
+    return {data: res.data, error: false};
+  } catch (err) {
+    return {data: [], error: true};
+  }
+};
