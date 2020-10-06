@@ -15,9 +15,9 @@ router.post(
   [auth, cardValidationRules(), validate],
   async (req, res) => {
     try {
-      const { name } = req.body;
+      const { name, deadline } = req.body;
       const column = await Column.findById(req.params.columnId);
-      const newCard = { name: name, column: column._id };
+      const newCard = { name: name, column: column._id, deadline: deadline };
 
       Card.create(newCard, async (err, card) => {
         if (err) {
@@ -102,6 +102,7 @@ router.put("/update/:id", async (req, res) => {
 
 router.get("/show/:id", auth, (req, res) => {
   try {
+    console.log(req.params.id);
     Card.findById(req.params.id)
       .populate("column", ["name"])
       .exec((err, card) => {
