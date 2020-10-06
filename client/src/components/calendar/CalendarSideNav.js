@@ -18,8 +18,8 @@ const CalendarSideNav = ({draggableEvents}) => {
         return {
           title: eventEl.children[0].innerText,
           id: eventEl.getAttribute('id'),
-          backgroundColor: eventEl.getAttribute('backgroundColor'),
-          borderColor: eventEl.getAttribute('borderColor'),
+          backgroundColor: 'transparent',
+          borderColor: 'transparent',
         };
       },
     });
@@ -35,8 +35,6 @@ const CalendarSideNav = ({draggableEvents}) => {
           color="background.default"
           key={card.id}
           id={card.id}
-          backgroundColor={card.backgroundColor}
-          borderColor={card.borderColor}
           className={`${classes.sideNavCards} dragCardItem`}
         >
           <Typography>{card.title}</Typography>

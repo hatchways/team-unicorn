@@ -45,9 +45,6 @@ const NavBar = ({boards, currentBoard, setCurrentBoard}) => {
   const handleClose = (event) => {
     const boardIndex = event.target.getAttribute('value');
     if (boardIndex !== null) setCurrentBoard(boards[boardIndex]);
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
     setOpen(false);
   };
 

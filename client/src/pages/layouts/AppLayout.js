@@ -23,6 +23,7 @@ const AppLayout = ({
   currentBoard,
   setCurrentBoard,
   setCurrentView,
+  setBoards,
 }) => {
   const classes = useStyles();
   return (
@@ -65,7 +66,7 @@ const AppLayout = ({
             flexGrow={1}
           >
             <CenteringBox flexGrow={1}>
-              <CreateBoard />
+              <CreateBoard setBoards={setBoards} />
             </CenteringBox>
             <Box
               display="flex"

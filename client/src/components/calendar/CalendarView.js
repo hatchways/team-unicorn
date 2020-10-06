@@ -32,43 +32,40 @@ const CalendarView = ({calendarEvents}) => {
       </>
     );
   };
-  const updateDeadline = async (event) => {
+
+  const handleEventChange = async (info) => {
+    const changeEvent = info.event;
     const editedCard = {};
     // eslint-disable-next-line no-underscore-dangle
-    editedCard._id = event.id;
-    editedCard.deadline = event.start;
+    editedCard._id = changeEvent.id;
+    editedCard.deadline = changeEvent.start;
     // eslint-disable-next-line no-unused-vars
     const payload = await updateCard(editedCard);
   };
-  const handleEventReceive = (receiveInfo) => {
-    updateDeadline(receiveInfo.event);
-  };
-  const handleEventChange = (changeInfo) => {
-    updateDeadline(changeInfo.event);
-  };
   const handleEventDidMount = () => {
-    //  Count events per day
-    const eventElements = document.querySelectorAll('.fc-event');
-
-    eventElements.forEach((el) => {
-      const dayTopElements =
-        el.parentElement.parentElement.parentElement.children[0];
-
-      const dayEventElements = el.parentElement.parentElement;
-      const ncards = dayEventElements.querySelectorAll('.fc-event').length;
-      const ncardsText = ncards === 1 ? `${ncards} card` : `${ncards} cards`;
-
-      const cardCountElement = dayTopElements.querySelector('.card-count');
-
-      if (cardCountElement === null)
-        dayTopElements.innerHTML = `${dayTopElements.innerHTML} <span class='card-count'>${ncardsText}</span>`;
-    });
-  };
-  const handleEventWillUnmount = () => {
     const cardCountElements = document.querySelectorAll('.card-count');
     // Remove count element
     cardCountElements.forEach((el) => {
       el.parentNode.removeChild(el);
+    });
+
+    //  Count events per day
+    const eventElements = document.querySelectorAll('.fc-event');
+
+    eventElements.forEach((el) => {
+      const dayGridElement = el.parentElement.parentElement.parentElement;
+      const dayTopElement = dayGridElement.querySelector('.fc-daygrid-day-top');
+      if (dayTopElement !== null) {
+        const cardCountElement = dayTopElement.querySelector('.card-count');
+        if (cardCountElement === null) {
+          const dayEventElement = el.parentElement.parentElement;
+          const ncards = dayEventElement.querySelectorAll('.fc-event').length;
+          const ncardsText =
+            ncards === 1 ? `${ncards} card` : `${ncards} cards`;
+
+          dayTopElement.innerHTML = `${dayTopElement.innerHTML} <span class='card-count'>${ncardsText}</span>`;
+        }
+      }
     });
   };
 
@@ -90,9 +87,9 @@ const CalendarView = ({calendarEvents}) => {
           events={calendarEvents}
           eventClick={handleEventClick}
           eventChange={handleEventChange}
+          eventReceive={handleEventChange}
           eventDidMount={handleEventDidMount}
-          eventWillUnmount={handleEventWillUnmount}
-          eventReceive={handleEventReceive}
+          dayMaxEventRows
           drop={(info) => {
             info.draggedEl.parentNode.removeChild(info.draggedEl);
           }}

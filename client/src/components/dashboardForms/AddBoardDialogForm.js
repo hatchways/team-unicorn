@@ -15,7 +15,7 @@ import {addBoard} from '../../api/Board';
 import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
-const AddBoardDialogForm = ({open, setOpen}) => {
+const AddBoardDialogForm = ({open, setOpen, setBoards}) => {
   const classes = dialogStyles();
   const {register, handleSubmit, errors} = useForm();
 
@@ -34,6 +34,9 @@ const AddBoardDialogForm = ({open, setOpen}) => {
 
     if (!error) {
       document.getElementById('name').value = '';
+      setBoards((prevState) => {
+        return [...prevState, payload.data];
+      });
     }
     setTimeout(() => {
       setError(false);

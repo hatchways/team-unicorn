@@ -23,6 +23,9 @@ const Dashboard = () => {
     }
     fetchData();
   }, []);
+  useEffect(() => {
+    if (boards) setCurrentBoard(boards[boards.length - 1]);
+  }, [boards]);
 
   return (
     <>
@@ -31,6 +34,7 @@ const Dashboard = () => {
       {boards?.length > 0 ? (
         <AppLayout
           boards={boards}
+          setBoards={setBoards}
           currentBoard={currentBoard}
           setCurrentBoard={setCurrentBoard}
           setCurrentView={setCurrentView}

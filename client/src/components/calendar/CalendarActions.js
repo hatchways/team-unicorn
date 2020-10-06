@@ -19,8 +19,6 @@ const CalendarActions = ({currentBoard}) => {
           card.title = cardObject.name;
           // eslint-disable-next-line no-param-reassign, no-underscore-dangle
           card.id = cardObject._id;
-          card.backgroundColor = 'transparent';
-          card.borderColor = 'transparent';
           if (cardObject.deadline === undefined) {
             draggableCards.push(card);
           } else {
