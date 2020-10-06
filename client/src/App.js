@@ -3,16 +3,15 @@ import {MuiThemeProvider} from '@material-ui/core';
 import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
 import {Elements} from '@stripe/react-stripe-js';
 import {loadStripe} from '@stripe/stripe-js';
+import theme from 'themes/theme';
+import Signup from 'pages/Signup';
+import Login from 'pages/Login';
+import User from 'api/User';
 import AuthRoute from './components/AuthRoute';
 import PrivateRoute from './components/PrivateRoute';
 import UserContext from './contexts';
-import theme from './themes/theme';
 import Dashboard from './pages/Dashboard';
-
-import Signup from './pages/Signup';
-import Login from './pages/Login';
 import './App.css';
-import User from './api/User';
 
 // TODO: Handle UI if server is unavailable?
 
@@ -39,7 +38,10 @@ function App() {
       } else {
         // TODO: Do we want to display any messages
         //       regarding session resolution errors?
-        console.log(errors);
+
+        // disabling for now, was here when i merged changes
+        // eslint-disable-next-line no-console
+        console.error(errors);
         setAuthenticated(false);
       }
       setSessionResolved(true);
@@ -47,7 +49,7 @@ function App() {
 
     resolveAndAssignUser();
   }, []);
-
+  console.log(userContextValue);
   return !sessionResolved ? null : (
     <MuiThemeProvider theme={theme}>
       <Elements stripe={stripeKey}>

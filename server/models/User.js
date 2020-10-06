@@ -25,6 +25,10 @@ const UserSchema = new mongoose.Schema({
   premium: {
     type: Boolean,
     default: false
+  },
+  avatar: {
+    type: String,
+    default: "https://unicorn-profile-pictures.s3-us-west-1.amazonaws.com/download.png"
   }
 });
 

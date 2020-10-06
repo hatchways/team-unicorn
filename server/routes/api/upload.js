@@ -1,9 +1,6 @@
-const express = require("express");
-const router = express.Router();
 const AWS = require("aws-sdk");
 const multer = require('multer')
 const multerS3 = require('multer-s3')
-
 
 const s3 = new AWS.S3({
   accessKeyId: process.env.IAMUSERKEY,
@@ -19,17 +16,9 @@ const upload = multer({
     },
     key: (req, file, cb) => {
       console.log('file is uploading')
-      cb(null, file.originalname)
+      cb(null, Date.now().toString())
     },
   }),
 })
 
-//@route POST api/upload
-//@desc: posts a profile picture to aws bucket
-//@accesss public
-//should probably validate file first before uploading (basic file regex? *.png or *.jpg)
-router.post('/', upload.single('profile'), (req, res, next) => {
-  res.status(200).send(req.file);
-})
-
-module.exports = router;
+module.exports = upload;
