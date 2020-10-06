@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme) => ({
   },
   addColumnContainer: {
     width: '30vh',
-    overflow: 'hidden',
+    // overflow: 'hidden',
     '&#leftNav': {
       '& .addColumnContent': {
         minHeight: '500px',
@@ -70,7 +70,7 @@ const useStyles = makeStyles((theme) => ({
           '&:hover': {
             padding: '0 0 0 20px',
             left: 0,
-            position: 'relative',
+            position: 'absolute',
             width: 'fit-content',
             backgroundColor: 'lightgrey',
             transition: '0.05s',
@@ -101,7 +101,7 @@ const useStyles = makeStyles((theme) => ({
             padding: '0px',
           },
           '&:hover': {
-            position: 'relative',
+            position: 'absolute',
             width: 'fit-content',
             backgroundColor: 'lightgrey',
             right: 0,
@@ -157,7 +157,6 @@ export default function KanbanBoard() {
     if (type === 'column') {
       boardActions.moveColumn(source.index, destination.index, dispatch);
       await Board.saveData(data.id, {columns: data.columnOrder});
-      return;
     }
 
     // moving cards
