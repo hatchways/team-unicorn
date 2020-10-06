@@ -44,15 +44,14 @@ router.post(
 // @desc Move Card to another column
 // @access private
 
-router.put("/:id", auth, (req, res) => {
+router.put("/:id", auth, async (req, res) => {
   try {
-    console.log(req.body);
-    Card.findByIdAndUpdate(req.params.id, req.body, (err, updatedCard) => {
-      if (!updatedCard) return res.status(400).send({ msg: "Invalid Card" });
-
-      console.log("updatedCard", updatedCard);
-      res.send(updatedCard);
-    });
+    const { name, details } = req.body;
+    const card = await Card.findById(req.params.id);
+    card.name = name;
+    card.details = details;
+    const updated = await card.save();
+    console.log(updated);
   } catch (err) {
     res.status(500).send("Server Error");
   }
@@ -72,7 +71,7 @@ router.put("/:id", async (req, res) => {
     const oldCol = await Column.findById(oldColId);
     const oldColCards = await oldCol.cards;
     await Column.findByIdAndUpdate(oldColId, {
-      cards: oldColCards.filter((c) => c !== cardId)
+      cards: oldColCards.filter((c) => c !== cardId),
     });
 
     //Update column where card is added
@@ -82,8 +81,8 @@ router.put("/:id", async (req, res) => {
       cards: [
         ...newColCards.slice(0, index),
         cardId,
-        ...newColCards.slice(index)
-      ]
+        ...newColCards.slice(index),
+      ],
     });
 
     //Change card's column reference

@@ -42,11 +42,11 @@ export const getCardById = async (id) => {
 };
 
 // Update Card by Id
-export const updateCard = async ({id, title: name, details}) => {
+export const updateCard = async (id, title, details) => {
   try {
     const url = `/api/cards/${id}`;
 
-    const {data} = await axios.put(url, {name, details});
+    const {data} = await axios.put(url, {name: title, details});
     return ApiResultFactory.withData(data);
   } catch (err) {
     return defaultErrorHandler(err);

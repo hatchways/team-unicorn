@@ -13,7 +13,8 @@ import {dialogTheme} from '../../../../themes/theme';
 import CardDialogContentBody from './CardDialogContentBody';
 
 const detailsReducer = (details, updatedSection) => {
-  return {...details, updatedSection};
+  console.log(details, updatedSection);
+  return {...details, ...updatedSection};
 };
 
 const CardDialog = ({
@@ -21,6 +22,7 @@ const CardDialog = ({
   columnName,
   details: initDetails,
   onClose,
+  onSave,
   ...rest
 }) => {
   const subtitle = `In list "${columnName}"`;
@@ -40,6 +42,14 @@ const CardDialog = ({
     tags,
   } = cardFields;
 
+  const saveAndExit = () => {
+    onSave(cardFields);
+    onClose();
+  };
+
+  const discardAndExit = () => {
+    onClose();
+  };
   return (
     <MuiThemeProvider theme={dialogTheme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -48,7 +58,7 @@ const CardDialog = ({
             onClose={onClose}
             cardColor={color}
             subtitle={subtitle}
-            dispatch={dispatchCardUpdate}
+            dispatchUpdate={dispatchCardUpdate}
           >
             {title}
           </CardDialogTitle>
@@ -60,13 +70,24 @@ const CardDialog = ({
             comments={comments}
             attachments={attachments}
             tags={tags}
+            dispatchUpdate={dispatchCardUpdate}
           />
 
           <DialogActions>
-            <Button variant="contained" size="small" color="primary">
+            <Button
+              variant="contained"
+              size="small"
+              color="primary"
+              onClick={saveAndExit}
+            >
               Save
             </Button>
-            <Button variant="contained" size="small" color="primary">
+            <Button
+              variant="contained"
+              size="small"
+              color="primary"
+              onClick={discardAndExit}
+            >
               Discard
             </Button>
           </DialogActions>

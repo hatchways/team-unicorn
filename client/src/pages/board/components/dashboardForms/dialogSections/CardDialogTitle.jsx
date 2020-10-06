@@ -35,9 +35,11 @@ const CardDialogTitle = ({
   onClose,
   subtitle,
   cardColor,
-  onColorChange,
+  dispatchUpdate,
 }) => {
   const classes = useStyles();
+
+  const onColorChange = (value) => dispatchUpdate({color: value});
   return (
     <DialogTitle disableTypography>
       <WithIcon spacing={2} Icon={TitleIcon} iconColor="primary">

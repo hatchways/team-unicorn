@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Card, Typography} from '@material-ui/core';
 import {Draggable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
-import {getCardById} from 'api/Card';
+import {getCardById, updateCard} from 'api/Card';
 import CardDialog from './dashboardForms/CardDialog';
 
 const useStyles = makeStyles((theme) => ({
@@ -38,17 +38,24 @@ export default function Task({id, columnName, title, index}) {
     setOpen(false);
   };
 
+  const handleSave = async ({title: updatedTitle, ...updatedDetails}) => {
+    const {success, data} = await updateCard(id, updatedTitle, {
+      ...updatedDetails,
+    });
+    console.log(success, data);
+  };
+
   useEffect(() => {
     const loadDetails = async () => {
       const {success, data, error} = await getCardById(id);
       if (success) {
         const {details: fetched} = data;
-        console.log(fetched);
         setDetails(fetched);
       } else {
         console.log(error);
       }
     };
+
     if (open) {
       loadDetails();
     }
@@ -88,6 +95,7 @@ export default function Task({id, columnName, title, index}) {
         details={details}
         open={open}
         onClose={handleClose}
+        onSave={handleSave}
       />
     </>
   );
