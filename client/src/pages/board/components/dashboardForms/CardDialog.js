@@ -26,7 +26,7 @@ const CardDialog = ({
   const subtitle = `In list "${columnName}"`;
 
   const [cardFields, dispatchCardUpdate] = useReducer(detailsReducer, {
-    initTitle,
+    title: initTitle,
     ...initDetails,
   });
   const {

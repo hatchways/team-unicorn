@@ -25,12 +25,11 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Task({id, columnName, content, index}) {
+export default function Task({id, columnName, title, index}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [details, setDetails] = useState(null);
 
-  console.log(open);
   const handleOpen = () => {
     setOpen(true);
   };
@@ -50,7 +49,6 @@ export default function Task({id, columnName, content, index}) {
         console.log(error);
       }
     };
-
     if (open) {
       loadDetails();
     }
@@ -73,7 +71,7 @@ export default function Task({id, columnName, content, index}) {
             }}
             onClick={handleOpen}
           >
-            <Typography gutterBottom>{content}</Typography>
+            <Typography gutterBottom>{title}</Typography>
             <div className={classes['card-footer']}>
               {/* {date ? (
                 <Typography style={{textAlign: 'right'}} variant="caption">
@@ -85,7 +83,7 @@ export default function Task({id, columnName, content, index}) {
         )}
       </Draggable>
       <CardDialog
-        title={content}
+        title={title}
         columnName={columnName}
         details={details}
         open={open}
