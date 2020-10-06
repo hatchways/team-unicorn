@@ -42,10 +42,10 @@ const convertBoardAPI = async (board) => {
 };
 
 const Board = {
-  getData: async () => {
+  getData: async (index) => {
     try {
       const res = await axios.get(`/api/boards/`);
-      const convertedBoard = await convertBoardAPI(res.data);
+      const convertedBoard = await convertBoardAPI(res.data[index]);
       return {data: convertedBoard, loading: false, error: false};
     } catch (err) {
       return {data: [], loading: false, error: true};

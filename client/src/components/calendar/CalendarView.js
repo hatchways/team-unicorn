@@ -7,13 +7,14 @@ import {Typography, Card} from '@material-ui/core/';
 
 import CalendarStyles from '../styles/CalendarStyles';
 
-import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
+// import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
 import {getCardById, updateCard} from '../../api/Card';
 
 const CalendarView = ({calendarEvents}) => {
   const classes = CalendarStyles();
-
+  // eslint-disable-next-line
   const [open, setOpen] = useState(false);
+  // eslint-disable-next-line
   const [detailCardData, setDetailCardData] = useState(false);
   const [detailCardError, setDetailCardError] = useState(false);
 
@@ -96,13 +97,13 @@ const CalendarView = ({calendarEvents}) => {
         />
       </div>
       {detailCardError && <div> Something went wrong </div>}
-      {detailCardData?.name && (
+      {/* {detailCardData?.name && (
         <EditCardDialogForm
           open={open}
           setOpen={setOpen}
           detailCardData={detailCardData}
         />
-      )}
+      )} */}
     </>
   );
 };

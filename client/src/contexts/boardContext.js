@@ -43,7 +43,7 @@ const BoardProvider = ({children}) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const board = await Board.getData();
+        const board = await Board.getData(0);
         dispatch({
           type: 'INIT_BOARD',
           boardData: board.data,

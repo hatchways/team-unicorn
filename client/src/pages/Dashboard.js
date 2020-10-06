@@ -43,7 +43,7 @@ const Dashboard = () => {
         >
           <BoardProvider>
             {currentView === 'dashboard' ? (
-              <KanbanBoard currentBoard={currentBoard} />
+              <KanbanBoard />
             ) : (
               <CalendarActions currentBoard={currentBoard} />
             )}
