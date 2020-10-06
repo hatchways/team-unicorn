@@ -41,11 +41,13 @@ export default function Task({id, columnName, title, index}) {
     setOpen(false);
   };
 
-  const handleSave = async ({title: updatedTitle, ...updatedDetails}) => {
-    const {success, data} = await updateCard(id, updatedTitle, {
-      ...updatedDetails,
-    });
-    console.log(success, data);
+  const handleSave = async ({title: updatedTitle, details: updatedDetails}) => {
+    const {success, error} = await updateCard(id, updatedTitle, updatedDetails);
+    if (success) {
+      setDetails(updatedDetails);
+    } else {
+      console.error(error);
+    }
   };
 
   useEffect(() => {
@@ -82,24 +84,20 @@ export default function Task({id, columnName, title, index}) {
             onClick={handleOpen}
           >
             <Typography gutterBottom>{title}</Typography>
-            <div className={classes['card-footer']}>
-              {/* {date ? (
-                <Typography style={{textAlign: 'right'}} variant="caption">
-                  deadline: {date}
-                </Typography>
-              ) : null} */}
-            </div>
+            <div className={classes['card-footer']} />
           </Card>
         )}
       </Draggable>
-      <CardDialog
-        title={title}
-        columnName={columnName}
-        details={details}
-        open={open}
-        onClose={handleClose}
-        onSave={handleSave}
-      />
+      {details && (
+        <CardDialog
+          title={title}
+          columnName={columnName}
+          {...details}
+          open={open}
+          onClose={handleClose}
+          onSave={handleSave}
+        />
+      )}
     </>
   );
 }

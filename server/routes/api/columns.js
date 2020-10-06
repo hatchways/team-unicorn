@@ -7,7 +7,7 @@ const Board = require("../../models/boards");
 const auth = require("../../middleware/authenticator");
 const {
   validate,
-  columnValidationRules
+  columnValidationRules,
 } = require("../../middleware/validator");
 
 // @route POST api/columns/create
@@ -17,7 +17,6 @@ router.post(
   "/:boardId",
   [auth, columnValidationRules(), validate],
   async (req, res) => {
-    console.log(req.body);
     try {
       const board = await Board.findById(req.params.boardId);
 
@@ -29,7 +28,6 @@ router.post(
           board.columns.push({ _id: col.id });
           await board.save();
 
-          console.log(col);
           res.send(col);
         }
       });
@@ -44,27 +42,21 @@ router.post(
 // @route PUT api/columns/:id
 // @desc Either change name of column or changing location of card within column.
 // @access private
-router.put(
-  "/:id",
-  [auth, columnValidationRules(), validate],
-  (req, res) => {
-    console.log(req.body);
-    Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
-      if (!updatedColumn)
-        return res.status(400).send({ msg: "Invalid Column" });
+router.put("/:id", [auth, columnValidationRules(), validate], (req, res) => {
+  console.log(req.body);
+  Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
+    if (!updatedColumn) return res.status(400).send({ msg: "Invalid Column" });
 
-      console.log(updatedColumn);
-      res.send(updatedColumn);
-    });
-  }
-);
+    res.send(updatedColumn);
+  });
+});
 
 // @route GET  /api/columns/show/:id
 // @desc Get the column by columnId
 // @access Private
 router.get("/:id", auth, (req, res) => {
   Column.findById(req.params.id, (err, col) => {
-    if (!col) return res.status(400).send( { msg: "Invalid Column" } );
+    if (!col) return res.status(400).send({ msg: "Invalid Column" });
 
     res.send(col);
   });

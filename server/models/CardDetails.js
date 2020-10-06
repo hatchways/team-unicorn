@@ -3,11 +3,11 @@ const mongoose = require("mongoose");
 const CardDetailsSchema = new mongoose.Schema({
   color: String, // hexcode
   description: String,
-  checklist: [mongoose.ObjectId],
+  checklist: { type: [Object], default: undefined },
   deadline: Number, // epoch
-  comments: [mongoose.ObjectId],
-  attachments: [mongoose.ObjectId],
-  tags: [mongoose.ObjectId],
+  comments: { type: [Object], default: undefined },
+  attachments: { type: [Object], default: undefined },
+  tags: { type: [Object], default: undefined },
 });
 
 module.exports = CardDetailsSchema;

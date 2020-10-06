@@ -28,7 +28,6 @@ router.post(
           column.cards.push({ _id: card.id });
           await column.save();
 
-          console.log(card);
           res.send(card);
         }
       });
@@ -47,12 +46,15 @@ router.post(
 router.put("/:id", auth, async (req, res) => {
   try {
     const { name, details } = req.body;
-    const card = await Card.findById(req.params.id);
-    card.name = name;
-    card.details = details;
-    const updated = await card.save();
-    console.log(updated);
+    await Card.findByIdAndUpdate(req.params.id, {
+      $set: {
+        name: name,
+        details: details,
+      },
+    });
+    res.status(200).send();
   } catch (err) {
+    console.error(err);
     res.status(500).send("Server Error");
   }
 });
@@ -106,7 +108,6 @@ router.get("/:id", auth, (req, res) => {
       .exec((err, card) => {
         if (!card) return res.status(400).send({ msg: "Invalid Card" });
 
-        console.log(card);
         res.send(card);
       });
   } catch (err) {

@@ -32,7 +32,6 @@ const CardDialog = ({
   ...rest
 }) => {
   const subtitle = `In list "${columnName}"`;
-
   const [cardFields, dispatchCardUpdate] = useReducer(detailsReducer, {
     color: initColor,
     desc: initDesc,
@@ -42,7 +41,6 @@ const CardDialog = ({
     attachments: initAttachments,
     tags: initTags,
   });
-
   const {
     color,
     desc,
@@ -52,7 +50,6 @@ const CardDialog = ({
     attachments,
     tags,
   } = cardFields;
-
   const sectionValues = {
     DESC: desc,
     CHCK: checklist,
@@ -62,6 +59,7 @@ const CardDialog = ({
     TAGS: tags,
     // COVR: cover,
   };
+
   const [sections, setSections] = useState(
     Object.keys(SectionInfos).filter(
       (sectionCode) =>
@@ -82,7 +80,14 @@ const CardDialog = ({
   };
 
   const saveAndExit = () => {
-    onSave(cardFields);
+    // NOTE: Manually construct details outside of section (i.e only color for now)
+    const initDetails = {color};
+    const updatedDetails = sections.reduce((obj, sectionCode) => {
+      const {dbPropName} = SectionInfos[sectionCode];
+      return {...obj, [dbPropName]: cardFields[dbPropName]};
+    }, initDetails);
+
+    onSave({title, details: updatedDetails});
     onClose();
   };
 
