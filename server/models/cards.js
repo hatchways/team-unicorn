@@ -6,4 +6,13 @@ const cardSchema = new mongoose.Schema({
   column: { type: mongoose.Schema.Types.ObjectId, ref: "Column" }
 });
 
+cardSchema.virtual('id').get(function(){
+  return this._id.toHexString();
+});
+
+cardSchema.set('toJSON', {
+  virtuals: true
+});
+
+
 module.exports = mongoose.model("Card", cardSchema);

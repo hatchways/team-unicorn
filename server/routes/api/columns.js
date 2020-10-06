@@ -14,7 +14,7 @@ const {
 // @desc Create a New Column and push the new column to the board
 // @access private
 router.post(
-  "/create/:boardId",
+  "/:boardId",
   [auth, columnValidationRules(), validate],
   async (req, res) => {
     console.log(req.body);
@@ -41,28 +41,30 @@ router.post(
   }
 );
 
-// @route PUT api/columns/update
+// @route PUT api/columns/:id
 // @desc Either change name of column or changing location of card within column.
 // @access private
 router.put(
-  "/update/:id",
-  [auth, columnValidationRules(), validate],
+  "/:id",
+  [auth, validate],
   (req, res) => {
-    console.log(req.body);
+    console.log(req.body)
     Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
-      if (!updatedColumn)
+      if (!updatedColumn) {
+        console.log(updatedColumn)
         return res.status(400).send({ msg: "Invalid Column" });
+      }
 
       console.log(updatedColumn);
-      res.send(updatedColumn);
+      res.status(200).send(updatedColumn);
     });
   }
 );
 
-// @route GET  /api/columns/show/:id
+// @route GET  /api/columns/:id
 // @desc Get the column by columnId
 // @access Private
-router.get("/show/:id", auth, (req, res) => {
+router.get("/:id", auth, (req, res) => {
   Column.findById(req.params.id, (err, col) => {
     if (!col) return res.status(400).send( { msg: "Invalid Column" } );
 
@@ -70,4 +72,13 @@ router.get("/show/:id", auth, (req, res) => {
   });
 });
 
+router.delete("/:id", auth, async (req, res) => {
+  try {
+    await Column.findByIdAndDelete(req.params.id)
+    res.sendStatus(200)
+  } catch(e) {
+    console.log(e)
+    res.status(500).send(e)
+  }
+})
 module.exports = router;

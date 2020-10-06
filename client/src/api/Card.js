@@ -10,7 +10,7 @@ export const addCardByColumnId = async (columnId, formData) => {
     };
     const body = JSON.stringify(formData);
 
-    const res = await axios.post(`/api/cards/create/${columnId}`, body, config);
+    const res = await axios.post(`/api/cards/${columnId}`, body, config);
 
     return {data: res.data, error: false};
   } catch (err) {
@@ -22,7 +22,7 @@ export const addCardByColumnId = async (columnId, formData) => {
 export const getCardById = async (cardId) => {
   try {
     // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    const res = await axios.get(`/api/cards/show/${cardId}`);
+    const res = await axios.get(`/api/cards/${cardId}`);
 
     return {data: res.data, loading: false, error: false};
   } catch (err) {
@@ -40,7 +40,7 @@ export const updateCard = async (card) => {
     };
     const body = JSON.stringify(card);
     // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    const url = `/api/cards/detail/update/${card._id}`;
+    const url = `/api/cards/${card._id}`;
 
     const res = await axios.put(url, body, config);
 
