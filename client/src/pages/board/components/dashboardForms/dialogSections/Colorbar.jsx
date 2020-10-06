@@ -8,8 +8,8 @@ const useStyles = makeStyles((theme) => ({
     width: '35px',
     marginLeft: theme.spacing(2),
     borderWidth: '4px',
-    backgroundColor: ({color}) => color,
-    borderColor: ({color}) => color,
+    backgroundColor: ({color}) => color || theme.palette.primary.main,
+    borderColor: ({color}) => color || theme.palette.primary.main,
     borderStyle: 'solid',
     '&:hover': {
       cursor: 'pointer',

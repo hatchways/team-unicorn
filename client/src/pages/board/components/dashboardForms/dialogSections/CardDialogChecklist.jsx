@@ -5,15 +5,23 @@ import ChecklistItem from './components/ChecklistItem';
 import Section from './components/Section';
 import SectionContent from './components/SectionContent';
 
-const CardDialogChecklist = ({initState: initChecklistItems, ...other}) => {
-  const [checklist, setChecklist] = useState(initChecklistItems || []);
+const CardDialogChecklist = ({
+  value: checklist,
+  propName,
+  dispatchUpdate,
+  ...other
+}) => {
   const [locked, setLocked] = useState(false);
 
   const toggleLock = () => setLocked((prevLockState) => !prevLockState);
 
+  const setChecklist = (value) => dispatchUpdate({[propName]: value});
+
   const addItem = ({checked = false, text = ''}) => {
     const newChecklistItem = {timestamp: Date.now(), text, checked};
-    const updatedChecklist = [...checklist, newChecklistItem];
+    const updatedChecklist = checklist
+      ? [...checklist, newChecklistItem]
+      : [newChecklistItem];
     setChecklist(updatedChecklist);
   };
 
@@ -61,7 +69,7 @@ const CardDialogChecklist = ({initState: initChecklistItems, ...other}) => {
           alignItems="stretch"
         >
           <List disablePadding>
-            {checklist.map(({text, checked, timestamp}) => (
+            {checklist?.map(({text, checked, timestamp}) => (
               <ChecklistItem
                 key={timestamp}
                 id={`card-checklist-item-${timestamp}`}

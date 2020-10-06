@@ -4,14 +4,18 @@ import {KeyboardDatePicker} from '@material-ui/pickers';
 import SectionContent from './components/SectionContent';
 import Section from './components/Section';
 
-const CardDialogDeadline = ({initState: initDeadline, ...other}) => {
-  const [deadline, setDeadline] = useState(initDeadline);
+const CardDialogDeadline = ({
+  value: deadline,
+  propName,
+  dispatchUpdate,
+  ...other
+}) => {
   const [open, setOpen] = useState(false);
   const [locked, setLocked] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleDateChange = (val) => setDeadline(val);
+  const handleDateChange = (val) => dispatchUpdate({[propName]: val});
   const handleToggleLock = () => setLocked((prevLock) => !prevLock);
 
   const TextFieldComponent = ({...props}) => (

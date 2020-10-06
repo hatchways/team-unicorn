@@ -18,15 +18,20 @@ import Section from './components/Section';
 //       As for why, to generate unique ids for
 //       handling state logic.
 
-const CardDialogComments = ({initState: initComments, ...other}) => {
-  const [comments, setComments] = useState(initComments || []);
+const CardDialogComments = ({
+  value: comments,
+  propName,
+  dispatchUpdate,
+  ...other
+}) => {
   const [locked, setLocked] = useState(false);
 
+  const setComments = (value) => dispatchUpdate({[propName]: value});
   const toggleLock = () => setLocked((prevLocked) => !prevLocked);
 
   const addComment = ({comment = ''}) => {
     const newComment = {timestamp: Date.now(), comment};
-    const updatedComments = [...comments, newComment];
+    const updatedComments = comments ? [...comments, newComment] : [newComment];
     setComments(updatedComments);
   };
 
