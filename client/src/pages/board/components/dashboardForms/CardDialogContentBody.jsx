@@ -1,4 +1,4 @@
-import React, {useState, useMemo} from 'react';
+import React from 'react';
 import {Box, DialogContent, makeStyles} from '@material-ui/core';
 import CardDialogButtonMenu from './dialogSections/CardDialogButtonMenu';
 import SectionInfos from './dialogSections/enums';
@@ -12,47 +12,13 @@ const useStyles = makeStyles({
 });
 
 const CardDialogContentBody = ({
-  desc,
-  checklist,
-  deadline,
-  comments,
-  attachments,
-  tags,
-  cover,
+  sections,
+  sectionValues,
+  addSection,
+  deleteSection,
   dispatchUpdate,
 }) => {
   const classes = useStyles();
-  const sectionValues = useMemo(
-    () => ({
-      DESC: desc,
-      CHCK: checklist,
-      DEDL: deadline,
-      COMM: comments,
-      ATCH: attachments,
-      TAGS: tags,
-      COVR: cover,
-    }),
-    [desc, checklist, deadline, comments, attachments, tags, cover],
-  );
-
-  const [sections, setSections] = useState(
-    Object.keys(SectionInfos).filter(
-      (sectionCode) =>
-        !SectionInfos[sectionCode].optional || sectionValues[sectionCode],
-    ),
-  );
-
-  const addSection = (sectionCode) => {
-    if (!sections.includes(sectionCode)) {
-      const updated = [...sections, sectionCode];
-      setSections(updated);
-    }
-  };
-
-  const deleteSection = (sectionCode) => {
-    const updated = sections.filter((code) => code !== sectionCode);
-    setSections(updated);
-  };
 
   // TODO: Ensure state changes don't re-render every section
   return (

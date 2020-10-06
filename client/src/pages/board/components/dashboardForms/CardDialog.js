@@ -1,4 +1,4 @@
-import React, {useReducer} from 'react';
+import React, {useReducer, useState} from 'react';
 import {
   Dialog,
   DialogActions,
@@ -11,15 +11,22 @@ import DateFnsUtils from '@date-io/date-fns';
 import CardDialogTitle from './dialogSections/CardDialogTitle';
 import {dialogTheme} from '../../../../themes/theme';
 import CardDialogContentBody from './CardDialogContentBody';
+import SectionInfos from './dialogSections/enums';
 
 const detailsReducer = (details, updatedSection) => {
   return {...details, ...updatedSection};
 };
 
 const CardDialog = ({
-  title: initTitle,
+  title,
   columnName,
-  details: initDetails,
+  color: initColor,
+  description: initDesc,
+  checklist: initChecklist,
+  deadline: initDeadline,
+  comments: initComments,
+  attachments: initAttachments,
+  tags: initTags,
   onClose,
   onSave,
   ...rest
@@ -27,13 +34,18 @@ const CardDialog = ({
   const subtitle = `In list "${columnName}"`;
 
   const [cardFields, dispatchCardUpdate] = useReducer(detailsReducer, {
-    title: initTitle,
-    ...initDetails,
+    color: initColor,
+    desc: initDesc,
+    checklist: initChecklist,
+    deadline: initDeadline,
+    comments: initComments,
+    attachments: initAttachments,
+    tags: initTags,
   });
+
   const {
-    title,
     color,
-    description: desc,
+    desc,
     checklist,
     deadline,
     comments,
@@ -41,7 +53,34 @@ const CardDialog = ({
     tags,
   } = cardFields;
 
-  console.log(desc);
+  const sectionValues = {
+    DESC: desc,
+    CHCK: checklist,
+    DEDL: deadline,
+    COMM: comments,
+    ATCH: attachments,
+    TAGS: tags,
+    // COVR: cover,
+  };
+  const [sections, setSections] = useState(
+    Object.keys(SectionInfos).filter(
+      (sectionCode) =>
+        !SectionInfos[sectionCode].optional || sectionValues[sectionCode],
+    ),
+  );
+
+  const addSection = (sectionCode) => {
+    if (!sections.includes(sectionCode)) {
+      const updated = [...sections, sectionCode];
+      setSections(updated);
+    }
+  };
+
+  const deleteSection = (sectionCode) => {
+    const updated = sections.filter((code) => code !== sectionCode);
+    setSections(updated);
+  };
+
   const saveAndExit = () => {
     onSave(cardFields);
     onClose();
@@ -64,12 +103,10 @@ const CardDialog = ({
           </CardDialogTitle>
           <Divider variant="fullWidth" light />
           <CardDialogContentBody
-            desc={desc}
-            deadline={deadline}
-            checklist={checklist}
-            comments={comments}
-            attachments={attachments}
-            tags={tags}
+            sections={sections}
+            sectionValues={sectionValues}
+            addSection={addSection}
+            deleteSection={deleteSection}
             dispatchUpdate={dispatchCardUpdate}
           />
 
