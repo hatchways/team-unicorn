@@ -9,6 +9,7 @@
     "@material-ui/pickers": "^3.2.10",
     "axios": "^0.20.0",
     "date-fns": "^2.16.1",
+    "material-ui-dropzone": "^3.5.0",
     "react": "^16.8.6",
     "react-beautiful-dnd": "^13.0.0",
     "react-dom": "^16.8.6",
