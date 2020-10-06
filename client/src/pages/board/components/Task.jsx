@@ -30,6 +30,7 @@ export default function Task({id, columnName, content, index}) {
   const [open, setOpen] = useState(false);
   const [details, setDetails] = useState(null);
 
+  console.log(open);
   const handleOpen = () => {
     setOpen(true);
   };

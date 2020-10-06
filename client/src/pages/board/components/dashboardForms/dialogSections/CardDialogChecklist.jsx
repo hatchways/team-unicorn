@@ -52,7 +52,7 @@ const CardDialogChecklist = ({initState: initChecklistItems, ...other}) => {
   };
 
   return (
-    <Section locked={locked} handleToggleLock={toggleLock} optional {...other}>
+    <Section locked={locked} handleToggleLock={toggleLock} {...other}>
       <SectionContent>
         <Box
           width="100%"

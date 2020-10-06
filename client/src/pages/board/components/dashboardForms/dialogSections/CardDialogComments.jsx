@@ -49,7 +49,7 @@ const CardDialogComments = ({initState: initComments, ...other}) => {
   };
 
   return (
-    <Section locked={locked} handleToggleLock={toggleLock} optional {...other}>
+    <Section locked={locked} handleToggleLock={toggleLock} {...other}>
       <SectionContent>
         <Box
           width="100%"

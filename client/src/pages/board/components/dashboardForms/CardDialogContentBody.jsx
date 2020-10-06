@@ -35,8 +35,9 @@ const CardDialogContentBody = ({
   );
 
   const [sections, setSections] = useState(
-    Object.keys(initSectionStates).filter(
-      (sectionCode) => initSectionStates[sectionCode],
+    Object.keys(SectionInfos).filter(
+      (sectionCode) =>
+        !SectionInfos[sectionCode].optional || initSectionStates[sectionCode],
     ),
   );
 
@@ -81,6 +82,7 @@ const CardDialogContentBody = ({
                 IconComponent={IconComponent}
                 handleDelete={deleteSection}
                 initState={initSectionStates[sectionCode]}
+                optional={SectionInfos[sectionCode].optional}
               />
             );
             return result;

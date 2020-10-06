@@ -17,31 +17,37 @@ const SectionInfos = {
     title: 'Description',
     IconComponent: DescIcon,
     SectionComponent: CardDialogDesc,
+    optional: false,
   },
   CHCK: {
     title: 'Checklist',
     IconComponent: ChecklistIcon,
     SectionComponent: CardDialogChecklist,
+    optional: true,
   },
   DEDL: {
     title: 'Deadline',
     IconComponent: DeadlineIcon,
     SectionComponent: CardDialogDeadline,
+    optional: true,
   },
   COMM: {
     title: 'Comments',
     IconComponent: CommentsIcon,
     SectionComponent: CardDialogComments,
+    optional: true,
   },
   ATCH: {
     title: 'Attachments',
     IconComponent: AttachmentIcon,
     SectionComponent: CardDialogAttachments,
+    optional: true,
   },
   TAGS: {
     title: 'Tags',
     IconCompnent: TagsIcon,
     SectionComponent: CardDialogTags,
+    optional: true,
   },
   // COVR: {title: 'Cover', IconComponent: CoverIcon},
 };

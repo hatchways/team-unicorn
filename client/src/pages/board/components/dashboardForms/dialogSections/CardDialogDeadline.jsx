@@ -24,12 +24,7 @@ const CardDialogDeadline = ({initState: initDeadline, ...other}) => {
   );
 
   return (
-    <Section
-      locked={locked}
-      handleToggleLock={handleToggleLock}
-      optional
-      {...other}
-    >
+    <Section locked={locked} handleToggleLock={handleToggleLock} {...other}>
       <SectionContent>
         <KeyboardDatePicker
           id="deadline-date"
