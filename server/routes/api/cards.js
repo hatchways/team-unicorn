@@ -55,7 +55,9 @@ router.put("/:id", auth, async (req, res) => {
     res.status(200).send();
   } catch (err) {
     console.error(err);
-    res.status(500).send("Server Error");
+    res.status(500).json({
+      errors: { CARD_NOT_SAVED: "Could not save card." },
+    });
   }
 });
 

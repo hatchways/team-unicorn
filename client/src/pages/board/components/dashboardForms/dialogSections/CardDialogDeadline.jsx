@@ -16,7 +16,8 @@ const CardDialogDeadline = ({
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const handleDateChange = (val) => dispatchUpdate({[propName]: val});
+  const handleDateChange = (date) =>
+    dispatchUpdate({[propName]: date.getTime()});
 
   const TextFieldComponent = ({...props}) => (
     <TextField
