@@ -1,18 +1,8 @@
-import React, {useState, useContext, useCallback} from 'react';
+import React from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Typography,
-  Menu,
-  MenuItem,
-} from '@material-ui/core/';
+import {AppBar, Toolbar, IconButton, Typography} from '@material-ui/core/';
 import MenuIcon from '@material-ui/icons/Menu';
-import UserContext from '../../../contexts';
-import User from '../../../api/User';
-import LogoutButton from '../../auth/components/LogoutButton';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -26,48 +16,16 @@ const useStyles = makeStyles((theme) => ({
 
 const NavBar = () => {
   const classes = useStyles();
-  const [anchorEl, setAnchorEl] = useState(null);
-  const open = Boolean(anchorEl);
-  const userContext = useContext(UserContext);
-  const handleLogout = useCallback(async () => {
-    const {success} = await User.endSession();
-    if (success) {
-      userContext.setUser(null);
-      userContext.setAuthenticated(false);
-    }
-  }, [userContext]);
 
-  const handleMenu = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
   return (
     <AppBar position="static" className={classes.appBar} elevation={0}>
       <Toolbar disableGutters>
         <Typography variant="h6" className={classes.title} color="inherit">
           My School Board
         </Typography>
-        <LogoutButton />
-        <IconButton
-          edge="end"
-          aria-label="menu"
-          color="inherit"
-          onClick={handleMenu}
-        >
+        <IconButton edge="end" aria-label="menu" color="inherit">
           <MenuIcon />
         </IconButton>
-        <Menu
-          id="simple-menu"
-          anchorEl={anchorEl}
-          variant="menu"
-          open={open}
-          onClose={handleClose}
-        >
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        </Menu>
       </Toolbar>
     </AppBar>
   );
