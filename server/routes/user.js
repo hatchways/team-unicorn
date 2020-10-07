@@ -184,4 +184,20 @@ router.put('/avatar', authenticator, avatarUploader.single('avatar'), async (req
   }
 })
 
+// @route POST user/stripe
+// @desc Update user's stripe details
+router.put('/stripe', authenticator, async (req, res) => {
+  try {
+    const {id, stripeId, premium} = req
+    const stripe = {stripeId: stripeId , premium: premium}
+    await User.findByIdAndUpdate(id, stripe);
+    res.status(200).send(stripe);
+  } catch (err) {
+    console.log(err.message);
+    res
+      .status(500)
+      .json({errors: {DEFAULT_SERVER_ERROR: "Something went wrong..."}})
+  }
+})
+
 module.exports = router;

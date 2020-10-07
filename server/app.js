@@ -28,7 +28,6 @@ app.use(express.static(join(__dirname, "public")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
-app.use("/api/upload", uploadRouter);
 app.use("/user", userRouter);
 app.use("/api/columns", columnsRouter);
 app.use("/api/cards", cardsRouter);
