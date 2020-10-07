@@ -21,13 +21,7 @@ const AppLayout = ({children}) => {
   const classes = useStyles();
   return (
     <Box>
-      <Box
-        display="flex"
-        flexGrow={1}
-        minHeight="9rem"
-        maxHeight="15%"
-        flexDirection="column"
-      >
+      <Box display="flex" maxHeight="15%" flexDirection="column">
         <Box
           component="header"
           display="flex"

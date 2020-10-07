@@ -19,7 +19,6 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
   },
   appBar: {
-    marginBottom: theme.spacing(3),
     paddingLeft: theme.spacing(theme.pageIndent),
     paddingRight: theme.spacing(theme.pageIndent),
   },
@@ -36,11 +35,6 @@ const NavBar = () => {
       userContext.setUser(null);
       userContext.setAuthenticated(false);
     }
-    // else {
-    //   //es-lint
-    //   console.log(errors);
-    //   // TODO: Display toaster
-    // }
   }, [userContext]);
 
   const handleMenu = (event) => {
