@@ -1,6 +1,6 @@
 import React, {createContext, useEffect, useReducer, useState} from 'react';
 import Board from 'api/Board';
-import {updateColumn} from 'api/Column';
+import reducers from './boardReducers';
 
 const initialState = {
   id: null,
@@ -8,102 +8,8 @@ const initialState = {
   columnOrder: [],
   tasks: {},
 };
+
 const BoardContext = createContext(initialState);
-
-const reducers = {
-  addCard: (state, task, colId) => {
-    const newColumn = {
-      ...state.columns[colId],
-      taskIds: state.columns[colId].taskIds.concat(task.id),
-    };
-    const newState = {
-      ...state,
-      columns: {
-        ...state.columns,
-        [newColumn.id]: newColumn,
-      },
-    };
-
-    newState.tasks[task.id] = {id: task.id, content: task.name};
-    return newState;
-  },
-  moveCard: (state, prevColId, nextColId, oldIndex, newIndex) => {
-    const taskId = state.columns[prevColId].taskIds[oldIndex];
-
-    // remove card from previous column
-    const prevTaskIds = Array.from(state.columns[prevColId].taskIds);
-    prevTaskIds.splice(oldIndex, 1);
-    const prevColumn = {
-      ...state.columns[prevColId],
-      taskIds: prevTaskIds,
-    };
-
-    const newState = {...state};
-    if (prevColId === nextColId) {
-      // Moving cards within same column
-      prevTaskIds.splice(newIndex, 0, taskId);
-      newState.columns = {
-        ...state.columns,
-        [prevColumn.id]: prevColumn,
-      };
-      updateColumn(prevColumn.id, {
-        _id: prevColumn.id,
-        name: prevColumn.title,
-        cards: prevColumn.taskIds,
-      });
-    } else {
-      // Moving cards between different columns
-      const nextTaskIds = Array.from(state.columns[nextColId].taskIds);
-      nextTaskIds.splice(newIndex, 0, taskId);
-      const nextColumn = {
-        ...state.columns[nextColId],
-        taskIds: nextTaskIds,
-      };
-
-      newState.columns = {
-        ...state.columns,
-        [prevColumn.id]: prevColumn,
-        [nextColumn.id]: nextColumn,
-      };
-
-      updateColumn(prevColumn.id, {
-        _id: prevColumn.id,
-        name: prevColumn.title,
-        cards: prevColumn.taskIds,
-      });
-      updateColumn(nextColumn.id, {
-        _id: nextColumn.id,
-        name: nextColumn.title,
-        cards: nextColumn.taskIds,
-      });
-    }
-    return newState;
-  },
-  addCol: (state, col) => {
-    const newColumns = {
-      ...state.columns,
-      [col.id]: {id: col.id, title: col.name, taskIds: []},
-    };
-    const newState = {
-      ...state,
-      columns: newColumns,
-      columnOrder: state.columnOrder.concat(col.id),
-    };
-
-    return newState;
-  },
-  moveCol: (state, fromIndex, toIndex) => {
-    const newState = {...state};
-    const col = newState.columnOrder[fromIndex];
-    newState.columnOrder.splice(fromIndex, 1);
-    newState.columnOrder.splice(toIndex, 0, col);
-    Board.saveData(state.id, {columns: newState.columnOrder});
-    return newState;
-  },
-  initBoard: (boardData) => {
-    return boardData;
-  },
-};
 
 const boardReducer = (state, action) => {
   switch (action.type) {
@@ -121,6 +27,8 @@ const boardReducer = (state, action) => {
       return reducers.addCol(state, action.col);
     case 'MOVE_COL':
       return reducers.moveCol(state, action.fromIndex, action.toIndex);
+    case 'DELETE_COL':
+      return reducers.deleteCol(state, action.colId);
     case 'INIT_BOARD':
       return reducers.initBoard(action.boardData);
     default:
@@ -129,7 +37,6 @@ const boardReducer = (state, action) => {
 };
 
 const BoardProvider = ({children}) => {
-  // const [data, setBoardState] = useState(initialState)
   const [data, dispatch] = useReducer(boardReducer, initialState);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -149,7 +56,6 @@ const BoardProvider = ({children}) => {
     fetchData();
   }, []);
 
-  // const [state, setState] = useState(initialState)
   return (
     <BoardContext.Provider
       value={{
