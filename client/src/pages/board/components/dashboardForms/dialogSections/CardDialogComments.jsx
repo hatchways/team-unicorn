@@ -63,7 +63,7 @@ const CardDialogComments = ({
           alignItems="stretch"
         >
           <List disablePadding>
-            {comments.map(({comment, timestamp}) => (
+            {comments?.map(({comment, timestamp}) => (
               <Comment
                 timestamp={timestamp}
                 key={timestamp}
