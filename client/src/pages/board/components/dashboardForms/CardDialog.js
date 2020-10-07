@@ -157,9 +157,9 @@ const CardDialog = ({
   return (
     <MuiThemeProvider theme={dialogTheme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Dialog fullWidth open={open} onClose={onClose} {...rest}>
+        <Dialog fullWidth open={open} onClose={saveAndExit} {...rest}>
           <CardDialogTitle
-            onClose={onClose}
+            onClose={discardAndExit}
             cardColor={color}
             subtitle={subtitle}
             dispatchUpdate={dispatchCardUpdate}
