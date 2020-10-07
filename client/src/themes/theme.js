@@ -59,7 +59,7 @@ const baseThemeSettings = {
       main: '#759CFC',
       contrastText: '#ffffff',
     },
-    secondary: {main: '#fff'},
+    secondary: {main: '#d32f2f', contrastText: '#ffffff'},
     divider: '#D8DFED',
     background: {paper: '#fff', default: '#F4F6FF'},
     props: {
