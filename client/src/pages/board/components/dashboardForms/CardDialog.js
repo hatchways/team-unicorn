@@ -1,46 +1,125 @@
-import React, {useReducer, useState, useCallback} from 'react';
+import React, {useReducer, useState, useCallback, useEffect} from 'react';
 import {
+  Box,
   Dialog,
   DialogActions,
   Button,
   Divider,
   MuiThemeProvider,
+  CircularProgress,
+  makeStyles,
+  DialogContent,
 } from '@material-ui/core';
 import {MuiPickersUtilsProvider} from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import {getCardById} from 'api/Card';
+import CenteringBox from 'components/CenteringBox';
 import CardDialogTitle from './dialogSections/CardDialogTitle';
 import {dialogTheme} from '../../../../themes/theme';
 import CardDialogContentBody from './CardDialogContentBody';
 import SectionInfos from './dialogSections/enums';
+import CardDialogButtonMenu from './dialogSections/CardDialogButtonMenu';
+
+const useStyles = makeStyles({
+  content: {
+    display: 'flex',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+  },
+});
 
 const detailsReducer = (details, updatedSection) => {
   return {...details, ...updatedSection};
 };
 
+// TODO: Make title editable
+// TODO: Make col editable
 const CardDialog = ({
+  id,
   title,
   columnName,
-  color: initColor,
-  description: initDesc,
-  checklist: initChecklist,
-  deadline: initDeadline,
-  comments: initComments,
-  attachments: initAttachments,
   tags: initTags,
   onClose,
   onSave,
+  open,
   ...rest
 }) => {
+  const classes = useStyles();
   const subtitle = `In list "${columnName}"`;
-  const [cardFields, dispatchCardUpdate] = useReducer(detailsReducer, {
-    color: initColor,
-    description: initDesc,
-    checklist: initChecklist,
-    deadline: initDeadline,
-    comments: initComments,
-    attachments: initAttachments,
-    tags: initTags,
-  });
+  const [sections, setSections] = useState([]);
+  const [lockedSections, setLockedSections] = useState([]);
+  const [cardFields, dispatchCardUpdate] = useReducer(detailsReducer, {});
+  const [loading, setLoading] = useState(false);
+
+  // On mount, fetch detailed card data:
+  useEffect(() => {
+    const loadDetails = async () => {
+      setLoading(true);
+      const {success, data, errors} = await getCardById(id);
+      if (success) {
+        const {
+          details: {
+            meta: {sections: initSections, lockedSections: initLockedSections},
+            ...details
+          },
+        } = data;
+
+        setSections(initSections.length === 0 ? ['DESC'] : initSections);
+        setLockedSections(initLockedSections);
+        dispatchCardUpdate(details);
+      } else {
+        // TODO: Snackbar
+        console.log(errors);
+      }
+      setLoading(false);
+    };
+    if (open) {
+      loadDetails();
+    }
+    return () => {
+      // TODO: cancel request (axios cancel tokens)
+    };
+  }, [id, open]);
+
+  const addSection = (sectionCode) => {
+    if (!sections.includes(sectionCode)) {
+      const updated = [...sections, sectionCode];
+      setSections(updated);
+    }
+  };
+  const deleteSection = (sectionCode) => {
+    const updated = sections.filter((code) => code !== sectionCode);
+    setSections(updated);
+  };
+  const toggleLock = useCallback(
+    (sectionCode) =>
+      setLockedSections((prevLocked) => {
+        if (prevLocked.includes(sectionCode)) {
+          return prevLocked.filter((lockedCode) => lockedCode !== sectionCode);
+        }
+
+        return [...prevLocked, sectionCode];
+      }),
+    [setLockedSections],
+  );
+
+  const saveAndExit = () => {
+    const meta = {sections, lockedSections};
+    const initDetails = {meta, color: cardFields.color};
+
+    const updatedDetails = sections.reduce((obj, sectionCode) => {
+      const {dbPropName} = SectionInfos[sectionCode];
+      return {...obj, [dbPropName]: cardFields[dbPropName]};
+    }, initDetails);
+
+    onSave({details: updatedDetails});
+    onClose();
+  };
+  const discardAndExit = () => {
+    onClose();
+  };
+
+  // Destructuring/formatting details for rendering purposes:
   const {
     color,
     description,
@@ -60,57 +139,25 @@ const CardDialog = ({
     // COVR: cover,
   };
 
-  const [sections, setSections] = useState(
-    Object.keys(SectionInfos).filter(
-      (sectionCode) =>
-        !SectionInfos[sectionCode].optional || sectionValues[sectionCode],
-    ),
-  );
-  const [lockedSections, setLockedSections] = useState([]);
-
-  const addSection = (sectionCode) => {
-    if (!sections.includes(sectionCode)) {
-      const updated = [...sections, sectionCode];
-      setSections(updated);
-    }
-  };
-
-  const deleteSection = (sectionCode) => {
-    const updated = sections.filter((code) => code !== sectionCode);
-    setSections(updated);
-  };
-
-  const toggleLock = useCallback(
-    (sectionCode) =>
-      setLockedSections((prevLocked) => {
-        if (prevLocked.includes(sectionCode)) {
-          return prevLocked.filter((lockedCode) => lockedCode !== sectionCode);
-        }
-
-        return [...prevLocked, sectionCode];
-      }),
-    [setLockedSections],
+  const ContentBody = loading ? (
+    <CenteringBox alignSelf="stretch" flexGrow={1}>
+      <CircularProgress />
+    </CenteringBox>
+  ) : (
+    <CardDialogContentBody
+      lockedSections={lockedSections}
+      toggleLock={toggleLock}
+      sections={sections}
+      sectionValues={sectionValues}
+      deleteSection={deleteSection}
+      dispatchUpdate={dispatchCardUpdate}
+    />
   );
 
-  const saveAndExit = () => {
-    // NOTE: Manually construct details outside of section (i.e only color for now)
-    const initDetails = {color};
-    const updatedDetails = sections.reduce((obj, sectionCode) => {
-      const {dbPropName} = SectionInfos[sectionCode];
-      return {...obj, [dbPropName]: cardFields[dbPropName]};
-    }, initDetails);
-
-    onSave({title, details: updatedDetails});
-    onClose();
-  };
-
-  const discardAndExit = () => {
-    onClose();
-  };
   return (
     <MuiThemeProvider theme={dialogTheme}>
       <MuiPickersUtilsProvider utils={DateFnsUtils}>
-        <Dialog fullWidth onClose={onClose} {...rest}>
+        <Dialog fullWidth open={open} onClose={onClose} {...rest}>
           <CardDialogTitle
             onClose={onClose}
             cardColor={color}
@@ -120,15 +167,20 @@ const CardDialog = ({
             {title}
           </CardDialogTitle>
           <Divider variant="fullWidth" light />
-          <CardDialogContentBody
-            lockedSections={lockedSections}
-            toggleLock={toggleLock}
-            sections={sections}
-            sectionValues={sectionValues}
-            addSection={addSection}
-            deleteSection={deleteSection}
-            dispatchUpdate={dispatchCardUpdate}
-          />
+          <DialogContent className={classes.content}>
+            {ContentBody}
+            <Box
+              width="130px"
+              minWidth="130px"
+              maxWidth="130px"
+              alignSelf="stretch"
+              position="sticky"
+              top={0}
+              marginLeft={3}
+            >
+              <CardDialogButtonMenu handleAdd={addSection} />
+            </Box>
+          </DialogContent>
 
           <DialogActions>
             <Button

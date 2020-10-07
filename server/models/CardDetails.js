@@ -1,6 +1,13 @@
 const mongoose = require("mongoose");
 
 const CardDetailsSchema = new mongoose.Schema({
+  meta: {
+    type: {
+      sections: [String],
+      lockedSections: [String],
+    },
+    default: { sections: [], lockedSections: [] },
+  },
   color: String, // hexcode
   description: String,
   checklist: { type: [Object], default: undefined },

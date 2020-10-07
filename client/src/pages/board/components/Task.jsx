@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Card, Typography} from '@material-ui/core';
 import {Draggable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
-import {getCardById, updateCard} from 'api/Card';
+import {updateCard} from 'api/Card';
 import CardDialog from './dashboardForms/CardDialog';
 
 const useStyles = makeStyles((theme) => ({
@@ -31,44 +31,35 @@ const useStyles = makeStyles((theme) => ({
 export default function Task({id, columnName, title, index}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [details, setDetails] = useState(null);
+  const [saveRequestData, setSaveRequestData] = useState(null);
 
   const handleOpen = () => {
     setOpen(true);
   };
-
   const handleClose = () => {
     setOpen(false);
   };
-
-  const handleSave = async ({title: updatedTitle, details: updatedDetails}) => {
-    const {success, error} = await updateCard(id, updatedTitle, updatedDetails);
-    if (success) {
-      setDetails(updatedDetails);
-    } else {
-      console.error(error);
-    }
-  };
-
   useEffect(() => {
-    const loadDetails = async () => {
-      const {success, data, error} = await getCardById(id);
+    const submitSaveRequest = async () => {
+      const {details} = saveRequestData;
+      const {success, errors} = await updateCard({id, title, details});
+      // TODO: display snackbars
       if (success) {
-        const {details: fetched} = data;
-        setDetails(fetched);
+        setSaveRequestData(null);
       } else {
-        console.log(error);
+        // TODO: Retry?
+        console.error(errors);
       }
     };
 
-    if (open) {
-      loadDetails();
+    if (saveRequestData) {
+      submitSaveRequest();
     }
-    return () => {
-      // TODO: Cancel request?
-    };
-  }, [id, open]);
+    // TODO: Cleanup request.
+  }, [id, title, saveRequestData]);
 
+  const handleSave = (detailedCardData) => setSaveRequestData(detailedCardData);
+  // TODO: Move dialog component outside of tasks, potentially to app ?
   return (
     <>
       <Draggable draggableId={id} index={index}>
@@ -88,16 +79,14 @@ export default function Task({id, columnName, title, index}) {
           </Card>
         )}
       </Draggable>
-      {details && (
-        <CardDialog
-          title={title}
-          columnName={columnName}
-          {...details}
-          open={open}
-          onClose={handleClose}
-          onSave={handleSave}
-        />
-      )}
+      <CardDialog
+        title={title}
+        id={id}
+        columnName={columnName}
+        open={open}
+        onClose={handleClose}
+        onSave={handleSave}
+      />
     </>
   );
 }

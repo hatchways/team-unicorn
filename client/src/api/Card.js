@@ -37,12 +37,12 @@ export const getCardById = async (id) => {
 
     return ApiResultFactory.withData(respData);
   } catch (err) {
-    return {data: [], loading: false, error: true};
+    return defaultErrorHandler(err);
   }
 };
 
 // Update Card by Id
-export const updateCard = async (id, title, details) => {
+export const updateCard = async ({id, title, details}) => {
   try {
     const url = `/api/cards/${id}`;
 
