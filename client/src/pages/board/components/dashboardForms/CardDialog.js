@@ -34,7 +34,7 @@ const CardDialog = ({
   const subtitle = `In list "${columnName}"`;
   const [cardFields, dispatchCardUpdate] = useReducer(detailsReducer, {
     color: initColor,
-    desc: initDesc,
+    description: initDesc,
     checklist: initChecklist,
     deadline: initDeadline,
     comments: initComments,
@@ -43,7 +43,7 @@ const CardDialog = ({
   });
   const {
     color,
-    desc,
+    description,
     checklist,
     deadline,
     comments,
@@ -51,7 +51,7 @@ const CardDialog = ({
     tags,
   } = cardFields;
   const sectionValues = {
-    DESC: desc,
+    DESC: description,
     CHCK: checklist,
     DEDL: deadline,
     COMM: comments,
