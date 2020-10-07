@@ -42,7 +42,7 @@ const AppLayout = ({children}) => {
             <AppLogo />
           </Box>
           <CenteringBox boxSizing="border-box" flexBasis="40%" flexGrow={1}>
-            <SwitchView />
+            <SwitchView path="Dashboard" />
           </CenteringBox>
           <Box
             display="flex"
