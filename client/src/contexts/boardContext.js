@@ -1,6 +1,7 @@
 import React, {createContext, useEffect, useReducer, useState} from 'react';
 import Board from 'api/Board';
-// import {updateColumn} from 'api/Column'
+import {updateColumn} from 'api/Column';
+
 const initialState = {
   id: null,
   columns: {},
@@ -45,6 +46,11 @@ const reducers = {
         ...state.columns,
         [prevColumn.id]: prevColumn,
       };
+      updateColumn(prevColumn.id, {
+        _id: prevColumn.id,
+        name: prevColumn.title,
+        cards: prevColumn.taskIds,
+      });
     } else {
       // Moving cards between different columns
       const nextTaskIds = Array.from(state.columns[nextColId].taskIds);
@@ -59,8 +65,18 @@ const reducers = {
         [prevColumn.id]: prevColumn,
         [nextColumn.id]: nextColumn,
       };
-    }
 
+      updateColumn(prevColumn.id, {
+        _id: prevColumn.id,
+        name: prevColumn.title,
+        cards: prevColumn.taskIds,
+      });
+      updateColumn(nextColumn.id, {
+        _id: nextColumn.id,
+        name: nextColumn.title,
+        cards: nextColumn.taskIds,
+      });
+    }
     return newState;
   },
   addCol: (state, col) => {
@@ -81,6 +97,7 @@ const reducers = {
     const col = newState.columnOrder[fromIndex];
     newState.columnOrder.splice(fromIndex, 1);
     newState.columnOrder.splice(toIndex, 0, col);
+    Board.saveData(state.id, {columns: newState.columnOrder});
     return newState;
   },
   initBoard: (boardData) => {
