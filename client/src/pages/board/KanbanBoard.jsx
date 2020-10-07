@@ -2,7 +2,6 @@ import React, {useContext, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
-import Board from 'api/Board';
 import {BoardContext} from 'contexts/boardContext';
 import Column from './components/Column';
 
@@ -162,7 +161,6 @@ export default function KanbanBoard() {
         fromIndex: source.index,
         toIndex: destination.index,
       });
-      await Board.saveData(data.id, data.columnOrder);
       return;
     }
 
@@ -173,8 +171,6 @@ export default function KanbanBoard() {
       fromIndex: source.index,
       toIndex: destination.index,
     });
-
-    await Board.saveData(data.id, data.columnOrder);
   };
 
   return (
