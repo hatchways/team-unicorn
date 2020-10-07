@@ -45,9 +45,13 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     alignContent: 'center',
   },
+  dashboardContainer: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+  },
   addColumnContainer: {
-    width: '30vh',
-    // overflow: 'hidden',
+    width: '5%',
     '&#leftNav': {
       '& .addColumnContent': {
         minHeight: '500px',
@@ -63,16 +67,16 @@ const useStyles = makeStyles((theme) => ({
           alignItems: 'center',
           '& button': {
             marginRight: '10px',
-            backgroundColor: 'lightgrey',
+            backgroundColor: theme.palette.props.slideFont,
             padding: '0px',
-            color: 'grey',
+            color: theme.palette.props.slideBackground,
           },
           '&:hover': {
             padding: '0 0 0 20px',
             left: 0,
-            position: 'absolute',
+            position: 'relative',
             width: 'fit-content',
-            backgroundColor: 'lightgrey',
+            backgroundColor: theme.palette.props.slideBackground,
             transition: '0.05s',
           },
         },
@@ -96,14 +100,14 @@ const useStyles = makeStyles((theme) => ({
           minHeight: '500px',
           '& button': {
             marginLeft: '10px',
-            backgroundColor: 'lightgrey',
-            color: 'grey',
+            backgroundColor: theme.palette.props.slideFont,
+            color: theme.palette.props.slideBackground,
             padding: '0px',
           },
           '&:hover': {
-            position: 'absolute',
+            position: 'relative',
             width: 'fit-content',
-            backgroundColor: 'lightgrey',
+            backgroundColor: theme.palette.props.slideBackground,
             right: 0,
             padding: '0 10px 0 0',
           },
@@ -171,30 +175,36 @@ export default function KanbanBoard() {
   };
 
   return (
-    <DragDropContext onDragEnd={onDragEnd}>
-      {/* // Add Left and Right Hover Bars for adding columns */}
+    <div className={classes.dashboardContainer}>
+      {/* Add Left and Right Hover Bars for adding columns */}
       <div className={classes.addColumnContainer} id="leftNav">
         {data.columns ? (
           <AddColumnSidebar data={data} boardId={data.id} />
         ) : null}
       </div>
-      <Droppable droppableId="all-columns" direction="horizontal" type="column">
-        {(provided) => (
-          <Grid
-            className={classes.root}
-            {...provided.droppableProps}
-            innerRef={provided.innerRef}
-          >
-            <Columns data={data} />
-            {provided.placeholder}
-          </Grid>
-        )}
-      </Droppable>
+      <DragDropContext onDragEnd={onDragEnd}>
+        <Droppable
+          droppableId="all-columns"
+          direction="horizontal"
+          type="column"
+        >
+          {(provided) => (
+            <Grid
+              className={classes.root}
+              {...provided.droppableProps}
+              innerRef={provided.innerRef}
+            >
+              <Columns data={data} />
+              {provided.placeholder}
+            </Grid>
+          )}
+        </Droppable>
+      </DragDropContext>
       <div className={classes.addColumnContainer} id="rightNav">
         {data.columns ? (
           <AddColumnSidebar data={data} boardId={data.id} />
         ) : null}
       </div>
-    </DragDropContext>
+    </div>
   );
 }

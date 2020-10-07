@@ -86,7 +86,7 @@ const AppLayout = ({
           />
         </Box>
       </Box>
-      <CenteringBox flexGrow={1}>{children}</CenteringBox>
+      <Box>{children}</Box>
     </Box>
   );
 };
