@@ -10,7 +10,7 @@ const useStyle = makeStyles((theme) => ({
     textTransform: 'none',
     minHeight: 0,
     minWidth: 36,
-    fontWeight: theme.typography.fontWeightRegular,
+    fontWeight: theme.typography.fontWeightMedium,
   },
   tabWrapper: {
     flexDirection: 'row',
