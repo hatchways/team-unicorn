@@ -7,16 +7,16 @@ import Section from './components/Section';
 const CardDialogDeadline = ({
   value: deadline,
   propName,
+  locked,
+  toggleLock,
   dispatchUpdate,
   ...other
 }) => {
   const [open, setOpen] = useState(false);
-  const [locked, setLocked] = useState(false);
 
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const handleDateChange = (val) => dispatchUpdate({[propName]: val});
-  const handleToggleLock = () => setLocked((prevLock) => !prevLock);
 
   const TextFieldComponent = ({...props}) => (
     <TextField
@@ -28,7 +28,7 @@ const CardDialogDeadline = ({
   );
 
   return (
-    <Section locked={locked} handleToggleLock={handleToggleLock} {...other}>
+    <Section locked={locked} handleToggleLock={toggleLock} {...other}>
       <SectionContent>
         <KeyboardDatePicker
           id="deadline-date"

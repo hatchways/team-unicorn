@@ -12,6 +12,8 @@ const useStyles = makeStyles({
 });
 
 const CardDialogContentBody = ({
+  lockedSections,
+  toggleLock,
   sections,
   sectionValues,
   addSection,
@@ -41,6 +43,7 @@ const CardDialogContentBody = ({
             ];
 
             const render = sections.includes(sectionCode);
+            const locked = lockedSections.includes(sectionCode);
             const result = render && (
               <SectionComponent
                 key={sectionCode}
@@ -51,6 +54,8 @@ const CardDialogContentBody = ({
                 value={sectionValues[sectionCode]}
                 propName={SectionInfos[sectionCode].dbPropName}
                 dispatchUpdate={dispatchUpdate}
+                locked={locked}
+                toggleLock={toggleLock}
                 optional={SectionInfos[sectionCode].optional}
               />
             );

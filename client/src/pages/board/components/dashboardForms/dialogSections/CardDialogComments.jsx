@@ -1,5 +1,5 @@
+import React from 'react';
 import {Box, Button, List} from '@material-ui/core';
-import React, {useState} from 'react';
 import AddCommentIcon from '@material-ui/icons/AddCommentOutlined';
 import SectionContent from './components/SectionContent';
 import Comment from './components/Comment';
@@ -21,13 +21,12 @@ import Section from './components/Section';
 const CardDialogComments = ({
   value: comments,
   propName,
+  locked,
+  toggleLock,
   dispatchUpdate,
   ...other
 }) => {
-  const [locked, setLocked] = useState(false);
-
   const setComments = (value) => dispatchUpdate({[propName]: value});
-  const toggleLock = () => setLocked((prevLocked) => !prevLocked);
 
   const addComment = ({comment = ''}) => {
     const newComment = {timestamp: Date.now(), comment};

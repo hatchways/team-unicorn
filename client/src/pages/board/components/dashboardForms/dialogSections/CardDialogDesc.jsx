@@ -1,13 +1,17 @@
-import React, {useState} from 'react';
+import React from 'react';
 import SectionContent from './components/SectionContent';
 import Section from './components/Section';
 import TextFieldOnFocusTypography from './components/TextFieldOnFocusTypography';
 
-const CardDialogDesc = ({value: desc, propName, dispatchUpdate, ...other}) => {
-  const [locked, setLocked] = useState(false);
-
+const CardDialogDesc = ({
+  value: desc,
+  locked,
+  toggleLock,
+  propName,
+  dispatchUpdate,
+  ...other
+}) => {
   const save = (val) => dispatchUpdate({[propName]: val});
-  const toggleLock = () => setLocked((prevLocked) => !prevLocked);
 
   return (
     <Section locked={locked} handleToggleLock={toggleLock} {...other}>

@@ -24,7 +24,7 @@ const Section = ({
 }) => {
   const classes = useStyles();
 
-  const onLock = () => handleToggleLock();
+  const onLock = () => handleToggleLock(code);
   const onDelete = () => handleDelete(code);
 
   const LockIcon = locked ? LockedIcon : UnlockedIcon;

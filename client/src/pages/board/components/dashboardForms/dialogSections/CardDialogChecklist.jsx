@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {Box, List, Button} from '@material-ui/core';
 import AddItemIcon from '@material-ui/icons/PlaylistAddRounded';
 import ChecklistItem from './components/ChecklistItem';
@@ -8,13 +8,11 @@ import SectionContent from './components/SectionContent';
 const CardDialogChecklist = ({
   value: checklist,
   propName,
+  locked,
+  toggleLock,
   dispatchUpdate,
   ...other
 }) => {
-  const [locked, setLocked] = useState(false);
-
-  const toggleLock = () => setLocked((prevLockState) => !prevLockState);
-
   const setChecklist = (value) => dispatchUpdate({[propName]: value});
 
   const addItem = ({checked = false, text = ''}) => {

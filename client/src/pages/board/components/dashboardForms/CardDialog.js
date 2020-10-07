@@ -1,4 +1,4 @@
-import React, {useReducer, useState} from 'react';
+import React, {useReducer, useState, useCallback} from 'react';
 import {
   Dialog,
   DialogActions,
@@ -66,6 +66,7 @@ const CardDialog = ({
         !SectionInfos[sectionCode].optional || sectionValues[sectionCode],
     ),
   );
+  const [lockedSections, setLockedSections] = useState([]);
 
   const addSection = (sectionCode) => {
     if (!sections.includes(sectionCode)) {
@@ -78,6 +79,18 @@ const CardDialog = ({
     const updated = sections.filter((code) => code !== sectionCode);
     setSections(updated);
   };
+
+  const toggleLock = useCallback(
+    (sectionCode) =>
+      setLockedSections((prevLocked) => {
+        if (prevLocked.includes(sectionCode)) {
+          return prevLocked.filter((lockedCode) => lockedCode !== sectionCode);
+        }
+
+        return [...prevLocked, sectionCode];
+      }),
+    [setLockedSections],
+  );
 
   const saveAndExit = () => {
     // NOTE: Manually construct details outside of section (i.e only color for now)
@@ -108,6 +121,8 @@ const CardDialog = ({
           </CardDialogTitle>
           <Divider variant="fullWidth" light />
           <CardDialogContentBody
+            lockedSections={lockedSections}
+            toggleLock={toggleLock}
             sections={sections}
             sectionValues={sectionValues}
             addSection={addSection}
