@@ -1,5 +1,5 @@
 import React, {createContext, useEffect, useReducer, useState} from 'react';
-import Board from '../api/Board';
+import Board from 'api/Board';
 import reducers from './boardReducers';
 
 const initialState = {

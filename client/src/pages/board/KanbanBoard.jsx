@@ -2,9 +2,9 @@ import React, {useContext, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
-import Board from 'api/Board';
 import {BoardContext} from 'contexts/boardContext';
 import boardActions from 'contexts/boardActions';
+import Board from 'api/Board';
 import Column from './components/Column';
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
