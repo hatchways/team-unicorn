@@ -3,8 +3,10 @@ import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
 import {BoardContext} from 'contexts/boardContext';
-import boardActions from 'contexts/boardActions';
 import Column from './components/Column';
+
+// import {updateColumn} from '../../api/Column';
+
 import AddColumnSidebar from './components/dashboardUI/AddColumnSidebar';
 
 const useStyles = makeStyles((theme) => ({
@@ -46,7 +48,7 @@ const useStyles = makeStyles((theme) => ({
   },
   addColumnContainer: {
     width: '30vh',
-    // overflow: 'hidden',
+    overflow: 'hidden',
     '&#leftNav': {
       '& .addColumnContent': {
         minHeight: '500px',
@@ -69,7 +71,7 @@ const useStyles = makeStyles((theme) => ({
           '&:hover': {
             padding: '0 0 0 20px',
             left: 0,
-            position: 'absolute',
+            position: 'relative',
             width: 'fit-content',
             backgroundColor: 'lightgrey',
             transition: '0.05s',
@@ -100,7 +102,7 @@ const useStyles = makeStyles((theme) => ({
             padding: '0px',
           },
           '&:hover': {
-            position: 'absolute',
+            position: 'relative',
             width: 'fit-content',
             backgroundColor: 'lightgrey',
             right: 0,
@@ -154,18 +156,21 @@ export default function KanbanBoard() {
     }
 
     if (type === 'column') {
-      await boardActions.moveColumn(source.index, destination.index, dispatch);
+      await dispatch({
+        type: 'MOVE_COL',
+        fromIndex: source.index,
+        toIndex: destination.index,
+      });
       return;
     }
 
-    // moving cards
-    await boardActions.moveCard(
-      source.droppableId,
-      destination.droppableId,
-      source.index,
-      destination.index,
-      dispatch,
-    );
+    await dispatch({
+      type: 'MOVE_CARD',
+      prevCol: source.droppableId,
+      nextCol: destination.droppableId,
+      fromIndex: source.index,
+      toIndex: destination.index,
+    });
   };
 
   return (

@@ -1,21 +1,10 @@
-import React, {memo, useState, useContext} from 'react';
+import React, {memo, useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import {Droppable, Draggable} from 'react-beautiful-dnd';
-import {
-  Button,
-  Box,
-  Grid,
-  IconButton,
-  Input,
-  Typography,
-} from '@material-ui/core';
-import DeleteIcon from '@material-ui/icons/Delete';
+import {Button, Grid, Typography} from '@material-ui/core';
 
-import {updateColumn, removeColumn} from 'api/Column';
 import Task from './Task';
 import AddCardDialogForm from './dashboardForms/AddCardDialogForm';
-import boardActions from '../../../contexts/boardActions';
-import {BoardContext} from '../../../contexts/boardContext';
 
 const useStyles = makeStyles((theme) => ({
   column: {
@@ -64,33 +53,10 @@ const Tasks = memo(({tasks}) =>
 export default function Column({column, index, tasks, setUpdate}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
-  const [title, setTitle] = useState(column.title);
-  const [isEditing, setEditing] = useState(false);
-  const {dispatch} = useContext(BoardContext);
+
   const handleClickOpen = () => {
     setOpen(true);
   };
-  const editTitle = (e) => {
-    e.preventDefault();
-    setTitle(e.target.value);
-  };
-
-  const finishEdit = () => {
-    setEditing(false);
-    updateColumn(column.id, {name: title});
-  };
-
-  const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      finishEdit();
-    }
-  };
-
-  const deleteCol = () => {
-    boardActions.deleteColumn(column.id, dispatch);
-    removeColumn(column.id);
-  };
-
   return (
     <Draggable draggableId={column.id} index={index}>
       {(providedForDraggable) => (
@@ -99,36 +65,9 @@ export default function Column({column, index, tasks, setUpdate}) {
           {...providedForDraggable.draggableProps}
           innerRef={providedForDraggable.innerRef}
         >
-          <Box />
-          <Grid container alignItems="center">
-            <Grid item xs={8}>
-              {isEditing ? (
-                <Input
-                  placeholder={title}
-                  onBlur={finishEdit}
-                  onChange={(e) => editTitle(e)}
-                  onKeyDown={(e) => handleKeyDown(e)}
-                  fullWidth="false"
-                />
-              ) : (
-                <Typography
-                  variant="h6"
-                  {...providedForDraggable.dragHandleProps}
-                  noWrap
-                  onDoubleClick={() => setEditing(true)}
-                >
-                  {title}
-                </Typography>
-              )}
-            </Grid>
-            <Grid item xs />
-            <Grid item xs={3}>
-              <IconButton edge="end" aria-label="delete" onClick={deleteCol}>
-                <DeleteIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-
+          <Typography variant="h6" {...providedForDraggable.dragHandleProps}>
+            {column.title}
+          </Typography>
           <Droppable droppableId={column.id} type="task">
             {(providedForDroppable, snapshot) => (
               <Grid

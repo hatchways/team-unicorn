@@ -25,7 +25,9 @@ const AddColumnSidebar = ({boardId, data}) => {
           open={open}
           setOpen={setOpen}
           boardId={boardId}
+          // setLoadBoard={setLoadBoard}
           data={data}
+          // setData={setData}
         />
       )}
     </>

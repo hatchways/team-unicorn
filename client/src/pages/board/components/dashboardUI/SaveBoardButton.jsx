@@ -1,6 +1,6 @@
 import React from 'react';
 import {Button} from '@material-ui/core';
-import Board from 'api/Board';
+import Board from '../../../../api/Board';
 
 const SaveBoardButton = (props) => {
   const {state} = props;

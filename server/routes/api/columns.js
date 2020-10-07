@@ -46,22 +46,20 @@ router.post(
 // @access private
 router.put(
   "/:id",
-  [auth, validate],
+  [auth, columnValidationRules(), validate],
   (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
     Column.findByIdAndUpdate(req.params.id, req.body, (err, updatedColumn) => {
-      if (!updatedColumn) {
-        console.log(updatedColumn)
+      if (!updatedColumn)
         return res.status(400).send({ msg: "Invalid Column" });
-      }
 
       console.log(updatedColumn);
-      res.status(200).send(updatedColumn);
+      res.send(updatedColumn);
     });
   }
 );
 
-// @route GET  /api/columns/:id
+// @route GET  /api/columns/show/:id
 // @desc Get the column by columnId
 // @access Private
 router.get("/:id", auth, (req, res) => {
@@ -72,13 +70,4 @@ router.get("/:id", auth, (req, res) => {
   });
 });
 
-router.delete("/:id", auth, async (req, res) => {
-  try {
-    await Column.findByIdAndDelete(req.params.id)
-    res.sendStatus(200)
-  } catch(e) {
-    console.log(e)
-    res.status(500).send(e)
-  }
-})
 module.exports = router;
