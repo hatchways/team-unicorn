@@ -48,9 +48,12 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CalendarView = () => {
-  const {convertedCalendar, AddCardToCalendar, UpdateDeadline} = useContext(
-    BoardContext,
-  );
+  const {
+    convertedCalendar,
+    AddCardToCalendar,
+    UpdateDeadline,
+    data,
+  } = useContext(BoardContext);
   const {calendarEvents} = convertedCalendar;
   const classes = useStyles();
 
@@ -66,24 +69,26 @@ const CalendarView = () => {
   };
 
   const handleEventDateClick = async (info) => {
-    // const calendarApi = info.view.calendar;
+    const calendarApi = info.view.calendar;
     const name = 'Add title ...';
     const deadline = info.date;
+
     await AddCardToCalendar({
       name,
       deadline,
     });
-    // Todo AddEvent
+    // Todo
+    // AddEvent to CalendarAPI
 
-    // if (!payload.error) {
-    //   calendarApi.addEvent({
-    //     title: name,
-    //     start: deadline,
-    //     id: payload.data.id,
-    //     backgroundColor: 'transparent',
-    //     borderColor: 'transparent',
-    //   });
-    // }
+    if (data) {
+      calendarApi.addEvent({
+        title: name,
+        start: deadline,
+        id: data.id,
+        backgroundColor: 'transparent',
+        borderColor: 'transparent',
+      });
+    }
   };
 
   const renderEventContent = (eventInfo) => {
@@ -93,8 +98,7 @@ const CalendarView = () => {
   const handleEventChange = async (info) => {
     const changeEvent = info.event;
     const editedCard = {};
-    // eslint-disable-next-line no-underscore-dangle
-    editedCard._id = changeEvent.id;
+    editedCard.id = changeEvent.id;
     editedCard.deadline = changeEvent.start;
     // Todo UpdateEvent
     UpdateDeadline(editedCard);

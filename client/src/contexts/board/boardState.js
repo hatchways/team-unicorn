@@ -23,6 +23,7 @@ const initialState = {
   convertedCalendar: null,
   loading: false,
   error: false,
+  data: null,
   view: 'dashboard',
 };
 const BoardState = ({children}) => {
@@ -47,7 +48,7 @@ const BoardState = ({children}) => {
       setLoading();
       try {
         const res = await getBoards();
-        console.log(res);
+
         dispatch({
           type: INIT,
           payload: res,
@@ -66,16 +67,27 @@ const BoardState = ({children}) => {
 
   // Add Card By Column Id
   const AddCardToCalendar = async (card) => {
-    const res = await addCardByColumnId(
-      state.convertedCalendar.inProgessId,
-      card,
-    );
-    dispatch({type: ADDCARD_CALENDAR, payload: res.data});
+    const columnid = state.convertedCalendar.inProgessId;
+    const res = await addCardByColumnId(columnid, card);
+
+    const cardsArray = state.board.columns.filter(
+      (column) => column.id === columnid,
+    )[0].cards;
+
+    cardsArray.push(res.data);
+    dispatch({
+      type: ADDCARD_CALENDAR,
+      payload: res.data,
+    });
   };
 
   // Change View
-  const ChangeView = (view) => {
-    dispatch({type: CHANGE_VIEW, payload: view});
+  const ChangeView = async (view) => {
+    const {convertedCalendar, convertedBoard} = await LoadViewData(state.board);
+    dispatch({
+      type: CHANGE_VIEW,
+      payload: {view, convertedCalendar, convertedBoard},
+    });
   };
 
   // Change Board
@@ -84,7 +96,6 @@ const BoardState = ({children}) => {
       (board) => board.id === boardId,
     )[0];
     const {convertedCalendar, convertedBoard} = await LoadViewData(newBoard);
-
     dispatch({
       type: CHANGE_BOARD,
       payload: {newBoard, convertedCalendar, convertedBoard},
@@ -114,6 +125,7 @@ const BoardState = ({children}) => {
         loading: state.loading,
         error: state.error,
         view: state.view,
+        data: state.data,
         ChangeBoard,
         AddBoard,
         ChangeView,

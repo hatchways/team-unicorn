@@ -9,10 +9,10 @@ import BoardContext from '../../../contexts/board/boardContext';
 const useStyles = makeStyles(() => ({
   sideNav: {
     marginTop: '20px',
-    cursor: 'pointer',
     marginRight: '10px',
   },
   sideNavCards: {
+    cursor: 'pointer',
     padding: '10px',
     margin: '10px 5px',
   },

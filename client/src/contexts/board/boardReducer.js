@@ -19,15 +19,16 @@ const BoardReducer = (state, action) => {
         loading: false,
       };
     case ADDCARD_CALENDAR:
-      // Todo
       return {
         ...state,
-        loading: false,
+        data,
       };
     case CHANGE_VIEW:
       return {
         ...state,
-        view: data,
+        view: data.view,
+        convertedBoard: data.convertedBoard,
+        convertedCalendar: data.convertedCalendar,
       };
     case ADD_BOARD:
       return {
