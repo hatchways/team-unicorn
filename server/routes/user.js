@@ -6,6 +6,7 @@ const authenticator = require("../middleware/authenticator");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+
 const {
   validate,
   createValidationRules,
@@ -14,6 +15,9 @@ const {
 
 const User = require("../models/User");
 
+const EmailSender = require('./api/email');
+const SUBJECT = 'Thank you for signing up!'
+const emailText = (name) => `Thank you for Signing up for our Kanban Board app: ${name}. We really appreciate it!`
 // TODO: Find a more appropriate place to put this?
 // Auth token time-to-live in ms.
 const AuthTokenTTL = 7 * 24 * 60 * 60 * 1000;
@@ -66,6 +70,11 @@ router.post("/create", createValidationRules(), validate, async (req, res) => {
 
     res.cookie("auth-token", token, { httpOnly: true });
     res.status(201).json(payload);
+
+    //send user notification that they signed up
+    const message = await EmailSender.createMessage(email, SUBJECT, emailText(name))
+    EmailSender.sendEmail(message)
+
   } catch (err) {
     console.error(err.message);
     res
