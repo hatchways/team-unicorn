@@ -6,8 +6,8 @@ const boardActions = {
       task,
     });
   },
-  moveCard: (prevCol, nextCol, fromIndex, toIndex, dispatch) => {
-    dispatch({
+  moveCard: async (prevCol, nextCol, fromIndex, toIndex, dispatch) => {
+    await dispatch({
       type: 'MOVE_CARD',
       prevCol,
       nextCol,
@@ -26,6 +26,12 @@ const boardActions = {
       type: 'MOVE_COL',
       fromIndex,
       toIndex,
+    });
+  },
+  deleteColumn: (colId, dispatch) => {
+    dispatch({
+      type: 'DELETE_COL',
+      colId,
     });
   },
   initBoard: (board, dispatch) => {

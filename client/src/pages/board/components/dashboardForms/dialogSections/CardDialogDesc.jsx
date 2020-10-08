@@ -21,7 +21,7 @@ const CardDialogDesc = ({
             id: 'card-desc',
             name: 'card-desc',
             autoComplete: 'off',
-            rows: 2,
+            rows: 1,
             rowsMax: 6,
             fullWidth: true,
           }}
