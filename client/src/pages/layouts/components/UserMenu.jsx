@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
+import React, {useState, useCallback, useContext} from 'react';
 import {Menu, MenuItem} from '@material-ui/core';
+import User from 'api/User';
 import AvatarDialogForm from './AvatarDialogForm';
-import LogOutButton from '../../auth/components/LogoutButton';
+import UserContext from '../../../contexts';
 
 const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
   const [profileOpen, setProfileOpen] = useState(false);
@@ -15,24 +16,32 @@ const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
     setAnchorElem(null);
   };
 
+  const userContext = useContext(UserContext);
+  const handleLogout = useCallback(async () => {
+    const {success, errors} = await User.endSession();
+    if (success) {
+      userContext.setUser(null);
+      userContext.setAuthenticated(false);
+    } else {
+      console.log(errors);
+      // TODO: Display snackbar
+    }
+  }, [userContext]);
+
   return (
     <>
       <Menu
-        id="simple-menu"
         anchorEl={anchorElem}
         keepMounted
         open={Boolean(anchorElem)}
         onClose={handleClose}
         getContentAnchorEl={null}
-        anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
-        transformOrigin={{vertical: 'top', horizontal: 'center'}}
+        anchorOrigin={{vertical: 'bottom', horizontal: 'right'}}
+        transformOrigin={{vertical: 'top', horizontal: 'right'}}
       >
         <MenuItem onClick={handleClose}>My account</MenuItem>
         <MenuItem onClick={openProfile}>Edit Profile Picture</MenuItem>
-        <MenuItem>
-          {' '}
-          <LogOutButton />{' '}
-        </MenuItem>
+        <MenuItem onClick={handleLogout}>Logout</MenuItem>
       </Menu>
 
       {profileOpen && (
