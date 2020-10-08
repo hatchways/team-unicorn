@@ -1,20 +1,60 @@
-import React, {useState} from 'react';
-
+import React, {useState, useContext} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
 
-import CalendarStyles from '../styles/CalendarStyles';
-
 import CalendarCard from './CalendarCard';
-import EditCardDialogForm from '../dashboardForms/EditCardDialogForm';
-import {getCardById, updateCard, addCardByColumnId} from '../../api/Card';
+import EditCardDialogForm from '../../board/components/dashboardForms/EditCardDialogForm';
+import {getCardById} from '../../../api/Card';
+import BoardContext from '../../../contexts/board/boardContext';
 
-const CalendarView = ({calendarEvents, inProgessId}) => {
-  const classes = CalendarStyles();
-  // eslint-disable-next-line
+const useStyles = makeStyles((theme) => ({
+  calendarContainer: {
+    width: '80%',
+    fontSize: '12px',
+    marginBottom: theme.spacing(10),
+    fontFamily: 'Montserrat, arial',
+    '& .cardItem': {
+      padding: '10px',
+      width: '100%',
+      margin: '0 2px',
+    },
+    '& .fc .fc-daygrid-day-top': {
+      flexDirection: 'row',
+      alignItems: 'baseline',
+      '& a': {
+        fontSize: '14px',
+        paddingRight: '10px',
+        paddingLeft: '5px',
+      },
+      '& .card-count': {
+        color: theme.palette.props.cardSubTitle,
+      },
+    },
+    '& .fc-toolbar-title': {
+      fontSize: '22px',
+      fontWeight: '600',
+    },
+    '& .fc-col-header-cell-cushion': {
+      fontSize: '12px',
+      color: '#9BA9CC',
+    },
+    '& .fc .fc-scroller-liquid-absolute': {
+      position: 'relative',
+      background: theme.palette.props.calendarBackground,
+    },
+  },
+}));
+
+const CalendarView = () => {
+  const {convertedCalendar, AddCardToCalendar, UpdateDeadline} = useContext(
+    BoardContext,
+  );
+  const {calendarEvents} = convertedCalendar;
+  const classes = useStyles();
+
   const [open, setOpen] = useState(false);
-  // eslint-disable-next-line
   const [detailCardData, setDetailCardData] = useState(false);
   const [detailCardError, setDetailCardError] = useState(false);
 
@@ -26,23 +66,24 @@ const CalendarView = ({calendarEvents, inProgessId}) => {
   };
 
   const handleEventDateClick = async (info) => {
-    const calendarApi = info.view.calendar;
+    // const calendarApi = info.view.calendar;
     const name = 'Add title ...';
     const deadline = info.date;
-    const payload = await addCardByColumnId(inProgessId, {
+    await AddCardToCalendar({
       name,
       deadline,
     });
-    if (!payload.error) {
-      calendarApi.addEvent({
-        title: name,
-        start: deadline,
-        // eslint-disable-next-line no-underscore-dangle
-        id: payload.data._id,
-        backgroundColor: 'transparent',
-        borderColor: 'transparent',
-      });
-    }
+    // Todo AddEvent
+
+    // if (!payload.error) {
+    //   calendarApi.addEvent({
+    //     title: name,
+    //     start: deadline,
+    //     id: payload.data.id,
+    //     backgroundColor: 'transparent',
+    //     borderColor: 'transparent',
+    //   });
+    // }
   };
 
   const renderEventContent = (eventInfo) => {
@@ -54,10 +95,9 @@ const CalendarView = ({calendarEvents, inProgessId}) => {
     const editedCard = {};
     // eslint-disable-next-line no-underscore-dangle
     editedCard._id = changeEvent.id;
-
     editedCard.deadline = changeEvent.start;
-    // eslint-disable-next-line no-unused-vars
-    const payload = await updateCard(editedCard);
+    // Todo UpdateEvent
+    UpdateDeadline(editedCard);
   };
 
   const handleEventDidMount = () => {

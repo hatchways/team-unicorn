@@ -39,8 +39,8 @@ export const updateCard = async (card) => {
       },
     };
     const body = JSON.stringify(card);
-    // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-    const url = `/api/cards/${card._id}`;
+
+    const url = `/api/cards/${card.id}`;
 
     const res = await axios.put(url, body, config);
 

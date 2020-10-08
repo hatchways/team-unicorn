@@ -1,7 +1,9 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Box, makeStyles, Button} from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/DashboardOutlined';
 import CalendarIcon from '@material-ui/icons/CalendarTodayOutlined';
+
+import BoardContext from '../../../contexts/board/boardContext';
 
 const useStyle = makeStyles((theme) => ({
   link: {
@@ -10,7 +12,8 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
-const SwitchView = ({setCurrentView}) => {
+const SwitchView = () => {
+  const {ChangeView} = useContext(BoardContext);
   const classes = useStyle();
 
   return (
@@ -20,7 +23,7 @@ const SwitchView = ({setCurrentView}) => {
         color="primary"
         startIcon={<DashboardIcon />}
         size="medium"
-        onClick={() => setCurrentView('dashboard')}
+        onClick={() => ChangeView('dashboard')}
       >
         Dashboard
       </Button>
@@ -30,7 +33,7 @@ const SwitchView = ({setCurrentView}) => {
         color="primary"
         startIcon={<CalendarIcon />}
         size="medium"
-        onClick={() => setCurrentView('calendar')}
+        onClick={() => ChangeView('calendar')}
       >
         Calendar
       </Button>

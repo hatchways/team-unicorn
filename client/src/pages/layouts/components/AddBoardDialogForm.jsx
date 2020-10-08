@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {makeStyles} from '@material-ui/core/styles';
 import {
   Typography,
   Button,
@@ -9,44 +10,62 @@ import {
   DialogContent,
 } from '@material-ui/core/';
 import CloseIcon from '@material-ui/icons/Close';
-import dialogStyles from '../styles/DialogStyles';
 
-import {addBoard} from '../../api/Board';
-import formProps from '../forms/props';
-import formValidation from '../forms/validator';
+import BoardContext from '../../../contexts/board/boardContext';
 
-const AddBoardDialogForm = ({open, setOpen, setBoards}) => {
-  const classes = dialogStyles();
+import formProps from '../../board/components/forms/props';
+import formValidation from '../../board/components/forms/validator';
+
+const useStyles = makeStyles(() => ({
+  addDialogModal: {
+    '& .closeButton': {
+      position: 'absolute',
+      right: '10px',
+      top: '10px',
+      color: 'lightblue',
+    },
+    textAlign: 'center',
+    '& .MuiDialog-paper': {
+      padding: '35px 20px 25px 20px',
+      '& .MuiDialogContent-root': {
+        minHeight: '245px',
+        '& form': {
+          marginTop: '40px',
+          '& .MuiFormControl-fullWidth': {
+            width: '90%',
+          },
+          '& button': {
+            margin: '45px 0 0 0',
+            padding: '5px 30px',
+          },
+        },
+      },
+    },
+  },
+}));
+
+const AddBoardDialogForm = ({open, setOpen}) => {
+  const {error, AddBoard} = useContext(BoardContext);
+  const classes = useStyles();
+  const [success, setSuccess] = useState(false);
+
   const {register, handleSubmit, errors} = useForm();
-
-  const [boardData, setBoardData] = useState();
-  const [error, setError] = useState(false);
 
   const {title: titleProps} = formProps.html.addBoard;
   const {textField: textFieldProps} = formProps.style;
   const {title: titleValidation} = formValidation.addBoard;
 
   const onSubmitForm = async (formData) => {
-    const payload = await addBoard({name: formData.name});
-
-    setError(payload.error);
-    setBoardData(payload.data);
-
+    await AddBoard({name: formData.name});
     if (!error) {
       document.getElementById('name').value = '';
-      setBoards((prevState) => {
-        return [...prevState, payload.data];
-      });
+      setSuccess(true);
+      setTimeout(() => {
+        setOpen(false);
+      }, 500);
     }
-    setTimeout(() => {
-      setError(false);
-      setBoardData();
-      setOpen(false);
-    }, 500);
   };
   const handleClose = () => {
-    setError(false);
-    setBoardData();
     setOpen(false);
   };
   return (
@@ -72,11 +91,7 @@ const AddBoardDialogForm = ({open, setOpen, setBoards}) => {
           id="addBoardForm"
         >
           {error && <div>Something went wrong. Please try again!!</div>}
-          {boardData?.columns.length === 2 ? (
-            <div>Added Successfully</div>
-          ) : (
-            ' '
-          )}
+          {success && <div>Added Successfully</div>}
 
           <TextField
             {...textFieldProps}

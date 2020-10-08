@@ -1,44 +1,13 @@
 import axios from 'axios';
-
+import {convertCalendarAPI, convertBoardAPI} from './Utils';
 // Get board
 export const getBoards = async () => {
-  try {
-    const res = await axios.get(`/api/boards/`);
-    // eslint-disable-next-line no-console
-    console.log('server', res.data);
-    return {data: res.data, loading: false, error: false};
-  } catch (err) {
-    return {data: [], loading: false, error: true};
-  }
-};
-// helper function to convertBoard backend to frontend
-// leaving this separate from exported Board because want to keep this private
-const convertBoardAPI = async (board) => {
-  const newBoard = {
-    id: board.id,
-    tasks: {},
-    columns: {},
-    columnOrder: [],
-  };
-
-  // eslint-disable-next-line
-  await board.columns.map(column => {
-    newBoard.columns[column.id] = {
-      id: column.id,
-      title: column.name,
-      taskIds: column.cards.map((card) => card.id),
-    };
-
-    // eslint-disable-next-line
-    column.cards.map(card => {
-      newBoard.tasks[card.id] = {
-        id: card.id,
-        content: card.name,
-      };
-    });
-    newBoard.columnOrder.push(column.id);
-  });
-  return newBoard;
+  const res = await axios.get(`/api/boards/`);
+  const convertedBoard = await convertBoardAPI(res.data[0]);
+  const convertedCalendar = await convertCalendarAPI(res.data[0]);
+  // eslint-disable-next-line no-console
+  console.log('server', res.data);
+  return {boards: res.data, convertedBoard, convertedCalendar};
 };
 
 const Board = {
@@ -65,19 +34,15 @@ const Board = {
 
 // Add Board
 export const addBoard = async (formData) => {
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    };
-    const body = JSON.stringify(formData);
+  const config = {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  };
+  const body = JSON.stringify(formData);
 
-    const res = await axios.post(`/api/boards/create/`, body, config);
+  const res = await axios.post(`/api/boards/`, body, config);
 
-    return {data: res.data, error: false};
-  } catch (err) {
-    return {data: [], error: true};
-  }
+  return res;
 };
 export default Board;

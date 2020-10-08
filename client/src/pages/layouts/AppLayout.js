@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {Box, makeStyles} from '@material-ui/core';
 import NavBar from './components/NavBar';
 import AppLogo from './components/AppLogo';
@@ -6,6 +6,11 @@ import SwitchView from './components/SwitchView';
 import CenteringBox from '../../components/CenteringBox';
 import CreateBoard from './components/CreateBoard';
 import ProfileAvatar from './components/ProfileAvatar';
+import CalendarActions from '../calendar/CalendarActions';
+import KanbanBoard from '../board/KanbanBoard';
+import {BoardProvider} from '../../contexts/boardContext';
+
+import BoardContext from '../../contexts/board/boardContext';
 
 const useStyles = makeStyles((theme) => ({
   logoContainer: {
@@ -17,14 +22,8 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const AppLayout = ({
-  children,
-  boards,
-  currentBoard,
-  setCurrentBoard,
-  setCurrentView,
-  setBoards,
-}) => {
+const AppLayout = () => {
+  const {view} = useContext(BoardContext);
   const classes = useStyles();
   return (
     <Box>
@@ -55,7 +54,7 @@ const AppLayout = ({
             <AppLogo />
           </Box>
           <CenteringBox boxSizing="border-box" flexBasis="40%" flexGrow={1}>
-            <SwitchView setCurrentView={setCurrentView} />
+            <SwitchView />
           </CenteringBox>
           <Box
             display="flex"
@@ -66,7 +65,7 @@ const AppLayout = ({
             flexGrow={1}
           >
             <CenteringBox flexGrow={1}>
-              <CreateBoard setBoards={setBoards} />
+              <CreateBoard />
             </CenteringBox>
             <Box
               display="flex"
@@ -79,14 +78,22 @@ const AppLayout = ({
           </Box>
         </Box>
         <Box flexGrow={1}>
-          <NavBar
-            boards={boards}
-            currentBoard={currentBoard}
-            setCurrentBoard={setCurrentBoard}
-          />
+          <NavBar />
         </Box>
       </Box>
-      <Box>{children}</Box>
+      <Box>
+        {/* <BoardProvider>
+          <KanbanBoard />
+        </BoardProvider> */}
+      </Box>
+      <Box>
+        {view === 'dashboard' && (
+          <BoardProvider>
+            <KanbanBoard />
+          </BoardProvider>
+        )}
+        {view === 'calendar' && <CalendarActions />}
+      </Box>
     </Box>
   );
 };

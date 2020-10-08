@@ -1,5 +1,6 @@
 import React, {useState} from 'react';
 import {useForm} from 'react-hook-form';
+import {makeStyles} from '@material-ui/core/styles';
 import {
   Typography,
   Button,
@@ -16,7 +17,69 @@ import formProps from '../forms/props';
 
 import {updateCard} from '../../../../api/Card';
 
+const useStyles = makeStyles(() => ({
+  editCardDialogModal: {
+    '& .closeButton': {
+      position: 'absolute',
+      right: '10px',
+      top: '10px',
+      color: 'lightblue',
+    },
+    '& .MuiDivider-root': {margin: '20px 0'},
+    '& .MuiDialog-paper': {
+      width: '90%',
+      '& .MuiDialogContent-root': {
+        minHeight: '245px',
+        padding: '20px 0 40px 0',
+        '& .cardSubTitle': {
+          color: 'grey',
+        },
+        '& .submitSummary': {
+          margin: '20px',
+        },
+        '& .editCardSection': {
+          display: 'flex',
+          margin: '0 20px',
+          '& .buttonFields': {
+            marginTop: '15px',
+          },
+          '& button': {
+            '&.icon': {
+              padding: '0 9px 0 0',
+              color: 'lightblue',
+            },
+          },
+          '& .rightContent': {
+            width: '90%',
+          },
+          '& .button': {
+            padding: '5px 30px',
+          },
+          '& textarea': {
+            width: '90%',
+            minWidth: '90%',
+            marginTop: '10px',
+            borderColor: 'red',
+            outlineColor: 'blue',
+            padding: '10px',
+            borderRadius: '5px',
+            resize: 'none',
+          },
+          '& .editCancel': {
+            padding: 0,
+            marginLeft: '10px',
+            color: 'red',
+            '& .MuiSvgIcon-root': {
+              fontSize: '1.2rem',
+            },
+          },
+        },
+      },
+    },
+  },
+}));
 const EditCardDialogForm = ({open, setOpen, detailCardData}) => {
+  const classes = useStyles();
   const {register, handleSubmit} = useForm();
 
   const [updatedData, setUpdatedData] = useState();
@@ -34,17 +97,15 @@ const EditCardDialogForm = ({open, setOpen, detailCardData}) => {
       setUpdatedError(payload.error);
       setUpdatedData(payload.data);
 
-      setTimeout(() => {
-        setUpdatedError(false);
-        setUpdatedData();
-        setOpen(false);
-      }, 500);
+      if (!payload.error) {
+        setTimeout(() => {
+          setOpen(false);
+        }, 500);
+      }
     }
   };
 
   const handleClose = () => {
-    setUpdatedError(false);
-    setUpdatedData();
     setOpen(false);
   };
   const handleEditCancel = () => {
@@ -56,7 +117,7 @@ const EditCardDialogForm = ({open, setOpen, detailCardData}) => {
     <Dialog
       open={open}
       onClose={handleClose}
-      // className={classes.editCardDialogModal}
+      className={classes.editCardDialogModal}
     >
       <DialogContent>
         {detailCardData?.column ? (

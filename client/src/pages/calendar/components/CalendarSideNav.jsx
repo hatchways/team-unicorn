@@ -1,13 +1,28 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useContext} from 'react';
+import {makeStyles} from '@material-ui/core/styles';
 import {Card, Typography} from '@material-ui/core';
 // eslint-disable-next-line no-unused-vars
 import FullCalendar from '@fullcalendar/react';
 import {Draggable} from '@fullcalendar/interaction';
+import BoardContext from '../../../contexts/board/boardContext';
 
-import CalendarStyles from '../styles/CalendarStyles';
+const useStyles = makeStyles(() => ({
+  sideNav: {
+    marginTop: '20px',
+    cursor: 'pointer',
+    marginRight: '10px',
+  },
+  sideNavCards: {
+    padding: '10px',
+    margin: '10px 5px',
+  },
+}));
 
-const CalendarSideNav = ({draggableEvents}) => {
-  const classes = CalendarStyles();
+const CalendarSideNav = () => {
+  const {convertedCalendar} = useContext(BoardContext);
+  const {draggableEvents} = convertedCalendar;
+
+  const classes = useStyles();
 
   useEffect(() => {
     const containerEl = document.getElementById('external-events');
