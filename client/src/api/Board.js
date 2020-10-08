@@ -8,7 +8,7 @@ const convertBoardAPI = async (board) => {
     tasks: {},
     columns: {},
     columnOrder: [],
-  }
+  };
 
   // eslint-disable-next-line
   await board.columns.map(column => {

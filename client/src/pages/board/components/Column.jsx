@@ -57,9 +57,17 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
-const Tasks = memo(({tasks}) =>
-  tasks.map((task, index) => <Task key={task.id} task={task} index={index} />),
-);
+const Tasks = memo(({tasks, columnName}) => {
+  return tasks.map(({id, content: title}, index) => (
+    <Task
+      key={id}
+      id={id}
+      title={title}
+      columnName={columnName}
+      index={index}
+    />
+  ));
+});
 
 export default function Column({column, index, tasks, setUpdate}) {
   const classes = useStyles();
@@ -142,7 +150,7 @@ export default function Column({column, index, tasks, setUpdate}) {
                     : 'white',
                 }}
               >
-                <Tasks tasks={tasks} />
+                <Tasks tasks={tasks} columnName={column.title} />
                 {providedForDroppable.placeholder}
                 <Button
                   className={classes.button}
