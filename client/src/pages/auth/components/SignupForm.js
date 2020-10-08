@@ -12,7 +12,7 @@ const useStyles = makeStyles({
   },
 });
 
-const SignupForm = () => {
+const SignupForm = ({openSnackbar}) => {
   const {
     register,
     handleSubmit,
@@ -30,9 +30,11 @@ const SignupForm = () => {
       const {user} = apiData;
       userContext.setUser(user);
       userContext.setAuthenticated(true);
+      openSnackbar('Success!', 'success');
     } else {
-      console.log(apiErrors);
-      // TODO: Render toaster
+      const errorKeys = Object.getOwnPropertyNames(apiErrors);
+      const message = apiErrors[errorKeys[0]];
+      openSnackbar(message, 'error');
     }
   };
 

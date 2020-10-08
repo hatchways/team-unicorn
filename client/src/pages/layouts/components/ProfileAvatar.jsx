@@ -34,6 +34,7 @@ const ProfileAvatar = () => {
         open={openSnackbar}
         onClose={() => setOpenSnackbar(false)}
         message="Profile Picture Updated!"
+        severity="success"
       />
     </>
   );
