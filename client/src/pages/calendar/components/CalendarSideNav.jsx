@@ -4,7 +4,7 @@ import {Card, Typography} from '@material-ui/core';
 // eslint-disable-next-line no-unused-vars
 import FullCalendar from '@fullcalendar/react';
 import {Draggable} from '@fullcalendar/interaction';
-import BoardContext from '../../../contexts/board/boardContext';
+import {BoardContext} from 'contexts/boardContext';
 
 const useStyles = makeStyles(() => ({
   sideNav: {
@@ -19,8 +19,8 @@ const useStyles = makeStyles(() => ({
 }));
 
 const CalendarSideNav = () => {
-  const {convertedCalendar} = useContext(BoardContext);
-  const {draggableEvents} = convertedCalendar;
+  const {data} = useContext(BoardContext);
+  const {draggableEvents} = data.boardView;
 
   const classes = useStyles();
 

@@ -11,11 +11,11 @@ import {
 } from '@material-ui/core/';
 import CloseIcon from '@material-ui/icons/Close';
 
-import BoardContext from '../../../contexts/board/boardContext';
-
+import {BoardContext} from 'contexts/boardContext';
+import boardActions from 'contexts/boardActions';
 import formProps from '../../board/components/forms/props';
 import formValidation from '../../board/components/forms/validator';
-
+import {addBoard} from 'api/Board';
 const useStyles = makeStyles(() => ({
   addDialogModal: {
     '& .closeButton': {
@@ -45,7 +45,7 @@ const useStyles = makeStyles(() => ({
 }));
 
 const AddBoardDialogForm = ({open, setOpen}) => {
-  const {error, AddBoard} = useContext(BoardContext);
+  const {dispatch} = useContext(BoardContext);
   const classes = useStyles();
   const [success, setSuccess] = useState(false);
 
@@ -56,7 +56,8 @@ const AddBoardDialogForm = ({open, setOpen}) => {
   const {title: titleValidation} = formValidation.addBoard;
 
   const onSubmitForm = async (formData) => {
-    await AddBoard({name: formData.name});
+    const {newBoard, error} = await addBoard({name: formData.name});
+    boardActions.addBoard(newBoard, dispatch)
     if (!error) {
       document.getElementById('name').value = '';
       setSuccess(true);
@@ -90,8 +91,8 @@ const AddBoardDialogForm = ({open, setOpen}) => {
           autoComplete="off"
           id="addBoardForm"
         >
-          {error && <div>Something went wrong. Please try again!!</div>}
-          {success && <div>Added Successfully</div>}
+          {/* {error && <div>Something went wrong. Please try again!!</div>}
+          {success && <div>Added Successfully</div>} */}
 
           <TextField
             {...textFieldProps}

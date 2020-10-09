@@ -53,6 +53,6 @@ export const addBoard = async (formData) => {
 
   const res = await axios.post(`/api/boards/`, body, config);
 
-  return res;
+  return {newBoard: res.data, loading: false, error: false};
 };
 export default Board;

@@ -15,7 +15,8 @@ import {
 } from '@material-ui/core/';
 
 import {BoardContext} from 'contexts/boardContext';
-import {convertBoardAPI} from 'api/Utils';
+import {convertBoardAPI, convertCalendarAPI} from 'api/Utils';
+import boardActions from 'contexts/boardActions';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,14 +49,11 @@ const NavBar = () => {
 
   const handleClose = async (event) => {
     const idx = await event.target.getAttribute('value');
-    const newBoard = await data.boards[idx];
-
-    // const board = data.view === 'dashboard' ?  : await convertCalendarAPI(newBoard)
-    dispatch({
-      board: await convertBoardAPI(newBoard),
-      type: 'SWITCH_BOARD',
-    });
-    // reducers.switchBoard(board, dispatch)
+    if (idx) {
+      const newBoard = await data.boards[idx];
+      const board = data.view === 'dashboard' ?  await convertBoardAPI(newBoard) : await convertCalendarAPI(newBoard)
+      boardActions.switchBoard(board, dispatch)
+    }
     setOpen(false);
   };
 
@@ -79,7 +77,7 @@ const NavBar = () => {
     <AppBar position="static" className={classes.appBar} elevation={0}>
       <Toolbar disableGutters>
         <Typography variant="h6" className={classes.title} color="inherit">
-          {data.boards.filter((val) => val.id === data.boardView.id)[0]?.name}
+          {data.boards?.filter((val) => val.id === data.boardView.id)[0]?.name}
         </Typography>
         <div>
           <IconButton

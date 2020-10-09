@@ -60,14 +60,14 @@ const boardReducer = (state, action) => {
     case 'SWITCH_BOARD':
       return reducers.switchBoard(state, action.board);
     case 'SWITCH_VIEW':
-      return reducers.switchView(state);
-    // case 'ADD_BOARD':
-    //   return reducers.addBoard(...);
+      return reducers.switchView(state, action.boardView, action.view);
+    case 'ADD_BOARD':
+      return reducers.addBoard(state, action.newBoard);
 
-    // case 'ADD_CARD_TO_CAL':
-    //   return reducers.addCardToCal();
-    // case 'UPDATE_DEADLINE':
-    //   return reducers.updateDeadline();
+    case 'ADD_CARD_TO_CAL':
+      return reducers.addCardToCal(state, action.card);
+    case 'UPDATE_DEADLINE':
+      return reducers.updateDeadline(state, action.card);
     default:
       return state;
   }

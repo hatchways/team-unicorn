@@ -6,9 +6,10 @@ import interactionPlugin from '@fullcalendar/interaction';
 
 import CalendarCard from './CalendarCard';
 import EditCardDialogForm from '../../board/components/dashboardForms/EditCardDialogForm';
-import {getCardById} from '../../../api/Card';
-import BoardContext from '../../../contexts/board/boardContext';
-
+import {getCardById} from 'api/Card';
+import {BoardContext} from 'contexts/boardContext';
+import boardActions from 'contexts/boardActions';
+import {addCardByColumnId} from 'api/Card'
 const useStyles = makeStyles((theme) => ({
   calendarContainer: {
     width: '80%',
@@ -48,13 +49,14 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const CalendarView = () => {
-  const {
-    convertedCalendar,
-    AddCardToCalendar,
-    UpdateDeadline,
-    data,
-  } = useContext(BoardContext);
-  const {calendarEvents} = convertedCalendar;
+  // const {
+  //   convertedCalendar,
+  //   AddCardToCalendar,
+  //   UpdateDeadline,
+  //   data,
+  // } = useContext(BoardContext);
+  const {data, dispatch} = useContext(BoardContext)
+  const {calendarEvents} = data.boardView;
   const classes = useStyles();
 
   const [open, setOpen] = useState(false);
@@ -73,10 +75,11 @@ const CalendarView = () => {
     const name = 'Add title ...';
     const deadline = info.date;
 
-    await AddCardToCalendar({
-      name,
-      deadline,
-    });
+    await boardActions.addCardToCal(addCardByColumnId(data.boardView.inProgressId, {name, deadline}), dispatch)
+    // await AddCardToCalendar({
+    //   name,
+    //   deadline,
+    // });
     // Todo
     // AddEvent to CalendarAPI
 
@@ -101,7 +104,7 @@ const CalendarView = () => {
     editedCard.id = changeEvent.id;
     editedCard.deadline = changeEvent.start;
     // Todo UpdateEvent
-    UpdateDeadline(editedCard);
+    // UpdateDeadline(editedCard);
   };
 
   const handleEventDidMount = () => {

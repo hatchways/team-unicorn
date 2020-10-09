@@ -3,7 +3,9 @@ import {Box, makeStyles, Button} from '@material-ui/core';
 import DashboardIcon from '@material-ui/icons/DashboardOutlined';
 import CalendarIcon from '@material-ui/icons/CalendarTodayOutlined';
 
-import BoardContext from '../../../contexts/board/boardContext';
+import {BoardContext} from 'contexts/boardContext';
+import boardActions from 'contexts/boardActions';
+import {convertCalendarAPI, convertBoardAPI, getCurrentBoard} from 'api/Utils';
 
 const useStyle = makeStyles((theme) => ({
   link: {
@@ -12,10 +14,17 @@ const useStyle = makeStyles((theme) => ({
   },
 }));
 
+
 const SwitchView = () => {
-  const {ChangeView} = useContext(BoardContext);
+  const {data, dispatch} = useContext(BoardContext);
   const classes = useStyle();
 
+  const switchView = async (view, board) => {
+    const convertFunc = view === 'dashboard' ? convertBoardAPI : convertCalendarAPI;
+    const newBoard = await convertFunc(board)
+    await boardActions.switchView(view, newBoard, dispatch)
+  }
+  
   return (
     <Box>
       <Button
@@ -23,7 +32,7 @@ const SwitchView = () => {
         color="primary"
         startIcon={<DashboardIcon />}
         size="medium"
-        onClick={() => ChangeView('dashboard')}
+        onClick={() => switchView('dashboard', getCurrentBoard(data))}
       >
         Dashboard
       </Button>
@@ -33,7 +42,7 @@ const SwitchView = () => {
         color="primary"
         startIcon={<CalendarIcon />}
         size="medium"
-        onClick={() => ChangeView('calendar')}
+        onClick={() => switchView('calendar', getCurrentBoard(data))}
       >
         Calendar
       </Button>

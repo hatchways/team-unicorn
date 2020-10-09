@@ -47,4 +47,26 @@ module.exports = {
       board,
     });
   },
+  switchView: (view, boardView, dispatch) => {
+    dispatch({
+      type: 'SWITCH_VIEW',
+      view,
+      boardView
+    });
+  },
+  addBoard: (newBoard, dispatch) => {
+    dispatch({type: 'ADD_BOARD', newBoard});
+  },
+  addCardToCal: (card, dispatch) => {
+    dispatch({
+      type: 'ADD_CARD_TO_CAL',
+      card,
+    })
+  },
+  updateDeadline: (card, dispatch) => {
+    dispatch({
+      type: 'UPDATE_DEADLINE',
+      card,
+    })
+  }
 };

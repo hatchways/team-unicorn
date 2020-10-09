@@ -1,6 +1,6 @@
 import {updateColumn} from 'api/Column';
 import Board from 'api/Board';
-import {convertCalendarAPI, convertBoardAPI} from 'api/Utils';
+import {convertCalendarAPI, convertBoardAPI, getCurrentBoard} from 'api/Utils';
 
 const reducers = {
   addCard: (state, task, colId) => {
@@ -123,15 +123,24 @@ const reducers = {
     // const convertedBoard = state.view === 'dashboard' ? : convertCalendarAPI(board)
     return {...state, boardView: board};
   },
-  switchView: (state) => {
-    const board = Board.getBoard(state.board.id);
-    const convertedBoard =
-      state.view === 'calendar'
-        ? convertBoardAPI(board)
-        : convertCalendarAPI(board);
-    const newView = state.view === 'dashboard' ? 'calendar' : 'dashboard';
-    return {...state, view: newView, boardView: convertedBoard};
+  switchView: (state, boardView, view) => {
+    if (!boardView) {
+      console.log(state)
+      return state;
+    }
+    return {...state, view, boardView};
   },
+  addBoard: (state, newBoard) => {
+    return {...state, boards: state.boards.concat(newBoard)}
+  },
+  addCardToCal: (state, card) => {
+    // const newCurrentBoard = getCurrentBoard(state)
+    // newCurrentBoard.columns.filter(col=>col.name==='In Progress').cards.push(card)
+    // return {...state, boards: state.boards.filter(board=>board.id !== newCurrentBoard.id).push(newCurrentBoard)}
+  },
+  updateDeadline: (state, card) => {
+    return state;
+  }
 };
 
 export default reducers;

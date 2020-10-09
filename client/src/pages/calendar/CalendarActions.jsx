@@ -2,7 +2,7 @@ import React, {useContext} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import CalendarSideNav from './components/CalendarSideNav';
 import CalendarView from './components/CalendarView';
-import BoardContext from '../../contexts/board/boardContext';
+import {BoardContext} from 'contexts/boardContext';
 
 const useStyles = makeStyles(() => ({
   calendarOuterContainer: {
@@ -14,9 +14,10 @@ const useStyles = makeStyles(() => ({
   },
 }));
 const CalendarActions = () => {
-  const {convertedCalendar} = useContext(BoardContext);
-  const {draggableEvents} = convertedCalendar;
+  const {data} = useContext(BoardContext);
+  const {draggableEvents} = data.boardView;
 
+  console.log(draggableEvents)
   const classes = useStyles();
   return (
     <div className={classes.calendarOuterContainer}>
