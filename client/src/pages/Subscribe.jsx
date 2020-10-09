@@ -33,15 +33,13 @@ const useStyles = makeStyles({
   },
 });
 
-const Subscribe = ({user}) => {
+const Subscribe = ({user, setUser}) => {
   const classes = useStyles();
   const stripe = useStripe();
   const elements = useElements();
-  let {_id, name, email, stripeCustomerId} = user;
-
-  const [stripeId, setStripeId] = useState(stripeCustomerId);
+  let {_id, name, email} = user;
   const [loading, setLoading] = useState(false)
-
+  console.log({user})
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
       return;
@@ -49,11 +47,11 @@ const Subscribe = ({user}) => {
 
     const cardElement = elements.getElement(CardElement);
     
-    if (stripeId !== "free") {
+    if (user.stripeCustomerId !== "free") {
       setLoading(true)
       User.subscribe({id: _id, stripeCustomerId: "free"})
-      setStripeId("free")
-      await axios.post('stripe/subscribe', {...user, stripeCustomerId: stripeId})
+      await axios.post('stripe/subscribe', {...user, stripeCustomerId: user.stripeCustomerId})
+      setUser({...user, stripeCustomerId: "free"});
       setLoading(false)
     } else {
       const result = await stripe.createPaymentMethod({
@@ -80,14 +78,15 @@ const Subscribe = ({user}) => {
             } else {
               console.log('Payment received. Thank you for subscribing!');
               User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId});
-              setStripeId(stripeInfo.stripeCustomerId);
+              setUser({...user, stripeCustomerId: stripeInfo.stripeCustomerId})
             }
           });
         } else {
-          setStripeId(stripeInfo.stripeCustomerId);
+          setUser({...user, stripeCustomerId: stripeInfo.stripeCustomerId})
           User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId});
           console.log('Payment received. Thank you for subscribing!');
         }
+        console.log({user})
         cardElement.clear()
         setLoading(false)
       }
@@ -105,10 +104,10 @@ const Subscribe = ({user}) => {
               <Typography variant="h6">Unlimited Boards</Typography>
               <Typography variant="h6">Unlimited Columns</Typography>
             </div>
-          <CardElement options={{disabled: stripeId !== "free"}} />
+          <CardElement options={{disabled: user.stripeCustomerId !== "free"}} />
           {loading ? <CircularProgress className={classes.button} /> : 
             <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub} >
-              {stripeId !== "free" ? "Cancel Subscription" : "Subscribe"}
+              {user.stripeCustomerId !== "free" ? "Cancel Subscription" : "Subscribe"}
             </Button>
           }
           </CardContent>

@@ -3,6 +3,7 @@ import {Menu, MenuItem} from '@material-ui/core';
 import AccountDialog from './AccountDialog';
 import AvatarDialogForm from './AvatarDialogForm';
 import LogOutButton from '../../auth/components/LogoutButton';
+import {BoardProvider} from '../../../contexts/boardContext';
 
 const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
   const [profileOpen, setProfileOpen] = useState({open: false, dialog: ''});
@@ -18,6 +19,7 @@ const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
 
   return (
     <>
+    <BoardProvider >
       <Menu
         id="simple-menu"
         anchorEl={anchorElem}
@@ -53,6 +55,7 @@ const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
           setOpenSnackbar={setOpenSnackbar}
         />
       )}
+    </BoardProvider>
     </>
   );
 };
