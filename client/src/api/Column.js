@@ -46,11 +46,9 @@ export const updateColumn = async (columnId, updatedColumn) => {
 // Delete Column
 export const removeColumn = async (colId) => {
   try {
-    const res = await axios.delete(
-      `/api/columns/${colId}`,
-      {data: []},
-      {headers: {Authorization: 'token'}},
-    );
+    const res = await axios.delete(`/api/columns/${colId}`, {
+      headers: {Authorization: 'token'},
+    });
     return {data: res.data, error: false};
   } catch (err) {
     return {data: [], error: true};

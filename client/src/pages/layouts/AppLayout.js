@@ -26,10 +26,9 @@ const AppLayout = () => {
   const {view} = useContext(BoardContext);
   const classes = useStyles();
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" minHeight="100%">
       <Box
         display="flex"
-        flexGrow={1}
         minHeight="9rem"
         maxHeight="15%"
         flexDirection="column"
@@ -80,11 +79,6 @@ const AppLayout = () => {
         <Box flexGrow={1}>
           <NavBar />
         </Box>
-      </Box>
-      <Box>
-        {/* <BoardProvider>
-          <KanbanBoard />
-        </BoardProvider> */}
       </Box>
       <Box>
         {view === 'dashboard' && (

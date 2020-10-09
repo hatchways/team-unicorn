@@ -9,7 +9,6 @@ import AuthRoute from './components/AuthRoute';
 import PrivateRoute from './components/PrivateRoute';
 import UserContext from './contexts';
 import Dashboard from './pages/Dashboard';
-import './App.css';
 
 // TODO: Handle UI if server is unavailable?
 

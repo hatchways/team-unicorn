@@ -2,7 +2,7 @@ import {createMuiTheme} from '@material-ui/core';
 
 import Montserrat from 'typeface-montserrat';
 
-const theme = createMuiTheme({
+const baseThemeSettings = {
   typography: {
     fontFamily: 'Montserrat, arial',
     fontSize: 14,
@@ -59,7 +59,7 @@ const theme = createMuiTheme({
       main: '#759CFC',
       contrastText: '#ffffff',
     },
-    secondary: {main: '#fff'},
+    secondary: {main: '#d32f2f', contrastText: '#ffffff'},
     divider: '#D8DFED',
     background: {paper: '#fff', default: '#F4F6FF'},
     props: {
@@ -91,6 +91,19 @@ const theme = createMuiTheme({
       },
     },
   },
-});
+};
 
+const dialogTheme = createMuiTheme(
+  {
+    typography: {
+      ...baseThemeSettings.typography,
+      fontSize: 12,
+    },
+  },
+  baseThemeSettings,
+);
+
+const theme = createMuiTheme(baseThemeSettings);
+
+export {dialogTheme};
 export default theme;

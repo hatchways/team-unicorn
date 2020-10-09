@@ -2,7 +2,6 @@ import React, {useContext, memo} from 'react';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {Grid} from '@material-ui/core';
-import Board from 'api/Board';
 import {BoardContext} from 'contexts/boardContext';
 import boardActions from 'contexts/boardActions';
 import Column from './components/Column';
@@ -159,8 +158,7 @@ export default function KanbanBoard() {
     }
 
     if (type === 'column') {
-      boardActions.moveColumn(source.index, destination.index, dispatch);
-      await Board.saveData(data.id, {columns: data.columnOrder});
+      await boardActions.moveColumn(source.index, destination.index, dispatch);
       return;
     }
 

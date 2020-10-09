@@ -1,4 +1,5 @@
 import {updateColumn} from 'api/Column';
+import Board from 'api/Board';
 
 const reducers = {
   addCard: (state, task, colId) => {
@@ -78,7 +79,7 @@ const reducers = {
     newState.columnOrder.splice(fromIndex, 1);
     newState.columnOrder.splice(toIndex, 0, col);
 
-    // await Board.saveData(newState.id, newState.columnOrder);
+    Board.saveData(newState.id, {columns: newState.columnOrder});
     return newState;
   },
   changeColTitle: (state, colId, newTitle) => {

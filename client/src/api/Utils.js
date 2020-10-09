@@ -20,7 +20,6 @@ export const convertCalendarAPI = async (board) => {
       }
     });
   });
-
   return {draggableEvents, calendarEvents, inProgessId};
 };
 
@@ -49,5 +48,6 @@ export const convertBoardAPI = async (board) => {
     });
     newBoard.columnOrder.push(column.id);
   });
+
   return newBoard;
 };

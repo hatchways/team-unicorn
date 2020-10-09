@@ -29,7 +29,6 @@ const useStyles = makeStyles((theme) => ({
     // marginLeft: theme.spacing(theme.pageIndent),
   },
   appBar: {
-    marginBottom: theme.spacing(3),
     paddingLeft: theme.spacing(theme.pageIndent),
     paddingRight: theme.spacing(theme.pageIndent),
   },

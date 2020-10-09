@@ -1,12 +1,14 @@
 import axios from 'axios';
 import {convertCalendarAPI, convertBoardAPI} from './Utils';
+
 // Get board
 export const getBoards = async () => {
   const res = await axios.get(`/api/boards/`);
+
   const convertedBoard = await convertBoardAPI(res.data[0]);
   const convertedCalendar = await convertCalendarAPI(res.data[0]);
   // eslint-disable-next-line no-console
-  console.log('server', res.data);
+  console.log('server', {boards: res.data, convertedBoard, convertedCalendar});
   return {boards: res.data, convertedBoard, convertedCalendar};
 };
 
