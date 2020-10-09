@@ -9,20 +9,36 @@ import {
   UPDATECARD_CALENDAR,
 } from '../types';
 
+const reducers = {
+  updateCardCalendar: (state, data) => {
+    const columnId = data.column;
+    const cardsArray = state.board.columns.filter(
+      (column) => column.id === columnId,
+    )[0].cards;
+    const cardState = cardsArray.filter(
+      (cardObject) => cardObject.id === data.id,
+    );
+    cardState[0] = data;
+
+    return state;
+  },
+  addCardCalendar: (state, data) => {
+    const columnid = state.convertedCalendar.inProgessId;
+    const cardsArray = state.board.columns.filter(
+      (column) => column.id === columnid,
+    )[0].cards;
+
+    cardsArray.push(data);
+    return state;
+  },
+};
 const BoardReducer = (state, action) => {
   const data = action.payload;
   switch (action.type) {
     case UPDATECARD_CALENDAR:
-      // Todo
-      return {
-        ...state,
-        loading: false,
-      };
+      return reducers.updateCardCalendar(state, data);
     case ADDCARD_CALENDAR:
-      return {
-        ...state,
-        data,
-      };
+      return reducers.addCardCalendar(state, data);
     case CHANGE_VIEW:
       return {
         ...state,

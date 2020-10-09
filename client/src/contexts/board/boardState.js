@@ -23,7 +23,6 @@ const initialState = {
   convertedCalendar: null,
   loading: false,
   error: false,
-  data: null,
   view: 'dashboard',
 };
 const BoardState = ({children}) => {
@@ -69,16 +68,8 @@ const BoardState = ({children}) => {
   const AddCardToCalendar = async (card) => {
     const columnid = state.convertedCalendar.inProgessId;
     const res = await addCardByColumnId(columnid, card);
-
-    const cardsArray = state.board.columns.filter(
-      (column) => column.id === columnid,
-    )[0].cards;
-
-    cardsArray.push(res.data);
-    dispatch({
-      type: ADDCARD_CALENDAR,
-      payload: res.data,
-    });
+    dispatch({type: ADDCARD_CALENDAR, payload: res.data});
+    return res.data;
   };
 
   // Change View
@@ -125,7 +116,6 @@ const BoardState = ({children}) => {
         loading: state.loading,
         error: state.error,
         view: state.view,
-        data: state.data,
         ChangeBoard,
         AddBoard,
         ChangeView,
