@@ -7,11 +7,12 @@ import Subscribe from '../../Subscribe';
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
+    flexDirection: 'column',
     justifyContent: "center",
     alignContent: "center",
   },
   box: {
-    flexGrow: 1,
+    justifyContent: "center",
     backgroundColor: "#F4F6FF",
   },
   paper: {
