@@ -39,19 +39,21 @@ const reducers = {
 
     newState.board = {...newBoard, columns: newColumns};
     newState.boards = newBoards.map((board) =>
-      board.id === newBoard.id ? newBoard : board,
+      board.id === newBoard.id ? newState.board : board,
     );
+
     return newState;
   },
   addCardCalendar: (state, card) => {
     const columnId = state.convertedCalendar.inProgessId;
+
+    const newState = state;
+    const newBoard = newState.board;
     const cardsArray = state.board.columns.filter(
       (column) => column.id === columnId,
     )[0].cards;
 
     cardsArray.push(card);
-    const newState = state;
-    const newBoard = newState.board;
     newState.board = {
       ...newBoard,
       columns: newState.board.columns.map((column) =>
@@ -66,15 +68,18 @@ const reducers = {
       ),
     };
     newState.boards = newState.boards.map((board) =>
-      board.id === newBoard.id ? newBoard : board,
+      board.id === newBoard.id ? newState.board : board,
     );
+
     return newState;
   },
   changeBoard: (state, boardId) => {
-    const newBoard = state.boards.filter((board) => board.id === boardId)[0];
+    const newState = state;
+    const newBoard = newState.boards.filter((board) => board.id === boardId)[0];
     const {convertedCalendar, convertedBoard} = LoadViewData(newBoard);
+
     return {
-      ...state,
+      ...newState,
       board: newBoard,
       convertedBoard,
       convertedCalendar,

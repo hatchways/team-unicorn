@@ -1,4 +1,4 @@
-import React, {useState, useContext} from 'react';
+import React, {useState, useContext, useEffect} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
@@ -52,7 +52,15 @@ const CalendarView = () => {
     BoardContext,
   );
   const {calendarEvents} = convertedCalendar;
-
+  useEffect(() => {
+    if (calendarEvents.length === 0) {
+      const cardCountElements = document.querySelectorAll('.card-count');
+      // Remove count element
+      cardCountElements.forEach((el) => {
+        el.parentNode.removeChild(el);
+      });
+    }
+  }, [calendarEvents]);
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [detailCardData, setDetailCardData] = useState(false);

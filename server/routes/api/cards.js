@@ -31,7 +31,8 @@ router.post(
           // Pushing the card to the column
           column.cards.push({ _id: card.id });
           await column.save();
-          res.send(card);
+          const newCard = await Card.findById(card.id);
+          res.send(newCard);
         }
       });
     } catch (err) {
