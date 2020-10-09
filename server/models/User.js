@@ -18,6 +18,10 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  stripeCustomerId: {
+    type: String,
+    default: "free"
+  },
   avatar: {
     type: String,
     default: "https://unicorn-profile-pictures.s3-us-west-1.amazonaws.com/download.png"

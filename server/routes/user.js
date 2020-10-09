@@ -199,4 +199,20 @@ router.put(
   }
 );
 
+// @route PUT user/subscribe
+// @desc Update user's premium details
+router.put('/subscribe', authenticator, async (req, res) => {
+  try {
+    const {id, stripeCustomerId} = req.body;
+    const stripeInfo = {stripeCustomerId: stripeCustomerId}
+    await User.findByIdAndUpdate(id, stripeInfo);
+    res.status(200).send(stripeInfo);
+  } catch (err) {
+    console.log(err.message);
+    res
+      .status(500)
+      .json({errors: {DEFAULT_SERVER_ERROR: "Something went wrong..."}})
+  }
+})
+
 module.exports = router;

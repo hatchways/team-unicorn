@@ -11,6 +11,7 @@ const userRouter = require("./routes/user");
 const columnsRouter = require("./routes/api/columns");
 const cardsRouter = require("./routes/api/cards");
 const boardRouter = require("./routes/api/boards");
+const stripeRouter = require("./routes/api/stripe");
 
 const { json, urlencoded } = express;
 
@@ -31,6 +32,8 @@ app.use("/user", userRouter);
 app.use("/api/columns", columnsRouter);
 app.use("/api/cards", cardsRouter);
 app.use("/api/boards", boardRouter);
+app.use("/user", userRouter);
+app.use("/stripe", stripeRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

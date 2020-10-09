@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {MuiThemeProvider} from '@material-ui/core';
 import {BrowserRouter, Route, Redirect, Switch} from 'react-router-dom';
+import {Elements} from '@stripe/react-stripe-js';
+import {loadStripe} from '@stripe/stripe-js';
 import theme from 'themes/theme';
 import Signup from 'pages/Signup';
 import Login from 'pages/Login';
@@ -11,6 +13,13 @@ import UserContext from './contexts';
 import Dashboard from './pages/Dashboard';
 
 // TODO: Handle UI if server is unavailable?
+
+// STRIPE
+import Subscription from './pages/Subscribe';
+
+const stripeKey = loadStripe(
+  'pk_test_51HWkpzD9AsNutHPoPsv3n7bvS04Gs98poP4UDgeFqq68GVEgRt1mJdfILPFgBZePOyICCSeHfXrYPQGIgQa9Zqme000nXXLlWg',
+);
 
 function App() {
   const [user, setUser] = useState(null);
@@ -41,38 +50,50 @@ function App() {
   }, []);
   return !sessionResolved ? null : (
     <MuiThemeProvider theme={theme}>
-      <UserContext.Provider value={userContextValue}>
-        <BrowserRouter>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              component={
-                authenticated
-                  ? () => <Redirect to="/dashboard" />
-                  : () => <Redirect to="/signup" />
-              }
-            />
-            <AuthRoute
-              authed={authenticated}
-              path="/signup"
-              component={Signup}
-            />
-            <AuthRoute authed={authenticated} path="/login" component={Login} />
-            <PrivateRoute
-              authed={authenticated}
-              path="/dashboard"
-              component={Dashboard}
-            />
-            <PrivateRoute
-              authed={authenticated}
-              path="/calendar"
-              // TODO: Update component to calendar
-              component={Dashboard}
-            />
-          </Switch>
-        </BrowserRouter>
-      </UserContext.Provider>
+      <Elements stripe={stripeKey}>
+        <UserContext.Provider value={userContextValue}>
+          <BrowserRouter>
+            <Switch>
+              <Route
+                exact
+                path="/"
+                component={
+                  authenticated
+                    ? () => <Redirect to="/dashboard" />
+                    : () => <Redirect to="/signup" />
+                }
+              />
+              <AuthRoute
+                authed={authenticated}
+                path="/signup"
+                component={Signup}
+              />
+              <AuthRoute
+                authed={authenticated}
+                path="/login"
+                component={Login}
+              />
+              <PrivateRoute
+                authed={authenticated}
+                path="/dashboard"
+                component={Dashboard}
+              />
+              <PrivateRoute
+                authed={authenticated}
+                path="/calendar"
+                // TODO: Update component to calendar
+                component={Dashboard}
+              />
+              <PrivateRoute
+                authed={authenticated}
+                path="/subscription"
+                // TODO: Update component to calendar
+                component={() => <Subscription user={user} />}
+              />
+            </Switch>
+          </BrowserRouter>
+        </UserContext.Provider>
+      </Elements>
     </MuiThemeProvider>
   );
 }

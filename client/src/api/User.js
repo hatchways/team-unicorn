@@ -64,6 +64,14 @@ const User = {
       return defaultErrorHandler(err);
     }
   },
+  subscribe: async (data) => {
+    try {
+      const {data: respData} = await axios.put('user/subscribe', data);
+      return ApiResultFactory.withData(respData);
+    } catch (err) {
+      return defaultErrorHandler(err);
+    }
+  },
 };
 
 export default User;
