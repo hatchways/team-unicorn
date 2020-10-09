@@ -8,28 +8,96 @@ import {
   ADDCARD_CALENDAR,
   UPDATECARD_CALENDAR,
 } from '../types';
+import {convertBoardAPI, convertCalendarAPI} from '../../api/Utils';
+
+// Load View Data
+const LoadViewData = (board) => {
+  const convertedCalendar = convertCalendarAPI(board);
+  const convertedBoard = convertBoardAPI(board);
+
+  return {convertedCalendar, convertedBoard};
+};
 
 const reducers = {
-  updateCardCalendar: (state, data) => {
-    const columnId = data.column;
+  updateCardCalendar: (state, card) => {
+    const columnId = card.column;
+    const newState = state;
+    const newBoards = newState.boards;
+    const newBoard = newState.board;
+    const newColumns = newBoard.columns.map((column) =>
+      column.id === columnId
+        ? {
+            cards: column.cards.map((cardObject) =>
+              cardObject.id === card.id ? card : cardObject,
+            ),
+            name: column.name,
+            _id: column.id,
+            id: column.id,
+          }
+        : column,
+    );
+
+    newState.board = {...newBoard, columns: newColumns};
+    newState.boards = newBoards.map((board) =>
+      board.id === newBoard.id ? newBoard : board,
+    );
+    return newState;
+  },
+  addCardCalendar: (state, card) => {
+    const columnId = state.convertedCalendar.inProgessId;
     const cardsArray = state.board.columns.filter(
       (column) => column.id === columnId,
     )[0].cards;
-    const cardState = cardsArray.filter(
-      (cardObject) => cardObject.id === data.id,
+
+    cardsArray.push(card);
+    const newState = state;
+    const newBoard = newState.board;
+    newState.board = {
+      ...newBoard,
+      columns: newState.board.columns.map((column) =>
+        column.id === columnId
+          ? {
+              cards: cardsArray,
+              name: column.name,
+              _id: column.id,
+              id: column.id,
+            }
+          : column,
+      ),
+    };
+    newState.boards = newState.boards.map((board) =>
+      board.id === newBoard.id ? newBoard : board,
     );
-    cardState[0] = data;
-
-    return state;
+    return newState;
   },
-  addCardCalendar: (state, data) => {
-    const columnid = state.convertedCalendar.inProgessId;
-    const cardsArray = state.board.columns.filter(
-      (column) => column.id === columnid,
-    )[0].cards;
-
-    cardsArray.push(data);
-    return state;
+  changeBoard: (state, boardId) => {
+    const newBoard = state.boards.filter((board) => board.id === boardId)[0];
+    const {convertedCalendar, convertedBoard} = LoadViewData(newBoard);
+    return {
+      ...state,
+      board: newBoard,
+      convertedBoard,
+      convertedCalendar,
+    };
+  },
+  changeView: (state, view) => {
+    const {convertedCalendar, convertedBoard} = LoadViewData(state.board);
+    return {...state, view, convertedCalendar, convertedBoard};
+  },
+  init: (state, boards) => {
+    const newBoard = boards[0];
+    const convertedBoard = convertBoardAPI(newBoard);
+    const convertedCalendar = convertCalendarAPI(newBoard);
+    // eslint-disable-next-line no-console
+    console.log('server', {boards, convertedBoard, convertedCalendar});
+    return {
+      ...state,
+      boards,
+      board: newBoard,
+      convertedBoard,
+      convertedCalendar,
+      loading: false,
+    };
   },
 };
 const BoardReducer = (state, action) => {
@@ -40,12 +108,9 @@ const BoardReducer = (state, action) => {
     case ADDCARD_CALENDAR:
       return reducers.addCardCalendar(state, data);
     case CHANGE_VIEW:
-      return {
-        ...state,
-        view: data.view,
-        convertedBoard: data.convertedBoard,
-        convertedCalendar: data.convertedCalendar,
-      };
+      return reducers.changeView(state, data);
+    case CHANGE_BOARD:
+      return reducers.changeBoard(state, data);
     case ADD_BOARD:
       return {
         ...state,
@@ -53,22 +118,8 @@ const BoardReducer = (state, action) => {
         board: data,
         loading: false,
       };
-    case CHANGE_BOARD:
-      return {
-        ...state,
-        board: data.newBoard,
-        convertedBoard: data.convertedBoard,
-        convertedCalendar: data.convertedCalendar,
-      };
     case INIT:
-      return {
-        ...state,
-        boards: data.boards,
-        board: data.boards[0],
-        convertedBoard: data.convertedBoard,
-        convertedCalendar: data.convertedCalendar,
-        loading: false,
-      };
+      return reducers.init(state, data);
     case SET_ERROR:
       return {...state, loading: false, error: true};
     case SET_LOADING:

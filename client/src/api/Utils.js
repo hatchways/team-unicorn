@@ -1,4 +1,4 @@
-export const convertCalendarAPI = async (board) => {
+export const convertCalendarAPI = (board) => {
   const calendarEvents = [];
   const draggableEvents = [];
   let inProgessId;
@@ -11,19 +11,17 @@ export const convertCalendarAPI = async (board) => {
       const card = {};
       card.title = cardObject.name;
       card.id = cardObject.id;
-      if (cardObject.deadline === undefined) {
-        draggableEvents.push(card);
-      } else {
-        card.start = cardObject.deadline;
-        card.end = cardObject.deadline;
+      if (cardObject.details && cardObject.details.deadline) {
+        card.start = cardObject.details.deadline;
+        card.end = cardObject.details.deadline;
         calendarEvents.push(card);
-      }
+      } else draggableEvents.push(card);
     });
   });
   return {draggableEvents, calendarEvents, inProgessId};
 };
 
-export const convertBoardAPI = async (board) => {
+export const convertBoardAPI = (board) => {
   const newBoard = {
     id: board.id,
     tasks: {},
@@ -32,7 +30,7 @@ export const convertBoardAPI = async (board) => {
   };
 
   // eslint-disable-next-line
-  await board.columns.map((column) => {
+  board.columns.map((column) => {
     newBoard.columns[column.id] = {
       id: column.id,
       title: column.name,

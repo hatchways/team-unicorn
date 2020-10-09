@@ -46,8 +46,9 @@ export const updateCard = async ({id, title, details}) => {
   try {
     const url = `/api/cards/${id}`;
 
-    await axios.put(url, {name: title, details});
-    return ApiResultFactory.success();
+    const {data: respData} = await axios.put(url, {name: title, details});
+    return respData;
+    // return ApiResultFactory.withData(respData);
   } catch (err) {
     return defaultErrorHandler(err);
   }

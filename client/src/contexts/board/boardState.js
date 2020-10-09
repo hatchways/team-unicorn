@@ -1,7 +1,6 @@
 import React, {useReducer, useEffect} from 'react';
 import {getBoards, addBoard} from '../../api/Board';
 import {updateCard, addCardByColumnId} from '../../api/Card';
-import {convertBoardAPI, convertCalendarAPI} from '../../api/Utils';
 import BoardReducer from './boardReducer';
 import BoardContext from './boardContext';
 
@@ -33,14 +32,6 @@ const BoardState = ({children}) => {
   // Set error
   const setError = () => dispatch({type: SET_ERROR});
 
-  // Load View Data
-  const LoadViewData = async (board) => {
-    const convertedCalendar = await convertCalendarAPI(board);
-    const convertedBoard = await convertBoardAPI(board);
-
-    return {convertedCalendar, convertedBoard};
-  };
-
   useEffect(() => {
     // Get Boards
     const GetBoards = async () => {
@@ -61,7 +52,7 @@ const BoardState = ({children}) => {
   // Update Deadline By Card Id
   const UpdateDeadline = async (card) => {
     const res = await updateCard(card);
-    dispatch({type: UPDATECARD_CALENDAR, payload: res.data});
+    dispatch({type: UPDATECARD_CALENDAR, payload: res});
   };
 
   // Add Card By Column Id
@@ -74,22 +65,14 @@ const BoardState = ({children}) => {
 
   // Change View
   const ChangeView = async (view) => {
-    const {convertedCalendar, convertedBoard} = await LoadViewData(state.board);
-    dispatch({
-      type: CHANGE_VIEW,
-      payload: {view, convertedCalendar, convertedBoard},
-    });
+    dispatch({type: CHANGE_VIEW, payload: view});
   };
 
   // Change Board
   const ChangeBoard = async (boardId) => {
-    const newBoard = [...state.boards].filter(
-      (board) => board.id === boardId,
-    )[0];
-    const {convertedCalendar, convertedBoard} = await LoadViewData(newBoard);
     dispatch({
       type: CHANGE_BOARD,
-      payload: {newBoard, convertedCalendar, convertedBoard},
+      payload: boardId,
     });
   };
 

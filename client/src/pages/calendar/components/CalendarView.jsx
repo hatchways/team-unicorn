@@ -52,6 +52,7 @@ const CalendarView = () => {
     BoardContext,
   );
   const {calendarEvents} = convertedCalendar;
+
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [detailCardData, setDetailCardData] = useState(false);
@@ -94,9 +95,10 @@ const CalendarView = () => {
     const changeEvent = info.event;
     const editedCard = {};
     editedCard.id = changeEvent.id;
-    editedCard.deadline = changeEvent.start.getTime();
+    editedCard.title = changeEvent.title;
+    editedCard.details = {};
+    editedCard.details.deadline = changeEvent.start.getTime();
 
-    // Todo UpdateEvent
     UpdateDeadline(editedCard);
   };
 
@@ -139,6 +141,7 @@ const CalendarView = () => {
           }}
           initialView="dayGridMonth"
           eventColor="red"
+          dayMaxEventRows
           editable
           droppable
           eventContent={renderEventContent}
@@ -148,7 +151,6 @@ const CalendarView = () => {
           eventChange={handleEventChange}
           eventReceive={handleEventChange}
           eventDidMount={handleEventDidMount}
-          dayMaxEventRows
           drop={(info) => {
             info.draggedEl.parentNode.removeChild(info.draggedEl);
           }}

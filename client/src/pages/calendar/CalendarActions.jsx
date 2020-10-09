@@ -16,7 +16,6 @@ const useStyles = makeStyles(() => ({
 const CalendarActions = () => {
   const {convertedCalendar} = useContext(BoardContext);
   const {draggableEvents} = convertedCalendar;
-
   const classes = useStyles();
   return (
     <div className={classes.calendarOuterContainer}>
