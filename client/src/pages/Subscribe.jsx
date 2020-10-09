@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {Button, Card, CardContent, CircularProgress, Typography} from '@material-ui/core';
+import {Button, Card, CardContent, CircularProgress, Grid, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import User from 'api/User';
@@ -10,29 +10,30 @@ const useStyles = makeStyles({
     maxWidth: 500,
     margin: '35vh auto',
   },
+  card: {
+    width: '450px',
+  },
   content: {
     display: 'flex',
     flexDirection: 'column',
     alignContent: 'flex-start',
-  },
-  div: {
-    display: 'flex',
-    flexDirection: 'row',
-    alignContent: 'flex-start',
     justifyContent: 'space-between',
   },
   button: {
-    margin: '2em auto 1em',
+    margin: '2em auto 2em',
+    textAlign: 'center'
   },
   receipt: {
     paddingBottom: '20px'
   },
-  progress: {
-    margin: '2em auto 1em'
-  }
+  cardPricing: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "baseline",
+  },
 });
 
-const Subscription = ({user}) => {
+const Subscribe = ({user}) => {
   const classes = useStyles();
   const stripe = useStripe();
   const elements = useElements();
@@ -95,20 +96,29 @@ const Subscription = ({user}) => {
                
 
   return (
-    <Card className={classes.root}>
-      <CardContent className={classes.content}>
-        <Typography variant="h5" className={classes.receipt}>Email: {email}</Typography>
-        <CardElement options={{disabled: stripeId !== "free"}} />
-        <div className={classes.div}>
-          {loading ? <CircularProgress className={classes.progress} /> : 
+    <Card className={classes.card}>
+      <Grid container alignItems="flex-end">
+        <Grid item xs={12} md={4}>
+        <Card>
+          <CardContent className={classes.content}>
+            <div className={classes.button}>
+            <Typography variant="h2" gutterBottom>Kanban Premium</Typography>
+            <Typography variant="h2" gutterBottom>$5/mo</Typography>
+            <Typography variant="h6">Unlimited Boards</Typography>
+            <Typography variant="h6">Unlimited Columns</Typography>
+            </div>
+          <CardElement options={{disabled: stripeId !== "free"}} />
+          {loading ? <CircularProgress className={classes.button} /> : 
             <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub} >
               {stripeId !== "free" ? "Cancel Subscription" : "Subscribe"}
             </Button>
           }
-        </div>
-      </CardContent>
+          </CardContent>
+        </Card>
+        </Grid>
+      </Grid>
     </Card>
   );
 }
 
-export default Subscription;
+export default Subscribe;
