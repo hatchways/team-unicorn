@@ -4,8 +4,8 @@ const stripe = require('stripe')(process.env.STRIPESECRET);
 const mongoose = require("mongoose");
 const User = require("../../models/User")
 const uri = process.env.MONGOURI 
-mongoose.connect(uri, {useUnifiedTopology: true, useNewUrlParser: true,   useCreateIndex: true,
-  useFindAndModify: true})
+mongoose.connect(uri, {useUnifiedTopology: true, useNewUrlParser: true, useCreateIndex: true,
+  useFindAndModify: false})
 
 const assignStripeInfo = async (customer) => {
   try {
