@@ -1,17 +1,18 @@
 import React, {useState} from 'react';
 import {Menu, MenuItem} from '@material-ui/core';
+import AccountDialog from './AccountDialog';
 import AvatarDialogForm from './AvatarDialogForm';
 import LogOutButton from '../../auth/components/LogoutButton';
 
 const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
-  const [profileOpen, setProfileOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState({open: false, dialog: ''});
 
-  const openProfile = () => {
-    setProfileOpen(true);
+  const openProfile = (dialog) => {
+    setProfileOpen({open: true, dialog});
   };
 
   const handleClose = () => {
-    setProfileOpen(false);
+    setProfileOpen({...profileOpen, open: false});
     setAnchorElem(null);
   };
 
@@ -27,18 +28,27 @@ const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
         anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
         transformOrigin={{vertical: 'top', horizontal: 'center'}}
       >
-        <MenuItem onClick={handleClose}>My account</MenuItem>
-        <MenuItem onClick={openProfile}>Edit Profile Picture</MenuItem>
+        <MenuItem onClick={() => openProfile('account')}>My account</MenuItem>
+        <MenuItem onClick={() => openProfile('avatar')}>
+          Edit Profile Picture
+        </MenuItem>
         <MenuItem>
           {' '}
           <LogOutButton />{' '}
         </MenuItem>
       </Menu>
 
-      {profileOpen && (
+      {profileOpen.dialog === 'avatar' && (
         <AvatarDialogForm
-          open={profileOpen}
+          open={profileOpen.open === true}
           setAvatar={setAvatar}
+          closeMenu={handleClose}
+          setOpenSnackbar={setOpenSnackbar}
+        />
+      )}
+      {profileOpen.dialog === 'account' && (
+        <AccountDialog
+          open={profileOpen.open === true}
           closeMenu={handleClose}
           setOpenSnackbar={setOpenSnackbar}
         />
