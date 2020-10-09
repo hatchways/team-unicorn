@@ -14,7 +14,7 @@ const useStyles = makeStyles({
   },
 });
 
-const LoginForm = () => {
+const LoginForm = ({openSnackbar}) => {
   const {register, handleSubmit, errors: formErrors} = useForm();
   const {
     email: emailHTMLProps,
@@ -31,9 +31,12 @@ const LoginForm = () => {
       const {user} = apiData;
       userContext.setUser(user);
       userContext.setAuthenticated(true);
+      openSnackbar('Success!', 'success');
     } else {
-      console.log(apiErrors);
+      const errorKeys = Object.getOwnPropertyNames(apiErrors);
+      const message = apiErrors[errorKeys[0]];
       // TODO: Display toaster
+      openSnackbar(message, 'error');
     }
   };
   const {
