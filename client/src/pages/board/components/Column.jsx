@@ -54,6 +54,11 @@ const useStyles = makeStyles((theme) => ({
     textTransform: 'none',
     alignContent: 'center',
   },
+  input: {
+    '&:hover': {
+      cursor: 'pointer',
+    },
+  },
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
@@ -124,6 +129,7 @@ export default function Column({column, index, tasks, setUpdate}) {
                   {...providedForDraggable.dragHandleProps}
                   noWrap
                   onDoubleClick={() => setEditing(true)}
+                  className={classes.input}
                 >
                   {title}
                 </Typography>
