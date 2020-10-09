@@ -3,6 +3,7 @@ import axios from 'axios';
 // helper function to convertBoard backend to frontend
 // leaving this separate from exported Board because want to keep this private
 const convertBoardAPI = async (board) => {
+  console.log(board)
   const newBoard = {
     id: board.id,
     tasks: {},
@@ -23,6 +24,7 @@ const convertBoardAPI = async (board) => {
       newBoard.tasks[card.id] = {
         id: card.id,
         content: card.name,
+        details: card.details
       };
     });
     newBoard.columnOrder.push(column.id);

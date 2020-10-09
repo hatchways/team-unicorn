@@ -136,6 +136,7 @@ const Columns = ({data}) => {
 
 export default function KanbanBoard() {
   const {data, dispatch} = useContext(BoardContext);
+  console.log(data)
 
   const classes = useStyles();
 

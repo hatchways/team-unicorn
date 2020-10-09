@@ -4,7 +4,7 @@ import {Draggable} from 'react-beautiful-dnd';
 import {makeStyles} from '@material-ui/core/styles';
 import {updateCard} from 'api/Card';
 import CardDialog from './dashboardForms/CardDialog';
-
+import Colorbar from './dashboardForms/dialogSections/Colorbar';
 const useStyles = makeStyles((theme) => ({
   drag: {
     width: 275,
@@ -25,13 +25,19 @@ const useStyles = makeStyles((theme) => ({
   'card-footer': {
     display: 'flex',
     flexDirection: 'column',
-  },
+  }, 
+  'card-header': {
+    display: 'flex',
+    flexDirection: 'column',
+    marginBottom: '20px',
+  }
 }));
 
 export default function Task({id, columnName, title, index}) {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [saveRequestData, setSaveRequestData] = useState(null);
+  const [color, setColor] = useState() //temporary 
 
   const handleOpen = () => {
     setOpen(true);
@@ -45,6 +51,7 @@ export default function Task({id, columnName, title, index}) {
       const {success, errors} = await updateCard({id, title, details});
       // TODO: display snackbars
       if (success) {
+        setColor(details.color)
         setSaveRequestData(null);
       } else {
         // TODO: Retry?
@@ -64,6 +71,7 @@ export default function Task({id, columnName, title, index}) {
     <>
       <Draggable draggableId={id} index={index}>
         {({draggableProps, dragHandleProps, innerRef}) => (
+
           <Card
             className={classes.card}
             {...draggableProps}
@@ -73,10 +81,14 @@ export default function Task({id, columnName, title, index}) {
               ...draggableProps.style,
             }}
             onClick={handleOpen}
+            key='colorbar'
           >
-            <Typography gutterBottom>{title}</Typography>
+            <div className={classes['card-header']}><Colorbar color={color} /></div>
+            <Typography gutterBottom> {title}</Typography>
             <div className={classes['card-footer']} />
+
           </Card>
+
         )}
       </Draggable>
       <CardDialog
@@ -86,6 +98,7 @@ export default function Task({id, columnName, title, index}) {
         open={open}
         onClose={handleClose}
         onSave={handleSave}
+        setColor={setColor}
       />
     </>
   );

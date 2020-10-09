@@ -22,7 +22,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Colorbar = ({color, shade = 500, onColorChange, ...other}) => {
+const Colorbar = ({color, shade = 500, onColorChange, setColor, ...other}) => {
   const classes = useStyles({color});
 
   const [open, setOpen] = useState(false);

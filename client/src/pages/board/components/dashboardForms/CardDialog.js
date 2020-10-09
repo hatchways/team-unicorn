@@ -42,6 +42,7 @@ const CardDialog = ({
   onClose,
   onSave,
   open,
+  setColor,
   ...rest
 }) => {
   const classes = useStyles();
@@ -63,7 +64,8 @@ const CardDialog = ({
             ...details
           },
         } = data;
-
+        
+        setColor(cardFields.color)
         setSections(initSections.length === 0 ? ['DESC'] : initSections);
         setLockedSections(initLockedSections);
         dispatchCardUpdate(details);

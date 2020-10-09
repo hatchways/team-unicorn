@@ -57,8 +57,8 @@ const useStyles = makeStyles((theme) => ({
   input: {
     '&:hover': {
       cursor: 'pointer',
-    },
-  },
+    }
+  }
 }));
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
