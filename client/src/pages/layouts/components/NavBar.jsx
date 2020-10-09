@@ -1,4 +1,4 @@
-import React, {useState, useContext, useCallback} from 'react';
+import React, {useState} from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import {
@@ -7,12 +7,8 @@ import {
   IconButton,
   Typography,
   Menu,
-  MenuItem,
 } from '@material-ui/core/';
 import MenuIcon from '@material-ui/icons/Menu';
-import UserContext from '../../../contexts';
-import User from '../../../api/User';
-import LogoutButton from '../../auth/components/LogoutButton';
 
 const useStyles = makeStyles((theme) => ({
   title: {
@@ -29,19 +25,6 @@ const NavBar = () => {
   const classes = useStyles();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
-  const userContext = useContext(UserContext);
-  const handleLogout = useCallback(async () => {
-    const {success} = await User.endSession();
-    if (success) {
-      userContext.setUser(null);
-      userContext.setAuthenticated(false);
-    }
-    // else {
-    //   //es-lint
-    //   console.log(errors);
-    //   // TODO: Display toaster
-    // }
-  }, [userContext]);
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
@@ -56,7 +39,6 @@ const NavBar = () => {
         <Typography variant="h6" className={classes.title} color="inherit">
           My School Board
         </Typography>
-        <LogoutButton />
         <IconButton
           edge="end"
           aria-label="menu"
@@ -71,9 +53,7 @@ const NavBar = () => {
           variant="menu"
           open={open}
           onClose={handleClose}
-        >
-          <MenuItem onClick={handleLogout}>Logout</MenuItem>
-        </Menu>
+        />
       </Toolbar>
     </AppBar>
   );
