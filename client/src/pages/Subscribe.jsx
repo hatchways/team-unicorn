@@ -11,7 +11,7 @@ const useStyles = makeStyles({
     margin: '35vh auto',
   },
   card: {
-    width: '450px',
+    width: '500px',
   },
   content: {
     display: 'flex',
@@ -97,15 +97,13 @@ const Subscribe = ({user}) => {
 
   return (
     <Card className={classes.card}>
-      <Grid container alignItems="flex-end">
-        <Grid item xs={12} md={4}>
-        <Card>
+        <Card className={classes.content}>
           <CardContent className={classes.content}>
             <div className={classes.button}>
-            <Typography variant="h2" gutterBottom>Kanban Premium</Typography>
-            <Typography variant="h2" gutterBottom>$5/mo</Typography>
-            <Typography variant="h6">Unlimited Boards</Typography>
-            <Typography variant="h6">Unlimited Columns</Typography>
+              <Typography variant="h2" gutterBottom>Kanban Premium</Typography>
+              <Typography variant="h2" gutterBottom>$5/mo</Typography>
+              <Typography variant="h6">Unlimited Boards</Typography>
+              <Typography variant="h6">Unlimited Columns</Typography>
             </div>
           <CardElement options={{disabled: stripeId !== "free"}} />
           {loading ? <CircularProgress className={classes.button} /> : 
@@ -115,8 +113,6 @@ const Subscribe = ({user}) => {
           }
           </CardContent>
         </Card>
-        </Grid>
-      </Grid>
     </Card>
   );
 }
