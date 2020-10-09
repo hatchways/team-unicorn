@@ -84,6 +84,17 @@ const reducers = {
     const {convertedCalendar, convertedBoard} = LoadViewData(state.board);
     return {...state, view, convertedCalendar, convertedBoard};
   },
+  addBoard: (state, board) => {
+    const {convertedCalendar, convertedBoard} = LoadViewData(board);
+    return {
+      ...state,
+      boards: [...state.boards, board],
+      board,
+      convertedCalendar,
+      convertedBoard,
+      loading: false,
+    };
+  },
   init: (state, boards) => {
     const newBoard = boards[0];
     const convertedBoard = convertBoardAPI(newBoard);
@@ -112,12 +123,7 @@ const BoardReducer = (state, action) => {
     case CHANGE_BOARD:
       return reducers.changeBoard(state, data);
     case ADD_BOARD:
-      return {
-        ...state,
-        boards: [...state.boards, data],
-        board: data,
-        loading: false,
-      };
+      return reducers.addBoard(state, data);
     case INIT:
       return reducers.init(state, data);
     case SET_ERROR:
