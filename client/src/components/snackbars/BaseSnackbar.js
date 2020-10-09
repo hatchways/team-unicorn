@@ -22,9 +22,9 @@ const BaseSnackBar = ({open, message, severity, onClose, ...otherProps}) => {
       autoHideDuration={6000}
       resumeHideDuration={500}
       transitionDuration={500}
-      anchorOrigin={{vertical: 'bottom', horizontal: 'center'}}
+      anchorOrigin={{vertical: 'top', horizontal: 'center'}}
       TransitionComponent={Slide}
-      TransitionProps={{direction: 'up'}}
+      TransitionProps={{direction: 'down'}}
       onClose={onClose}
       {...otherProps}
     >

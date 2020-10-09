@@ -19,8 +19,8 @@ const User = require("../models/User");
 const Board = require("../models/boards");
 
 const EmailSender = require('./api/email');
-const SUBJECT = 'Thank you for signing up!'
-const emailText = (name) => `Thank you for Signing up for our Kanban Board app: ${name}. We really appreciate it!`
+const SUBJECT = 'Thank You For Signing Up!'
+const emailText = (name) => `Thank you for signing up for our Kanban Board app: ${name}. We really appreciate it!`
 // TODO: Find a more appropriate place to put this?
 // Auth token time-to-live in ms.
 const AuthTokenTTL = 7 * 24 * 60 * 60 * 1000;
