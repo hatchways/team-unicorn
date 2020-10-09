@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import axios from 'axios';
-import {Button, Card, CardContent, Typography} from '@material-ui/core';
+import {Button, Card, CardContent, CircularProgress, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import User from 'api/User';
@@ -26,6 +26,9 @@ const useStyles = makeStyles({
   },
   receipt: {
     paddingBottom: '20px'
+  },
+  progress: {
+    margin: '2em auto 1em'
   }
 });
 
@@ -36,6 +39,7 @@ const Subscription = ({user}) => {
   let {_id, name, email, stripeCustomerId} = user;
 
   const [stripeId, setStripeId] = useState(stripeCustomerId);
+  const [loading, setLoading] = useState(false)
 
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
@@ -43,13 +47,14 @@ const Subscription = ({user}) => {
     }
 
     const cardElement = elements.getElement(CardElement);
-
+    
     if (stripeId !== "free") {
-      await User.subscribe({id: _id, stripeCustomerId: "free"})
-      await setStripeId("free")
+      setLoading(true)
+      User.subscribe({id: _id, stripeCustomerId: "free"})
+      setStripeId("free")
       await axios.post('stripe/subscribe', {...user, stripeCustomerId: stripeId})
+      setLoading(false)
     } else {
-
       const result = await stripe.createPaymentMethod({
         type: 'card',
         card: elements.getElement(CardElement),
@@ -58,10 +63,12 @@ const Subscription = ({user}) => {
           email: email,
         },
       });
-  
+      
       if (result.error) {
         console.log(result.error.message);
       } else {
+        setLoading(true);
+
         const res = await axios.post('/stripe/subscribe', {...user, 'payment_method': result.paymentMethod.id});
         const {client_secret, status, stripeInfo} = res.data;
         
@@ -71,16 +78,17 @@ const Subscription = ({user}) => {
               console.log('Issue with payment: ', result.error);
             } else {
               console.log('Payment received. Thank you for subscribing!');
-              User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId})
-              setStripeId(stripeInfo.stripeCustomerId)
+              User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId});
+              setStripeId(stripeInfo.stripeCustomerId);
             }
           });
         } else {
-          setStripeId(stripeInfo.stripeCustomerId)
-          User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId})
+          setStripeId(stripeInfo.stripeCustomerId);
+          User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId});
           console.log('Payment received. Thank you for subscribing!');
         }
         cardElement.clear()
+        setLoading(false)
       }
     };
     }
@@ -92,9 +100,11 @@ const Subscription = ({user}) => {
         <Typography variant="h5" className={classes.receipt}>Email: {email}</Typography>
         <CardElement options={{disabled: stripeId !== "free"}} />
         <div className={classes.div}>
-          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub}>
-            {stripeId !== "free" ? "Cancel Subscription" : "Subscribe"}
-          </Button>
+          {loading ? <CircularProgress className={classes.progress} /> : 
+            <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub} >
+              {stripeId !== "free" ? "Cancel Subscription" : "Subscribe"}
+            </Button>
+          }
         </div>
       </CardContent>
     </Card>
