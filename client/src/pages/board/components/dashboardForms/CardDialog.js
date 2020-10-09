@@ -37,8 +37,7 @@ const detailsReducer = (details, updatedSection) => {
 const CardDialog = ({
   id,
   title,
-  columnName,
-  tags: initTags,
+  columnName = 'Col',
   onClose,
   onSave,
   open,
