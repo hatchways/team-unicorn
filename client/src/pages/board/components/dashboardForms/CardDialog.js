@@ -37,6 +37,7 @@ const detailsReducer = (details, updatedSection) => {
 const CardDialog = ({
   id,
   title,
+  saveTitle,
   columnName = 'Col',
   onClose,
   onSave,
@@ -111,7 +112,7 @@ const CardDialog = ({
       return {...obj, [dbPropName]: cardFields[dbPropName]};
     }, initDetails);
 
-    onSave({details: updatedDetails});
+    onSave({title, details: updatedDetails});
     onClose();
   };
   const discardAndExit = () => {
@@ -162,6 +163,7 @@ const CardDialog = ({
             cardColor={color}
             subtitle={subtitle}
             dispatchUpdate={dispatchCardUpdate}
+            saveTitle={saveTitle}
           >
             {title}
           </CardDialogTitle>

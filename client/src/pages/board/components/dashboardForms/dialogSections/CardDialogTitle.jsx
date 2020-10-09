@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import TitleIcon from '@material-ui/icons/AssignmentOutlined';
 import {
@@ -6,6 +6,7 @@ import {
   IconButton,
   makeStyles,
   Typography,
+  Input,
 } from '@material-ui/core';
 import WithIcon from './components/WithIcon';
 import Colorbar from './Colorbar';
@@ -35,17 +36,34 @@ const CardDialogTitle = ({
   onClose,
   subtitle,
   cardColor,
+  saveTitle,
   dispatchUpdate,
 }) => {
   const classes = useStyles();
+  const [editing, setEditing] = useState(false);
 
   const onColorChange = (value) => dispatchUpdate({color: value});
+  const updateTitle = (e) => {
+    const value = e.target.value ? e.target.value : 'Add title...';
+    saveTitle(value);
+    setEditing(false);
+  };
+
+  const title = children || 'Add title...';
   return (
     <DialogTitle disableTypography>
       <WithIcon spacing={2} Icon={TitleIcon} iconColor="primary">
-        <Typography variant="h5" className={classes.title}>
-          {children}
-        </Typography>
+        {editing ? (
+          <Input autoFocus placeholder={title} onBlur={updateTitle} />
+        ) : (
+          <Typography
+            variant="h5"
+            className={classes.title}
+            onDoubleClick={() => setEditing(true)}
+          >
+            {title}
+          </Typography>
+        )}
         <Colorbar color={cardColor} onColorChange={onColorChange} />
       </WithIcon>
       <WithIcon spacing={2} aligner>

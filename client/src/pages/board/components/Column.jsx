@@ -123,6 +123,7 @@ export default function Column({column, index, tasks, setUpdate}) {
               <Grid item xs={8}>
                 {isEditing ? (
                   <Input
+                    autoFocus
                     placeholder={title}
                     onBlur={finishEdit}
                     onChange={(e) => editTitle(e)}
