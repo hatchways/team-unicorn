@@ -1,52 +1,56 @@
 import {updateColumn} from 'api/Column';
+import Board from 'api/Board';
+import {convertCalendarAPI, convertBoardAPI} from 'api/Utils';
 
 const reducers = {
   addCard: (state, task, colId) => {
+    const {boardView} = state;
     const newColumn = {
-      ...state.columns[colId],
-      taskIds: state.columns[colId].taskIds.concat(task.id),
+      ...boardView.columns[colId],
+      taskIds: boardView.columns[colId].taskIds.concat(task.id),
     };
     const newState = {
-      ...state,
+      ...boardView,
       columns: {
-        ...state.columns,
+        ...boardView.columns,
         [newColumn.id]: newColumn,
       },
     };
     newState.tasks[task.id] = {id: task.id, content: task.name};
-    return newState;
+    return {...state, boardView: newState};
   },
   moveCard: (state, prevColId, nextColId, oldIndex, newIndex) => {
-    const taskId = state.columns[prevColId].taskIds[oldIndex];
+    const {boardView} = state;
+    const taskId = boardView.columns[prevColId].taskIds[oldIndex];
 
     // remove card from previous column
-    const prevTaskIds = Array.from(state.columns[prevColId].taskIds);
+    const prevTaskIds = Array.from(boardView.columns[prevColId].taskIds);
     prevTaskIds.splice(oldIndex, 1);
     const prevColumn = {
-      ...state.columns[prevColId],
+      ...boardView.columns[prevColId],
       taskIds: prevTaskIds,
     };
 
-    const newState = {...state};
+    const newState = {...boardView};
     // Moving cards within same column
     if (prevColId === nextColId) {
       prevTaskIds.splice(newIndex, 0, taskId);
       newState.columns = {
-        ...state.columns,
+        ...boardView.columns,
         [prevColumn.id]: prevColumn,
       };
       updateColumn(prevColumn.id, {cards: prevTaskIds});
     } else {
       // Moving cards between different columns
-      const nextTaskIds = Array.from(state.columns[nextColId].taskIds);
+      const nextTaskIds = Array.from(boardView.columns[nextColId].taskIds);
       nextTaskIds.splice(newIndex, 0, taskId);
       const nextColumn = {
-        ...state.columns[nextColId],
+        ...boardView.columns[nextColId],
         taskIds: nextTaskIds,
       };
 
       newState.columns = {
-        ...state.columns,
+        ...boardView.columns,
         [prevColumn.id]: prevColumn,
         [nextColumn.id]: nextColumn,
       };
@@ -54,56 +58,79 @@ const reducers = {
       updateColumn(nextColumn.id, {cards: nextTaskIds});
     }
 
-    return newState;
+    return {...state, boardView: newState};
   },
   deleteTask: (state) => {
     // TODO
     return state;
   },
   addCol: (state, col) => {
+    const {boardView} = state;
     const newColumns = {
-      ...state.columns,
+      ...boardView.columns,
       [col.id]: {id: col.id, title: col.name, taskIds: []},
     };
     const newState = {
-      ...state,
+      ...boardView,
       columns: newColumns,
-      columnOrder: state.columnOrder.concat(col.id),
+      columnOrder: boardView.columnOrder.concat(col.id),
     };
-    return newState;
+    return {...state, boardView: newState};
   },
   moveCol: (state, fromIndex, toIndex) => {
-    const newState = {...state};
-    const col = newState.columnOrder[fromIndex];
-    newState.columnOrder.splice(fromIndex, 1);
-    newState.columnOrder.splice(toIndex, 0, col);
+    const {boardView} = state;
+    const newColumnOrder = Array.from(boardView.columnOrder);
+    const col = newColumnOrder[fromIndex];
+    newColumnOrder.splice(fromIndex, 1);
+    newColumnOrder.splice(toIndex, 0, col);
 
+    const newBoardState = {...boardView, columnOrder: newColumnOrder};
     // await Board.saveData(newState.id, newState.columnOrder);
-    return newState;
+    return {...state, boardView: newBoardState};
   },
   changeColTitle: (state, colId, newTitle) => {
+    const {boardView} = state;
     const newColumn = {
-      ...state.columns[colId],
+      ...boardView.columns[colId],
       title: newTitle,
     };
     const newColumns = {
-      ...state.columns,
+      ...boardView.columns,
       [newColumn.id]: newColumn,
     };
-    const newState = {...state, columns: newColumns};
-    return newState;
+    const newBoardState = {...boardView, columns: newColumns};
+    return {...state, boardView: newBoardState};
   },
   deleteCol: (state, colId) => {
     // TODO
-    const newColumns = {...state.columns};
+    const {boardView} = state;
+    const newColumns = {...boardView.columns};
     delete newColumns[colId];
-    const newColumnOrder = [...state.columnOrder].filter(
+    const newColumnOrder = [...boardView.columnOrder].filter(
       (val) => val !== colId,
     );
-    return {...state, columns: newColumns, columnOrder: newColumnOrder};
+    const newBoardState = {
+      ...boardView,
+      columns: newColumns,
+      columnOrder: newColumnOrder,
+    };
+    return {...state, boardView: newBoardState};
   },
-  initBoard: (boardData) => {
-    return boardData;
+  initBoard: (boards, board) => {
+    return {boards: boards.data, view: 'dashboard', boardView: board};
+  },
+  switchBoard: (state, board) => {
+    // const convertedBoard = state.view === 'dashboard' ? : convertCalendarAPI(board)
+    return {...state, boardView: board};
+  },
+  switchView: (state) => {
+    const board = Board.getBoard(state.board.id);
+    const convertedBoard =
+      state.view === 'calendar'
+        ? convertBoardAPI(board)
+        : convertCalendarAPI(board);
+    const newView = state.view === 'dashboard' ? 'calendar' : 'dashboard';
+    return {...state, view: newView, boardView: convertedBoard};
   },
 };
 

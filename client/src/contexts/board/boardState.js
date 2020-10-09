@@ -48,7 +48,6 @@ const BoardState = ({children}) => {
       setLoading();
       try {
         const res = await getBoards();
-
         dispatch({
           type: INIT,
           payload: res,
@@ -67,7 +66,7 @@ const BoardState = ({children}) => {
 
   // Add Card By Column Id
   const AddCardToCalendar = async (card) => {
-    const columnid = state.convertedCalendar.inProgessId;
+    const columnid = state.convertedCalendar.inProgressId;
     const res = await addCardByColumnId(columnid, card);
 
     const cardsArray = state.board.columns.filter(

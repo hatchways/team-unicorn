@@ -34,10 +34,17 @@ module.exports = {
       colId,
     });
   },
-  initBoard: (board, dispatch) => {
-    dispatch({
+  initBoard: async (boards, board, dispatch) => {
+    await dispatch({
       type: 'INIT_BOARD',
-      boardData: board,
+      boards,
+      board,
+    });
+  },
+  switchBoard: (board, dispatch) => {
+    dispatch({
+      type: 'SWITCH_BOARD',
+      board,
     });
   },
 };

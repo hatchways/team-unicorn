@@ -64,6 +64,22 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
+// @route GET /api/board/:id
+// @desc Get Board By ID
+// @access Private
+router.get("/:id", auth, async (req, res) => {
+  try {
+    await Board.findById(req.params.id)
+    .populate({path: "columns", populate: {path: "cards", model: "Card", select: ["name", "deadline"]}})
+    .exec((err, board) => {
+      res.json(board);
+    }); 
+  } catch (err) {
+      console.error(err.message);
+      res.status(500).send("Server Error")
+    }
+  })
+
 router.put("/:id", auth, (req, res) => {
   try {
     Board.findByIdAndUpdate(req.params.id, req.body, (err, newColumnOrder) => {

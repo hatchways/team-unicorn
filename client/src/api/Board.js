@@ -11,11 +11,21 @@ export const getBoards = async () => {
 };
 
 const Board = {
-  getData: async (index) => {
+  getAllBoards: async () => {
     try {
       const res = await axios.get(`/api/boards/`);
-      const convertedBoard = await convertBoardAPI(res.data[index]);
-      return {data: convertedBoard, loading: false, error: false};
+      // const boardIds = res.data.map(board => board._id);
+      // // const convertedBoard = await convertBoardAPI(res.data[index]);
+      return {data: res.data, loading: false, error: false};
+    } catch (err) {
+      return {data: [], loading: false, error: true};
+    }
+  },
+  getBoard: async (boardId) => {
+    try {
+      const res = await axios.get(`/api/boards/${boardId}`);
+      // const convertedBoard = await convertBoardAPI(res.data[index]);
+      return {data: res.data, loading: false, error: false};
     } catch (err) {
       return {data: [], loading: false, error: true};
     }

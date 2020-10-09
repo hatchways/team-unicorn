@@ -14,7 +14,8 @@ import {
   MenuList,
 } from '@material-ui/core/';
 
-import BoardContext from '../../../contexts/board/boardContext';
+import {BoardContext} from 'contexts/boardContext';
+import {convertBoardAPI} from 'api/Utils';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -36,7 +37,7 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const NavBar = () => {
-  const {boards, board, ChangeBoard} = useContext(BoardContext);
+  const {data, dispatch} = useContext(BoardContext);
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
   const anchorRef = React.useRef(null);
@@ -45,11 +46,16 @@ const NavBar = () => {
     setOpen((prevOpen) => !prevOpen);
   };
 
-  const handleClose = (event) => {
-    const boardId = event.target.getAttribute('value');
-    if (boardId !== null) {
-      ChangeBoard(boardId);
-    }
+  const handleClose = async (event) => {
+    const idx = await event.target.getAttribute('value');
+    const newBoard = await data.boards[idx];
+
+    // const board = data.view === 'dashboard' ?  : await convertCalendarAPI(newBoard)
+    dispatch({
+      board: await convertBoardAPI(newBoard),
+      type: 'SWITCH_BOARD',
+    });
+    // reducers.switchBoard(board, dispatch)
     setOpen(false);
   };
 
@@ -69,12 +75,11 @@ const NavBar = () => {
 
     prevOpen.current = open;
   }, [open]);
-
   return (
     <AppBar position="static" className={classes.appBar} elevation={0}>
       <Toolbar disableGutters>
         <Typography variant="h6" className={classes.title} color="inherit">
-          {board?.name}
+          {data.boards.filter((val) => val.id === data.boardView.id)[0]?.name}
         </Typography>
         <div>
           <IconButton
@@ -86,7 +91,7 @@ const NavBar = () => {
             onClick={handleToggle}
             disableRipple
           >
-            <Typography>Board</Typography>
+            <Typography>Switch Board</Typography>
             <ArrowDropDownIcon />
           </IconButton>
           <Popper
@@ -110,15 +115,15 @@ const NavBar = () => {
                       id="menu-list-grow"
                       onKeyDown={handleListKeyDown}
                     >
-                      {boards.map((b) => (
+                      {data.boards.map((board, idx) => (
                         <MenuItem
                           onClick={handleClose}
                           // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-                          value={b._id}
+                          value={idx}
                           // eslint-disable-next-line no-param-reassign, no-underscore-dangle
-                          key={b._id}
+                          key={board.id}
                         >
-                          {b.name}
+                          {board.name}
                         </MenuItem>
                       ))}
                     </MenuList>

@@ -1,12 +1,12 @@
 import React from 'react';
+import {BoardProvider} from 'contexts/boardContext';
 import AppLayout from './layouts/AppLayout';
-import BoardState from '../contexts/board/boardState';
 
 const Dashboard = () => {
   return (
-    <BoardState>
+    <BoardProvider>
       <AppLayout />
-    </BoardState>
+    </BoardProvider>
   );
 };
 

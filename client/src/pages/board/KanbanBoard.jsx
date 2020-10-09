@@ -141,9 +141,8 @@ const Columns = ({data}) => {
 
 export default function KanbanBoard() {
   const {data, dispatch} = useContext(BoardContext);
-
   const classes = useStyles();
-
+  const boardData = data.boardView;
   const onDragEnd = async (result) => {
     const {destination, source, type} = result;
 
@@ -160,7 +159,7 @@ export default function KanbanBoard() {
 
     if (type === 'column') {
       boardActions.moveColumn(source.index, destination.index, dispatch);
-      await Board.saveData(data.id, {columns: data.columnOrder});
+      await Board.saveData(boardData.id, {columns: boardData.columnOrder});
       return;
     }
 
@@ -178,8 +177,8 @@ export default function KanbanBoard() {
     <div className={classes.dashboardContainer}>
       {/* Add Left and Right Hover Bars for adding columns */}
       <div className={classes.addColumnContainer} id="leftNav">
-        {data.columns ? (
-          <AddColumnSidebar data={data} boardId={data.id} />
+        {boardData.columns ? (
+          <AddColumnSidebar data={boardData} boardId={boardData.id} />
         ) : null}
       </div>
       <DragDropContext onDragEnd={onDragEnd}>
@@ -194,15 +193,15 @@ export default function KanbanBoard() {
               {...provided.droppableProps}
               innerRef={provided.innerRef}
             >
-              <Columns data={data} />
+              <Columns data={boardData} />
               {provided.placeholder}
             </Grid>
           )}
         </Droppable>
       </DragDropContext>
       <div className={classes.addColumnContainer} id="rightNav">
-        {data.columns ? (
-          <AddColumnSidebar data={data} boardId={data.id} />
+        {boardData.columns ? (
+          <AddColumnSidebar data={boardData} boardId={boardData.id} />
         ) : null}
       </div>
     </div>

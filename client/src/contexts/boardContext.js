@@ -1,12 +1,38 @@
 import React, {createContext, useEffect, useReducer, useState} from 'react';
-import Board from '../api/Board';
+import Board from 'api/Board';
+import {convertBoardAPI} from 'api/Utils';
 import reducers from './boardReducers';
+import boardActions from './boardActions';
+
+// const initialState = {
+//   id: null,
+//   columns: {},
+//   columnOrder: [],
+//   tasks: {},
+//   index: 0,
+// };
+
+// const initialState = {
+//   index: 0,
+//   boards: [],
+//   board: {},
+//   convertedBoard: {},
+//   convertedCalendar: {},
+//   loading: true,
+//   error: false,
+//   view: 'dashboard',
+//   data: {},
+// }
 
 const initialState = {
-  id: null,
-  columns: {},
-  columnOrder: [],
-  tasks: {},
+  boards: [],
+  view: 'dashboard',
+  boardView: {
+    columns: {},
+    columnOrder: [],
+    tasks: {},
+    id: null,
+  },
 };
 
 const BoardContext = createContext(initialState);
@@ -30,7 +56,18 @@ const boardReducer = (state, action) => {
     case 'DELETE_COL':
       return reducers.deleteCol(state, action.colId);
     case 'INIT_BOARD':
-      return reducers.initBoard(action.boardData);
+      return reducers.initBoard(action.boards, action.board);
+    case 'SWITCH_BOARD':
+      return reducers.switchBoard(state, action.board);
+    case 'SWITCH_VIEW':
+      return reducers.switchView(state);
+    // case 'ADD_BOARD':
+    //   return reducers.addBoard(...);
+
+    // case 'ADD_CARD_TO_CAL':
+    //   return reducers.addCardToCal();
+    // case 'UPDATE_DEADLINE':
+    //   return reducers.updateDeadline();
     default:
       return state;
   }
@@ -40,14 +77,17 @@ const BoardProvider = ({children}) => {
   const [data, dispatch] = useReducer(boardReducer, initialState);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const board = await Board.getData(0);
-        dispatch({
-          type: 'INIT_BOARD',
-          boardData: board.data,
-        });
+        const boards = await Board.getAllBoards();
+        const firstBoard = await Board.getBoard(boards.data[0].id);
+        await boardActions.initBoard(
+          boards,
+          await convertBoardAPI(firstBoard.data),
+          dispatch,
+        );
         setLoading(false);
       } catch (e) {
         setError(e);

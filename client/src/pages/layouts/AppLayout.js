@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import {Box, makeStyles} from '@material-ui/core';
+import {BoardContext} from 'contexts/boardContext';
 import NavBar from './components/NavBar';
 import AppLogo from './components/AppLogo';
 import SwitchView from './components/SwitchView';
@@ -8,9 +9,6 @@ import CreateBoard from './components/CreateBoard';
 import ProfileAvatar from './components/ProfileAvatar';
 import CalendarActions from '../calendar/CalendarActions';
 import KanbanBoard from '../board/KanbanBoard';
-import {BoardProvider} from '../../contexts/boardContext';
-
-import BoardContext from '../../contexts/board/boardContext';
 
 const useStyles = makeStyles((theme) => ({
   logoContainer: {
@@ -23,7 +21,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AppLayout = () => {
-  const {view} = useContext(BoardContext);
+  const {data} = useContext(BoardContext);
+  const {view} = data;
   const classes = useStyles();
   return (
     <Box>
@@ -87,11 +86,7 @@ const AppLayout = () => {
         </BoardProvider> */}
       </Box>
       <Box>
-        {view === 'dashboard' && (
-          <BoardProvider>
-            <KanbanBoard />
-          </BoardProvider>
-        )}
+        {view === 'dashboard' && <KanbanBoard />}
         {view === 'calendar' && <CalendarActions />}
       </Box>
     </Box>

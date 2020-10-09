@@ -1,11 +1,11 @@
 export const convertCalendarAPI = async (board) => {
   const calendarEvents = [];
   const draggableEvents = [];
-  let inProgessId;
+  let inProgressId;
 
   board.columns.forEach((column) => {
     if (column.name === 'In Progress') {
-      inProgessId = column.id;
+      inProgressId = column.id;
     }
     column.cards.forEach((cardObject) => {
       const card = {};
@@ -21,7 +21,7 @@ export const convertCalendarAPI = async (board) => {
     });
   });
 
-  return {draggableEvents, calendarEvents, inProgessId};
+  return {draggableEvents, calendarEvents, inProgressId};
 };
 
 export const convertBoardAPI = async (board) => {
