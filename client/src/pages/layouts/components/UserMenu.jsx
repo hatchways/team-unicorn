@@ -2,8 +2,9 @@ import React, {useState, useCallback, useContext} from 'react';
 import {Menu, MenuItem} from '@material-ui/core';
 import AccountDialog from './AccountDialog';
 import AvatarDialogForm from './AvatarDialogForm';
-import LogOutButton from '../../auth/components/LogoutButton';
 import {BoardProvider} from '../../../contexts/boardContext';
+import UserContext from 'contexts';
+import User from 'api/User';
 
 const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
   const [profileOpen, setProfileOpen] = useState({open: false, dialog: ''});
@@ -45,9 +46,8 @@ const UserMenu = ({anchorElem, setAvatar, setAnchorElem, setOpenSnackbar}) => {
         <MenuItem onClick={() => openProfile('avatar')}>
           Edit Profile Picture
         </MenuItem>
-        <MenuItem>
-          {' '}
-          <LogOutButton />{' '}
+        <MenuItem onClick={handleLogout}>
+          {'Logout '}
         </MenuItem>
       </Menu>
 
