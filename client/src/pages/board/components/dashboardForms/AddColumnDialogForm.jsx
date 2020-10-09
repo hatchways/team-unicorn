@@ -15,6 +15,7 @@ import formProps from '../forms/props';
 import formValidation from '../forms/validator';
 
 import {BoardContext} from '../../../../contexts/boardContext';
+import UserContext from '../../../../contexts';
 
 // there used to be theme in the argument, not sure what happened here
 const useStyles = makeStyles(() => ({
@@ -117,7 +118,8 @@ const AddColumnDialogForm = (props) => {
   const {textField: textFieldProps} = formProps.style;
   const {title: titleValidation} = formValidation.addColumn;
 
-  const {dispatch} = useContext(BoardContext);
+  const {data, dispatch} = useContext(BoardContext);
+  const {user} = useContext(UserContext)
 
   const onSubmitForm = async (formData) => {
     const payload = await addColumnByBoardId(boardId, {name: formData.name});
@@ -176,9 +178,19 @@ const AddColumnDialogForm = (props) => {
             inputRef={register(titleValidation)}
             {...formValidation.getMuiErrorProps(errors, titleProps.name)}
           />
-          <Button variant="contained" color="primary" type="submit">
+          <Button 
+            disabled={data.columnOrder.length === 6 && user.stripeCustomerId === "free"}
+            variant="contained" 
+            color="primary" 
+            type="submit">
             Create
-          </Button>
+          </Button> 
+          {data.columnOrder.length === 6 && user.stripeCustomerId === "free" ?
+          <div style={{marginTop: '30px'}}>
+            <Typography variant="h4">Free users are limited to 6 columns.</Typography>
+            <Typography variant="h4">Subscribe to Kanban Premium to get unlimited columns.</Typography>
+          </div> : null
+          }
         </form>
       </DialogContent>
     </Dialog>
