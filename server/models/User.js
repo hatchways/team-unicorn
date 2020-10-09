@@ -18,13 +18,9 @@ const UserSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
-  stripeId: {
+  stripeCustomerId: {
     type: String,
-    unique: true
-  },
-  premium: {
-    type: Boolean,
-    default: false
+    default: "free"
   },
   avatar: {
     type: String,

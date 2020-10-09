@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import axios from 'axios';
 import {Button, Card, CardContent, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
+import User from 'api/User';
 
 const useStyles = makeStyles({
   root: {
@@ -23,89 +24,76 @@ const useStyles = makeStyles({
   button: {
     margin: '2em auto 1em',
   },
+  receipt: {
+    paddingBottom: '20px'
+  }
 });
 
 const Subscription = ({user}) => {
   const classes = useStyles();
   const stripe = useStripe();
   const elements = useElements();
-  const {_id, email} = user;
-  console.log(_id)
-  console.log(email)
+  let {_id, name, email, stripeCustomerId} = user;
 
-  const handleSubmitPay = async (event) => {
-    if (!stripe || !elements) {
-      return;
-    }
-
-    const res = await axios.post('/stripe/pay', {email: email});
-
-    const clientSecret = res.data['client_secret'];
-
-    const result = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: elements.getElement(CardElement),
-        billing_details: {
-          email: email,
-        },
-      },
-    });
-
-    if (result.error) {
-      console.log(result.error.message);
-    } else {
-      if (result.paymentIntent.status === 'succeeded') {
-        console.log('Payment received!');
-
-      }
-    }
-  };
+  const [stripeId, setStripeId] = useState(stripeCustomerId);
 
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
       return;
     }
 
-    const result = await stripe.createPaymentMethod({
-      type: 'card',
-      card: elements.getElement(CardElement),
-      billing_details: {
-        email: email,
-      },
-    });
+    const cardElement = elements.getElement(CardElement);
 
-    if (result.error) {
-      console.log(result.error.message);
+    if (stripeId !== "free") {
+      await User.subscribe({id: _id, stripeCustomerId: "free"})
+      await setStripeId("free")
+      await axios.post('stripe/subscribe', {...user, stripeCustomerId: stripeId})
     } else {
-      const res = await axios.post('/stripe/subscribe', {'payment_method': result.paymentMethod.id, 'email': email, 'customer': _id});
-      const {client_secret, status} = res.data;
 
-      if (status === 'requires_action') {
-        stripe.confirmCardPayment(client_secret).then(function(result) {
-          if (result.error) {
-            console.log('Issue with payment: ', result.error);
-          } else {
-            console.log('Payment received. Thank you for subscribing!');
-          }
-        });
+      const result = await stripe.createPaymentMethod({
+        type: 'card',
+        card: elements.getElement(CardElement),
+        billing_details: {
+          name: name,
+          email: email,
+        },
+      });
+  
+      if (result.error) {
+        console.log(result.error.message);
       } else {
-        console.log('Payment received. Thank you for subscribing!');
-
+        const res = await axios.post('/stripe/subscribe', {...user, 'payment_method': result.paymentMethod.id});
+        const {client_secret, status, stripeInfo} = res.data;
+        
+        if (status === 'requires_action') {
+          stripe.confirmCardPayment(client_secret).then(function(result) {
+            if (result.error) {
+              console.log('Issue with payment: ', result.error);
+            } else {
+              console.log('Payment received. Thank you for subscribing!');
+              User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId})
+              setStripeId(stripeInfo.stripeCustomerId)
+            }
+          });
+        } else {
+          setStripeId(stripeInfo.stripeCustomerId)
+          User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId})
+          console.log('Payment received. Thank you for subscribing!');
+        }
+        cardElement.clear()
       }
+    };
     }
-  };
+               
 
   return (
     <Card className={classes.root}>
       <CardContent className={classes.content}>
-        <Typography variant="h6" gutterBottom>Email: {email}</Typography>
-        <CardElement />
+        <Typography variant="h5" className={classes.receipt}>Email: {email}</Typography>
+        <CardElement options={{disabled: stripeId !== "free"}} />
         <div className={classes.div}>
-          <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitPay}>
-            Pay
-          </Button>
           <Button variant="contained" color="primary" className={classes.button} onClick={handleSubmitSub}>
-            Subscription
+            {stripeId !== "free" ? "Cancel Subscription" : "Subscribe"}
           </Button>
         </div>
       </CardContent>
