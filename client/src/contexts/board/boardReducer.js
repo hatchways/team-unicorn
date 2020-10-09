@@ -81,6 +81,7 @@ const reducers = {
     return {
       ...newState,
       board: newBoard,
+      view: 'dashboard',
       convertedBoard,
       convertedCalendar,
     };
