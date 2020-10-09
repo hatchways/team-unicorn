@@ -29,8 +29,9 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Task({id, columnName, title, index}) {
+export default function Task({id, columnName, title: initTitle, index}) {
   const classes = useStyles();
+  const [title, setTitle] = useState(initTitle);
   const [open, setOpen] = useState(false);
   const [saveRequestData, setSaveRequestData] = useState(null);
   const [openSnackbar, setOpenSnackbar] = useState(false);
@@ -40,6 +41,8 @@ export default function Task({id, columnName, title, index}) {
   const handleClose = () => {
     setOpen(false);
   };
+  const saveTitle = (value) => setTitle(value);
+
   useEffect(() => {
     const submitSaveRequest = async () => {
       const {details} = saveRequestData;
@@ -88,6 +91,7 @@ export default function Task({id, columnName, title, index}) {
         open={open}
         onClose={handleClose}
         onSave={handleSave}
+        saveTitle={saveTitle}
       />
       <BaseSnackbar
         open={openSnackbar}
