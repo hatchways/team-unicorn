@@ -32,7 +32,6 @@ const AccountDialog = (props) => {
     closeMenu();
   };
 
-
   return (
     <Dialog className={classes.root} open={open} onClose={closeMenu}>
       <Box className={classes.box}>
