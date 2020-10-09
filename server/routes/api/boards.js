@@ -42,7 +42,7 @@ router.post("/", [auth, boardValidationRules(), validate], async (req, res) => {
 // @access Private
 router.get("/", auth, async (req, res) => {
   try {
-    await Board.findOne({
+    await Board.find({
       user: req.user._id
     })
       .populate({
@@ -50,12 +50,7 @@ router.get("/", auth, async (req, res) => {
         populate: {
           path: "cards",
           model: "Card",
-          select: "name",
-          populate: {
-            path: "details",
-            model: "CardDetails",
-            select: "deadline"
-          }
+          select: ["name", "details"]
         }
       })
       .exec((err, board) => {

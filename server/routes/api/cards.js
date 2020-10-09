@@ -17,7 +17,11 @@ router.post(
     try {
       const { name, deadline } = req.body;
       const column = await Column.findById(req.params.columnId);
-      const newCard = { name: name, column: column._id, deadline: deadline };
+      const newCard = {
+        name: name,
+        column: column._id,
+        details: { deadline: deadline }
+      };
 
       Card.create(newCard, async (err, card) => {
         if (err) {
@@ -27,7 +31,6 @@ router.post(
           // Pushing the card to the column
           column.cards.push({ _id: card.id });
           await column.save();
-
           res.send(card);
         }
       });
@@ -49,14 +52,15 @@ router.put("/:id", auth, async (req, res) => {
     await Card.findByIdAndUpdate(req.params.id, {
       $set: {
         name: name,
-        details: details,
-      },
+        details: details
+      }
     });
-    res.status(200).send();
+    const updatedCard = await Card.findById(req.params.id);
+    res.status(200).send(updatedCard);
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      errors: { CARD_NOT_SAVED: "Could not save card." },
+      errors: { CARD_NOT_SAVED: "Could not save card." }
     });
   }
 });
