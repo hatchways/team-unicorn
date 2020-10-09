@@ -3,7 +3,7 @@ const router = express.Router();
 
 const Column = require("../../models/columns");
 const Board = require("../../models/boards");
-
+const Card = require("../../models/cards")
 const auth = require("../../middleware/authenticator");
 const {
   validate,
@@ -68,7 +68,12 @@ router.get("/:id", auth, (req, res) => {
 
 router.delete("/:id", auth, async (req, res) => {
   try {
-    await Column.findByIdAndDelete(req.params.id);
+    Column.findById(req.params.id, (err, col) => {
+      col.cards.forEach(cardId => {
+        Card.findByIdAndDelete({cardId})
+      })
+    })
+    await Column.findByIdAndDelete(req.params.id)
     res.sendStatus(200);
   } catch (e) {
     console.log(e);

@@ -112,7 +112,6 @@ const AddCardDialogForm = (props) => {
 
   const [cardData, setCardData] = useState();
   const [error, setError] = useState(false);
-
   const {title: titleProps} = formProps.html.addCard;
   const {textField: textFieldProps} = formProps.style;
   const {title: titleValidation} = formValidation.addCard;

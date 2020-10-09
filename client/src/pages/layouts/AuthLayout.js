@@ -1,5 +1,6 @@
 import {Grid, makeStyles, Box, Hidden} from '@material-ui/core';
-import React from 'react';
+import React, {useCallback, useState} from 'react';
+import BaseSnackbar from 'components/snackbars/BaseSnackbar';
 import AuthImg from '../static/authPageImage.png';
 import CenteringBox from '../../components/CenteringBox';
 
@@ -25,12 +26,30 @@ const useStyles = makeStyles({
 //        consider putting it in bg.
 //        Also consider debouncing and moving components
 //        dynamically (i.e. smoothly) upon resize.
-const AuthLayout = ({children}) => {
+const AuthLayout = ({
+  formContainer: FormContainer,
+  footer: FooterComponent,
+}) => {
   const classes = useStyles();
 
-  const formComponent = children.filter((comp) => comp.key === 'form');
-  const footerComponent = children.filter((comp) => comp.key === 'footer');
+  const [snackOpen, setSnackOpen] = useState(false);
+  const [snackMessage, setSnackMessage] = useState('');
+  const [severity, setSeverity] = useState('success');
 
+  const openSnackbar = useCallback((message, snackSeverity) => {
+    setSnackMessage(message);
+    setSnackOpen(true);
+    setSeverity(snackSeverity);
+  }, []);
+
+  const closeSnackbar = useCallback(() => {
+    setSnackOpen(false);
+    setSnackMessage('');
+  }, []);
+
+  const formComponentWithFormProps = React.cloneElement(FormContainer, {
+    formProps: {openSnackbar},
+  });
   return (
     <Grid
       className={classes.root}
@@ -38,6 +57,13 @@ const AuthLayout = ({children}) => {
       alignItems="stretch"
       container
     >
+      <BaseSnackbar
+        open={snackOpen}
+        message={snackMessage}
+        severity={severity}
+        onClose={closeSnackbar}
+      />
+
       <Hidden smDown>
         <Grid item md className={classes.imgCol}>
           <img className={classes.img} src={AuthImg} alt="KanBan Homepage" />
@@ -53,13 +79,13 @@ const AuthLayout = ({children}) => {
         md
         xs={12}
       >
-        <CenteringBox flexGrow={1}>{formComponent}</CenteringBox>
+        <CenteringBox flexGrow={1}>{formComponentWithFormProps}</CenteringBox>
         <CenteringBox
           className={classes.footer}
           borderTop={1}
           borderColor="grey.300"
         >
-          {footerComponent}
+          {FooterComponent}
         </CenteringBox>
       </Grid>
     </Grid>
