@@ -12,6 +12,7 @@ import {
 import DeleteIcon from '@material-ui/icons/Delete';
 
 import {updateColumn, removeColumn} from 'api/Column';
+import BaseSnackbar from 'components/snackbars/BaseSnackbar';
 import Task from './Task';
 import AddCardDialogForm from './dashboardForms/AddCardDialogForm';
 import boardActions from '../../../contexts/boardActions';
@@ -79,6 +80,7 @@ export default function Column({column, index, tasks, setUpdate}) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState(column.title);
   const [isEditing, setEditing] = useState(false);
+  const [openSnackbar, setOpenSnackbar] = useState(false);
   const {dispatch} = useContext(BoardContext);
   const handleClickOpen = () => {
     setOpen(true);
@@ -90,6 +92,9 @@ export default function Column({column, index, tasks, setUpdate}) {
 
   const finishEdit = () => {
     setEditing(false);
+    if (column.title !== title) {
+      setOpenSnackbar(true);
+    }
     updateColumn(column.id, {name: title});
   };
 
@@ -105,79 +110,87 @@ export default function Column({column, index, tasks, setUpdate}) {
   };
 
   return (
-    <Draggable draggableId={column.id} index={index}>
-      {(providedForDraggable) => (
-        <Grid
-          className={classes.column}
-          {...providedForDraggable.draggableProps}
-          innerRef={providedForDraggable.innerRef}
-        >
-          <Box />
-          <Grid container alignItems="center">
-            <Grid item xs={8}>
-              {isEditing ? (
-                <Input
-                  placeholder={title}
-                  onBlur={finishEdit}
-                  onChange={(e) => editTitle(e)}
-                  onKeyDown={(e) => handleKeyDown(e)}
-                  fullWidth="false"
-                />
-              ) : (
-                <Typography
-                  variant="h6"
-                  {...providedForDraggable.dragHandleProps}
-                  noWrap
-                  onDoubleClick={() => setEditing(true)}
-                  className={classes.input}
-                >
-                  {title}
-                </Typography>
-              )}
-            </Grid>
-            <Grid item xs />
-            <Grid item xs={3}>
-              <IconButton edge="end" aria-label="delete" onClick={deleteCol}>
-                <DeleteIcon />
-              </IconButton>
-            </Grid>
-          </Grid>
-
-          <Droppable droppableId={column.id} type="task">
-            {(providedForDroppable, snapshot) => (
-              <Grid
-                item
-                className={classes.drag}
-                innerRef={providedForDroppable.innerRef}
-                {...providedForDroppable.droppableProps}
-                style={{
-                  backgroundColor: snapshot.isDraggingOver
-                    ? '#E6ECFC'
-                    : 'white',
-                }}
-              >
-                <Tasks tasks={tasks} columnName={column.title} />
-                {providedForDroppable.placeholder}
-                <Button
-                  className={classes.button}
-                  size="large"
-                  onClick={handleClickOpen}
-                >
-                  <Typography>Add a card</Typography>
-                </Button>
-                {open && (
-                  <AddCardDialogForm
-                    open={open}
-                    setOpen={setOpen}
-                    columnId={column.id}
-                    setUpdate={setUpdate}
+    <>
+      <Draggable draggableId={column.id} index={index}>
+        {(providedForDraggable) => (
+          <Grid
+            className={classes.column}
+            {...providedForDraggable.draggableProps}
+            innerRef={providedForDraggable.innerRef}
+          >
+            <Box />
+            <Grid container alignItems="center">
+              <Grid item xs={8}>
+                {isEditing ? (
+                  <Input
+                    placeholder={title}
+                    onBlur={finishEdit}
+                    onChange={(e) => editTitle(e)}
+                    onKeyDown={(e) => handleKeyDown(e)}
+                    fullWidth="false"
                   />
+                ) : (
+                  <Typography
+                    variant="h6"
+                    {...providedForDraggable.dragHandleProps}
+                    noWrap
+                    onDoubleClick={() => setEditing(true)}
+                    className={classes.input}
+                  >
+                    {title}
+                  </Typography>
                 )}
               </Grid>
-            )}
-          </Droppable>
-        </Grid>
-      )}
-    </Draggable>
+              <Grid item xs />
+              <Grid item xs={3}>
+                <IconButton edge="end" aria-label="delete" onClick={deleteCol}>
+                  <DeleteIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+
+            <Droppable droppableId={column.id} type="task">
+              {(providedForDroppable, snapshot) => (
+                <Grid
+                  item
+                  className={classes.drag}
+                  innerRef={providedForDroppable.innerRef}
+                  {...providedForDroppable.droppableProps}
+                  style={{
+                    backgroundColor: snapshot.isDraggingOver
+                      ? '#E6ECFC'
+                      : 'white',
+                  }}
+                >
+                  <Tasks tasks={tasks} columnName={column.title} />
+                  {providedForDroppable.placeholder}
+                  <Button
+                    className={classes.button}
+                    size="large"
+                    onClick={handleClickOpen}
+                  >
+                    <Typography>Add a card</Typography>
+                  </Button>
+                  {open && (
+                    <AddCardDialogForm
+                      open={open}
+                      setOpen={setOpen}
+                      columnId={column.id}
+                      setUpdate={setUpdate}
+                    />
+                  )}
+                </Grid>
+              )}
+            </Droppable>
+          </Grid>
+        )}
+      </Draggable>
+      <BaseSnackbar
+        open={openSnackbar}
+        onClose={() => setOpenSnackbar(false)}
+        message="Column Title Changed!"
+        severity="success"
+      />
+    </>
   );
 }
