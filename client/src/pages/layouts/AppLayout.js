@@ -20,10 +20,9 @@ const useStyles = makeStyles((theme) => ({
 const AppLayout = ({children}) => {
   const classes = useStyles();
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" minHeight="100%">
       <Box
         display="flex"
-        flexGrow={1}
         minHeight="9rem"
         maxHeight="15%"
         flexDirection="column"
@@ -73,7 +72,9 @@ const AppLayout = ({children}) => {
         </Box>
         <NavBar />
       </Box>
-      <CenteringBox flexGrow={1}>{children}</CenteringBox>
+      <CenteringBox flexGrow={1} paddingY={2}>
+        {children}
+      </CenteringBox>
     </Box>
   );
 };

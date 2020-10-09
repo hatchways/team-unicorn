@@ -1,4 +1,4 @@
-module.exports = {
+const boardActions = {
   addCard: (task, columnId, dispatch) => {
     dispatch({
       type: 'ADD_CARD',
@@ -41,3 +41,5 @@ module.exports = {
     });
   },
 };
+
+export default boardActions;
