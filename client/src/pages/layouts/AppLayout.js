@@ -23,72 +23,78 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const AppLayout = () => {
-  const {view} = useContext(BoardContext);
+  const {view, boards} = useContext(BoardContext);
   const classes = useStyles();
   return (
-    <Box display="flex" flexDirection="column" minHeight="100%">
-      <Box
-        display="flex"
-        minHeight="9rem"
-        maxHeight="15%"
-        flexDirection="column"
-      >
-        <Box
-          component="header"
-          display="flex"
-          flexDirection="row"
-          flexGrow={1}
-          minHeight="5rem"
-          maxHeight="60%"
-          alignItems="stretch"
-        >
-          <Box
-            className={classes.logoContainer}
-            display="flex"
-            alignItems="center"
-            boxSizing="border-box"
-            flexBasis="30%"
-            flexGrow={1}
-          >
-            <AppLogo />
-          </Box>
-          <CenteringBox boxSizing="border-box" flexBasis="40%" flexGrow={1}>
-            <SwitchView />
-          </CenteringBox>
+    <>
+      {boards?.length > 0 ? (
+        <Box display="flex" flexDirection="column" minHeight="100%">
           <Box
             display="flex"
-            alignItems="stretch"
-            justifyContent="space-between"
-            boxSizing="border-box"
-            flexBasis="30%"
-            flexGrow={1}
+            minHeight="9rem"
+            maxHeight="15%"
+            flexDirection="column"
           >
-            <CenteringBox flexGrow={1}>
-              <CreateBoard />
-            </CenteringBox>
             <Box
+              component="header"
               display="flex"
-              alignItems="center"
-              justifyContent="flex-end"
-              className={classes.avatarContainer}
+              flexDirection="row"
+              flexGrow={1}
+              minHeight="5rem"
+              maxHeight="60%"
+              alignItems="stretch"
             >
-              <ProfileAvatar />
+              <Box
+                className={classes.logoContainer}
+                display="flex"
+                alignItems="center"
+                boxSizing="border-box"
+                flexBasis="30%"
+                flexGrow={1}
+              >
+                <AppLogo />
+              </Box>
+              <CenteringBox boxSizing="border-box" flexBasis="40%" flexGrow={1}>
+                <SwitchView />
+              </CenteringBox>
+              <Box
+                display="flex"
+                alignItems="stretch"
+                justifyContent="space-between"
+                boxSizing="border-box"
+                flexBasis="30%"
+                flexGrow={1}
+              >
+                <CenteringBox flexGrow={1}>
+                  <CreateBoard />
+                </CenteringBox>
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="flex-end"
+                  className={classes.avatarContainer}
+                >
+                  <ProfileAvatar />
+                </Box>
+              </Box>
+            </Box>
+            <Box flexGrow={1}>
+              <NavBar />
             </Box>
           </Box>
+          <Box>
+            {view === 'dashboard' && (
+              <BoardProvider>
+                <KanbanBoard />
+              </BoardProvider>
+            )}
+            {view === 'calendar' && <CalendarActions />}
+          </Box>
         </Box>
-        <Box flexGrow={1}>
-          <NavBar />
-        </Box>
-      </Box>
-      <Box>
-        {view === 'dashboard' && (
-          <BoardProvider>
-            <KanbanBoard />
-          </BoardProvider>
-        )}
-        {view === 'calendar' && <CalendarActions />}
-      </Box>
-    </Box>
+      ) : (
+        <div>...Loading</div>
+      )}
+    </>
   );
 };
 
