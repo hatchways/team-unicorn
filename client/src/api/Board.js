@@ -23,6 +23,7 @@ const convertBoardAPI = async (board) => {
       newBoard.tasks[card.id] = {
         id: card.id,
         content: card.name,
+        details: card.details,
       };
     });
     newBoard.columnOrder.push(column.id);

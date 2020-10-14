@@ -6,7 +6,7 @@ const useStyles = makeStyles((theme) => ({
   root: {
     borderRadius: '1.5rem',
     width: '35px',
-    marginLeft: theme.spacing(2),
+    marginLeft: theme.spacing(0.5),
     borderWidth: '4px',
     backgroundColor: ({color}) => color || theme.palette.primary.main,
     borderColor: ({color}) => color || theme.palette.primary.main,
@@ -22,7 +22,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const Colorbar = ({color, shade = 500, onColorChange, ...other}) => {
+const Colorbar = ({
+  color,
+  shade = 500,
+  onColorChange,
+  havePopOver,
+  ...other
+}) => {
   const classes = useStyles({color});
 
   const [open, setOpen] = useState(false);
@@ -49,37 +55,39 @@ const Colorbar = ({color, shade = 500, onColorChange, ...other}) => {
         onClick={handleOpen}
         {...other}
       />
-      <Popover
-        open={open}
-        anchorEl={anchorEl.current}
-        onClose={handleClose}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'left',
-        }}
-      >
-        <Box display="flex" alignItems="center" justifyContent="space-evenly">
-          {Object.keys(colorOptions).map((colorCode) => (
-            <Box
-              key={colorCode}
-              component="span"
-              className={classes.colorButton}
-              bgcolor={colorOptions[colorCode]}
-              borderColor={colorOptions[colorCode]}
-              borderRadius={10}
-              border={5}
-              width={10}
-              height={10}
-              margin={1}
-              onClick={() => closeAndSave(colorOptions[colorCode])}
-            />
-          ))}
-        </Box>
-      </Popover>
+      {havePopOver && (
+        <Popover
+          open={open}
+          anchorEl={anchorEl.current}
+          onClose={handleClose}
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'center',
+          }}
+          transformOrigin={{
+            vertical: 'top',
+            horizontal: 'left',
+          }}
+        >
+          <Box display="flex" alignItems="center" justifyContent="space-evenly">
+            {Object.keys(colorOptions).map((colorCode) => (
+              <Box
+                key={colorCode}
+                component="span"
+                className={classes.colorButton}
+                bgcolor={colorOptions[colorCode]}
+                borderColor={colorOptions[colorCode]}
+                borderRadius={10}
+                border={5}
+                width={10}
+                height={10}
+                margin={1}
+                onClick={() => closeAndSave(colorOptions[colorCode])}
+              />
+            ))}
+          </Box>
+        </Popover>
+      )}
     </>
   );
 };

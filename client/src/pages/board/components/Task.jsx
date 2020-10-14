@@ -5,6 +5,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import {updateCard} from 'api/Card';
 import BaseSnackbar from 'components/snackbars/BaseSnackbar';
 import CardDialog from './dashboardForms/CardDialog';
+import Colorbar from './dashboardForms/dialogSections/Colorbar';
 
 const useStyles = makeStyles((theme) => ({
   drag: {
@@ -27,13 +28,24 @@ const useStyles = makeStyles((theme) => ({
     display: 'flex',
     flexDirection: 'column',
   },
+  'card-header': {
+    display: 'flex',
+    marginBottom: '5px',
+  },
 }));
 
-export default function Task({id, columnName, title: initTitle, index}) {
+export default function Task({
+  id,
+  columnName,
+  title: initTitle,
+  color: initColor,
+  index,
+}) {
   const classes = useStyles();
   const [title, setTitle] = useState(initTitle);
   const [open, setOpen] = useState(false);
   const [saveRequestData, setSaveRequestData] = useState(null);
+  const [color, setColor] = useState(initColor);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const handleOpen = () => {
     setOpen(true);
@@ -49,6 +61,7 @@ export default function Task({id, columnName, title: initTitle, index}) {
       const {success, errors} = await updateCard({id, title, details});
       // TODO: display snackbars
       if (success) {
+        setColor(details.color);
         setSaveRequestData(null);
         setOpenSnackbar(true);
       } else {
@@ -60,6 +73,7 @@ export default function Task({id, columnName, title: initTitle, index}) {
     if (saveRequestData) {
       submitSaveRequest();
     }
+
     // TODO: Cleanup request.
   }, [id, title, saveRequestData]);
 
@@ -79,6 +93,13 @@ export default function Task({id, columnName, title: initTitle, index}) {
             }}
             onClick={handleOpen}
           >
+            <div className={classes['card-header']}>
+              <Colorbar
+                color={color}
+                onColorChange={setColor}
+                havePopOver={false}
+              />
+            </div>
             <Typography gutterBottom>{title}</Typography>
             <div className={classes['card-footer']} />
           </Card>
@@ -92,6 +113,7 @@ export default function Task({id, columnName, title: initTitle, index}) {
         onClose={handleClose}
         onSave={handleSave}
         saveTitle={saveTitle}
+        setColor={setColor}
       />
       <BaseSnackbar
         open={openSnackbar}

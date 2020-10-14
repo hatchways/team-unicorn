@@ -40,7 +40,11 @@ router.get("/", auth, async (req, res) => {
     })
       .populate({
         path: "columns",
-        populate: { path: "cards", model: "Card", select: "name" },
+        populate: { 
+          path: "cards", 
+          model: "Card", 
+          select: "name details", 
+      },
       })
       .exec((err, board) => {
         res.json(board);

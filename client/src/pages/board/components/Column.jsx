@@ -64,13 +64,14 @@ const useStyles = makeStyles((theme) => ({
 
 // performance optimization. prevents re-render when components are dragged all over w/memo
 const Tasks = memo(({tasks, columnName}) => {
-  return tasks.map(({id, content: title}, index) => (
+  return tasks.map(({id, content: title, details}, index) => (
     <Task
       key={id}
       id={id}
       title={title}
       columnName={columnName}
       index={index}
+      color={details?.color}
     />
   ));
 });

@@ -42,6 +42,7 @@ const CardDialog = ({
   onClose,
   onSave,
   open,
+  setColor,
   ...rest
 }) => {
   const classes = useStyles();

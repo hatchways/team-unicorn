@@ -64,7 +64,7 @@ const CardDialogTitle = ({
             {title}
           </Typography>
         )}
-        <Colorbar color={cardColor} onColorChange={onColorChange} />
+        <Colorbar color={cardColor} onColorChange={onColorChange} havePopOver />
       </WithIcon>
       <WithIcon spacing={2} aligner>
         <Typography className={classes.subtitle} variant="subtitle2">
