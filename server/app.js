@@ -8,6 +8,7 @@ const connectDB = require("./config/db");
 const indexRouter = require("./routes/index");
 const pingRouter = require("./routes/ping");
 const userRouter = require("./routes/user");
+
 const columnsRouter = require("./routes/api/columns");
 const cardsRouter = require("./routes/api/cards");
 const boardRouter = require("./routes/api/boards");
@@ -25,10 +26,12 @@ app.use(json());
 app.use(urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(join(__dirname, "public")));
+app.use(express.static(join(__dirname, "build")));
 
 app.use("/", indexRouter);
 app.use("/ping", pingRouter);
 app.use("/user", userRouter);
+
 app.use("/api/columns", columnsRouter);
 app.use("/api/cards", cardsRouter);
 app.use("/api/boards", boardRouter);
