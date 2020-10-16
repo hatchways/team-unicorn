@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import axios from 'axios';
 import {Button, Card, CardContent, CircularProgress, Grid, Typography} from '@material-ui/core';
+import BaseSnackBar from 'components/snackbars/BaseSnackbar';
 import {makeStyles} from '@material-ui/core/styles';
 import {useStripe, useElements, CardElement} from '@stripe/react-stripe-js';
 import User from 'api/User';
@@ -37,9 +38,11 @@ const Subscribe = ({user, setUser}) => {
   const classes = useStyles();
   const stripe = useStripe();
   const elements = useElements();
-  let {_id, name, email} = user;
   const [loading, setLoading] = useState(false)
-  console.log({user})
+  const [snack, setSnack] = useState({open: false, message: '', severity: ''})
+
+  let {_id, name, email} = user;
+  
   const handleSubmitSub = async (event) => {
     if (!stripe || !elements) {
       return;
@@ -52,6 +55,7 @@ const Subscribe = ({user, setUser}) => {
       User.subscribe({id: _id, stripeCustomerId: "free"})
       await axios.post('stripe/subscribe', {...user, stripeCustomerId: user.stripeCustomerId})
       setUser({...user, stripeCustomerId: "free"});
+      setSnack({open: true, message: "Unsubscribed from Kanban Premium!", severity: 'warning'})
       setLoading(false)
     } else {
       const result = await stripe.createPaymentMethod({
@@ -64,7 +68,7 @@ const Subscribe = ({user, setUser}) => {
       });
       
       if (result.error) {
-        console.log(result.error.message);
+        setSnack({open: true, message: `Issue with payment: ${result.error.message}`, severity: 'error'});
       } else {
         setLoading(true);
 
@@ -74,9 +78,9 @@ const Subscribe = ({user, setUser}) => {
         if (status === 'requires_action') {
           stripe.confirmCardPayment(client_secret).then(function(result) {
             if (result.error) {
-              console.log('Issue with payment: ', result.error);
+              setSnack({open: true, message: `Issue with payment: ${result.error.message}`, severity: 'error'});
             } else {
-              console.log('Payment received. Thank you for subscribing!');
+              setSnack({open: true, message: 'Payment received. Thank you for subscribing!', severity: 'success'})
               User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId});
               setUser({...user, stripeCustomerId: stripeInfo.stripeCustomerId})
             }
@@ -84,9 +88,8 @@ const Subscribe = ({user, setUser}) => {
         } else {
           setUser({...user, stripeCustomerId: stripeInfo.stripeCustomerId})
           User.subscribe({id: _id, stripeCustomerId: stripeInfo.stripeCustomerId});
-          console.log('Payment received. Thank you for subscribing!');
+          setSnack({open: true, message: 'Payment received. Thank you for subscribing!', severity: 'success'})
         }
-        console.log({user})
         cardElement.clear()
         setLoading(false)
       }
@@ -95,6 +98,7 @@ const Subscribe = ({user, setUser}) => {
                
 
   return (
+    <>
     <Card className={classes.card}>
         <Card className={classes.content}>
           <CardContent className={classes.content}>
@@ -113,6 +117,13 @@ const Subscribe = ({user, setUser}) => {
           </CardContent>
         </Card>
     </Card>
+    <BaseSnackBar
+        open={snack.open}
+        onClose={() => setSnack({open: false})}
+        message={snack.message}
+        severity={snack.severity}
+      />
+    </>
   );
 }
 
