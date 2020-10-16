@@ -34,6 +34,7 @@ const issueJWT = (user) => {
       name: user.name,
       email: user.email,
       avatar: user.avatar,
+      stripeCustomerId: user.stripeCustomerId
     },
   };
 
