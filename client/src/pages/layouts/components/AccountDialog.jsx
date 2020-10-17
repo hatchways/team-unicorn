@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
 const AccountDialog = (props) => {
   
   const classes = useStyles();
-  const {open, closeMenu, setOpenSnackbar} = props;
+  const {open, closeMenu} = props;
   const {user, setUser} = useContext(UserContext)
   const {data} = useContext(BoardContext)
   let columnCount = data.columnOrder.length
