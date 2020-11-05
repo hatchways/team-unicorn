@@ -8,6 +8,8 @@
   - Create a new user, use cookies to ensure\* one account per demo.
   - Add a reset button to reset demo account to default state.
 
+<sub>\*: If cookie exists, sign in to existing demo account. If not create a new demo acocunt and add the cookie. We can set a long expiry date.</sub>
+
 ## Integration & Old Tasks
 
 - Merge/Integrate Calendar & Multiple boards to dev. Might want to consider the issues below while doing so. I'd recommend diving into the branch, splitting up functionality and adjusting/integrating bit by bit rather than merging the whole thing and try to fix & patch as we go along.
@@ -16,7 +18,7 @@
 
 ## QOL fixes
 
-#### Consider each issue a separate ticket. Most of these also go hand in hand with some other issues listed here):
+#### Consider each issue a separate ticket. Most of these go hand in hand with some other issues listed:
 
 - General Backend fixes:
 
